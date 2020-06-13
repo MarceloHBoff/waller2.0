@@ -7,4 +7,9 @@ export default {
   bigger: 24,
   superBig: 30,
   giant: 36,
+
+  poppinsMedium: 'Poppins-Medium',
+  poppinsRegular: 'Poppins-Regular',
+  robotoMedium: 'Roboto-Medium',
+  robotRegular: 'Roboto-Regular',
 };
