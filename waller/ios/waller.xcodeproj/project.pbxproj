@@ -16,6 +16,10 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* wallerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* wallerTests.m */; };
+		D4A82D781CE844FE89BB811F /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7114E62F18A749B7826ED9D9 /* Poppins-Medium.ttf */; };
+		4B997E78E2D34B0999368ECB /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4BAB534A2C284498BCE39F2C /* Poppins-Regular.ttf */; };
+		DCD09741592B46EE8F03C8C9 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B9725AE3D8A49719EBE8E01 /* Roboto-Medium.ttf */; };
+		8E0976D127AC4FB58FC830A0 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05BA092D35D24DB2A2008830 /* Roboto-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +55,10 @@
 		2D02E4901E0B4A5D006451C7 /* waller-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "waller-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		7114E62F18A749B7826ED9D9 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4BAB534A2C284498BCE39F2C /* Poppins-Regular.ttf */ = {isa = PBXFileReference; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3B9725AE3D8A49719EBE8E01 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; name = "Roboto-Medium.ttf"; path = "../assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		05BA092D35D24DB2A2008830 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +148,7 @@
 				00E356EF1AD99517003FC87E /* wallerTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				C6138B3B8A0A45BFAF730E39 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -156,6 +165,18 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		C6138B3B8A0A45BFAF730E39 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				7114E62F18A749B7826ED9D9 /* Poppins-Medium.ttf */,
+				4BAB534A2C284498BCE39F2C /* Poppins-Regular.ttf */,
+				3B9725AE3D8A49719EBE8E01 /* Roboto-Medium.ttf */,
+				05BA092D35D24DB2A2008830 /* Roboto-Regular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -295,6 +316,10 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				D4A82D781CE844FE89BB811F /* Poppins-Medium.ttf in Resources */,
+				4B997E78E2D34B0999368ECB /* Poppins-Regular.ttf in Resources */,
+				DCD09741592B46EE8F03C8C9 /* Roboto-Medium.ttf in Resources */,
+				8E0976D127AC4FB58FC830A0 /* Roboto-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
