@@ -67,10 +67,20 @@ const Home: React.FC = () => {
       }),
     ]).start();
 
-    navigate('SignIn');
-
     handleEnterPage();
-  }, [opacity, offsetLeft, offsetRight, navigate, handleEnterPage]);
+  }, [opacity, offsetLeft, offsetRight, handleEnterPage]);
+
+  const handleNavigateSignIn = useCallback(() => {
+    handleLeavePage();
+
+    navigate('SignIn');
+  }, [handleLeavePage, navigate]);
+
+  const handleNavigateSignUp = useCallback(() => {
+    handleLeavePage();
+
+    navigate('SignUp');
+  }, [handleLeavePage, navigate]);
 
   useEffect(() => {
     handleEnterPage();
@@ -93,7 +103,7 @@ const Home: React.FC = () => {
             transform: [{ translateX: offsetRight.x }],
           }}
         >
-          <SignInButton onPress={handleLeavePage}>
+          <SignInButton onPress={handleNavigateSignIn}>
             <SignInButtonText>SignIn</SignInButtonText>
           </SignInButton>
         </SignInButtonContainer>
@@ -104,7 +114,7 @@ const Home: React.FC = () => {
             transform: [{ translateX: offsetLeft.x }],
           }}
         >
-          <SignUpButton>
+          <SignUpButton onPress={handleNavigateSignUp}>
             <SignUpButtonText>SignUp</SignUpButtonText>
           </SignUpButton>
         </SignUpButtonContainer>

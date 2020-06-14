@@ -2,20 +2,21 @@ import { Animated } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import { Colors, Fonts, Metrics } from '../../../styles';
+import { Colors, Fonts, Metrics } from '../../styles';
 
 export const Container = styled(Animated.View)`
   flex: 1;
 `;
 
 export const Content = styled.View`
-  padding: 0 32px;
-  margin-bottom: 46px;
+  padding: 0 ${Metrics.big}px;
+  margin-bottom: ${Metrics.large}px;
 `;
 
-export const SignInImage = styled.Image`
-  margin-top: 16px;
+export const TitleImage = styled.Image`
+  margin-top: ${Metrics.base}px;
   margin-left: auto;
+  height: 180px;
 `;
 
 export const Title = styled.Text`
