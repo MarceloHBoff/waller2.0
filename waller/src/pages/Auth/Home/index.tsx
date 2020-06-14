@@ -68,11 +68,13 @@ const Home: React.FC = () => {
     ]).start();
 
     navigate('SignIn');
-  }, [opacity, offsetLeft, offsetRight, navigate]);
+
+    handleEnterPage();
+  }, [opacity, offsetLeft, offsetRight, navigate, handleEnterPage]);
 
   useEffect(() => {
     handleEnterPage();
-  }, [handleEnterPage]);
+  }, []);
 
   return (
     <Container>

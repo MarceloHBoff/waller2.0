@@ -11,5 +11,5 @@ export default {
   poppinsMedium: 'Poppins-Medium',
   poppinsRegular: 'Poppins-Regular',
   robotoMedium: 'Roboto-Medium',
-  robotRegular: 'Roboto-Regular',
+  robotoRegular: 'Roboto-Regular',
 };
