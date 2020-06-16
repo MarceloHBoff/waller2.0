@@ -5,7 +5,7 @@ import path from 'path';
 const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
 
 interface IUploadConfig {
-  driver: 'disk' | 's3';
+  driver: 'disk';
 
   tmpFolder: string;
   uploadsFolder: string;
@@ -42,8 +42,5 @@ export default {
 
   config: {
     disk: {},
-    aws: {
-      bucket: 'name of bucket in aws console',
-    },
   },
 } as IUploadConfig;

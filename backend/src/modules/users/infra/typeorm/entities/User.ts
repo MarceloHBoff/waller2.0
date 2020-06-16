@@ -35,13 +35,12 @@ export default class User {
 
   @Expose({ name: 'avatar_url' })
   getAvatarUrl(): string | null {
-    if (!this.avatar) return null;
+    if (!this.avatar)
+      return `${process.env.BACK_END_URL}/files/placeholder.png`;
 
     switch (UploadConfig.driver) {
       case 'disk':
         return `${process.env.BACK_END_URL}/files/${this.avatar}`;
-      case 's3':
-        return `https://${UploadConfig.config.aws.bucket}.s3.amazonaws.com/${this.avatar}`;
       default:
         return null;
     }
