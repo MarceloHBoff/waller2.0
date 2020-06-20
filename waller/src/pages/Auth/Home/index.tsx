@@ -22,7 +22,7 @@ const Home: React.FC = () => {
   const offsetRight = new Animated.ValueXY({ x: 800, y: 0 });
   const opacity = new Animated.Value(0);
 
-  const { navigate } = useNavigation();
+  const { navigate, addListener } = useNavigation();
 
   const handleEnterPage = useCallback(() => {
     Animated.parallel([
@@ -50,25 +50,23 @@ const Home: React.FC = () => {
     Animated.parallel([
       Animated.spring(offsetLeft.x, {
         toValue: -800,
-        speed: 0.003,
-        bounciness: 1000,
+        speed: 0.001,
+        bounciness: 3000,
         useNativeDriver: true,
       }),
       Animated.spring(offsetRight.x, {
         toValue: 800,
-        speed: 0.003,
-        bounciness: 1000,
+        speed: 0.001,
+        bounciness: 3000,
         useNativeDriver: true,
       }),
       Animated.timing(opacity, {
         toValue: 0,
-        duration: 1000,
+        duration: 3000,
         useNativeDriver: true,
       }),
     ]).start();
-
-    handleEnterPage();
-  }, [opacity, offsetLeft, offsetRight, handleEnterPage]);
+  }, [opacity, offsetLeft, offsetRight]);
 
   const handleNavigateSignIn = useCallback(() => {
     handleLeavePage();
@@ -83,8 +81,12 @@ const Home: React.FC = () => {
   }, [handleLeavePage, navigate]);
 
   useEffect(() => {
-    handleEnterPage();
-  }, []);
+    const unsubscribe = addListener('focus', () => {
+      handleEnterPage();
+    });
+
+    return unsubscribe;
+  }, [addListener, handleEnterPage]);
 
   return (
     <Container>

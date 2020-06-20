@@ -8,23 +8,32 @@ export const Container = styled(Animated.View)`
   flex: 1;
 `;
 
-export const Content = styled.View`
+export const Content = styled(Animated.View)`
   padding: 0 ${Metrics.big}px;
   margin-bottom: ${Metrics.large}px;
+  position: relative;
 `;
 
-export const TitleImage = styled.Image`
+export const BackButton = styled.TouchableOpacity`
+  position: absolute;
+  top: 10px;
+  left: 20px;
+`;
+
+export const TitleImage = styled(Animated.Image)`
   margin-top: ${Metrics.base}px;
   margin-left: auto;
   height: 180px;
 `;
 
-export const Title = styled.Text`
+export const Title = styled(Animated.Text)`
   font-size: ${Fonts.superBig}px;
   font-family: ${Fonts.poppinsMedium};
   color: ${Colors.white};
   margin-bottom: ${Metrics.big}px;
 `;
+
+export const SubmitButtonContainer = styled(Animated.View)``;
 
 export const SubmitButton = styled.TouchableOpacity`
   padding: ${Metrics.base}px;
@@ -36,6 +45,7 @@ export const SubmitButton = styled.TouchableOpacity`
   border-bottom-left-radius: 50px;
 
   justify-content: center;
+  flex-direction: row;
   align-items: center;
 `;
 
@@ -43,4 +53,5 @@ export const SubmitButtonText = styled.Text`
   font-size: ${Fonts.big}px;
   font-family: ${Fonts.poppinsMedium};
   color: ${Colors.white};
+  margin-right: ${Metrics.base}px;
 `;

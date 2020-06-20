@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { Animated, ScrollView, Keyboard, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
+import { useNavigation } from '@react-navigation/native';
 import { FormHandles, Form } from '@unform/core';
 import * as Yup from 'yup';
 
@@ -10,8 +12,10 @@ import getValidationErrors from '../../../utils/getValidationErrors';
 import {
   Container,
   Content,
+  BackButton,
   TitleImage,
   Title,
+  SubmitButtonContainer,
   SubmitButton,
   SubmitButtonText,
 } from '../AuthStyles';
@@ -23,22 +27,64 @@ interface SignUpFormData {
 }
 
 const SignUp: React.FC = () => {
+  const offsetLeft = new Animated.ValueXY({ x: -800, y: 0 });
+  const offsetRight = new Animated.ValueXY({ x: 800, y: 0 });
   const opacity = new Animated.Value(0);
 
   const formRef = useRef<FormHandles>(null);
   const scrollViewRef = useRef<ScrollView>(null);
+
+  const { goBack } = useNavigation();
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () =>
       scrollViewRef.current?.scrollToEnd({ animated: true }),
     );
 
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  }, []);
+    Animated.parallel([
+      Animated.spring(offsetLeft.x, {
+        toValue: 0,
+        speed: 0.1,
+        bounciness: 200,
+        useNativeDriver: true,
+      }),
+      Animated.spring(offsetRight.x, {
+        toValue: 0,
+        speed: 0.1,
+        bounciness: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [opacity, offsetLeft, offsetRight]);
+
+  const handleGoBack = useCallback(() => {
+    Animated.parallel([
+      Animated.spring(offsetLeft.x, {
+        toValue: -800,
+        speed: 0.001,
+        bounciness: 100,
+        useNativeDriver: true,
+      }),
+      Animated.spring(offsetRight.x, {
+        toValue: 800,
+        speed: 0.001,
+        bounciness: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    goBack();
+  }, [goBack, opacity, offsetRight, offsetLeft]);
 
   const handleSubmit = useCallback(async (data: SignUpFormData) => {
     try {
@@ -71,7 +117,15 @@ const SignUp: React.FC = () => {
   return (
     <ScrollView ref={scrollViewRef}>
       <Container style={{ opacity }}>
-        <Content>
+        <Content
+          style={{
+            transform: [{ translateX: offsetLeft.x }],
+          }}
+        >
+          <BackButton onPress={handleGoBack}>
+            <Icon name="arrow-circle-left" size={30} color="#fff" />
+          </BackButton>
+
           <TitleImage resizeMode="contain" source={signUpImage} />
 
           <Title>Create {'\n'}account</Title>
@@ -105,9 +159,16 @@ const SignUp: React.FC = () => {
           </Form>
         </Content>
 
-        <SubmitButton onPress={() => formRef.current?.submitForm()}>
-          <SubmitButtonText>SignUp</SubmitButtonText>
-        </SubmitButton>
+        <SubmitButtonContainer
+          style={{
+            transform: [{ translateX: offsetRight.x }],
+          }}
+        >
+          <SubmitButton onPress={() => formRef.current?.submitForm()}>
+            <SubmitButtonText>SignUp</SubmitButtonText>
+            <Icon name="plus-circle" size={30} color="#fff" />
+          </SubmitButton>
+        </SubmitButtonContainer>
       </Container>
     </ScrollView>
   );
