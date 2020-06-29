@@ -13,24 +13,10 @@ export default class CreateActives1592177391123 implements MigrationInterface {
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
           },
-          {
-            name: 'code',
-            type: 'varchar',
-          },
-          {
-            name: 'name',
-            type: 'varchar',
-          },
-          {
-            name: 'type',
-            type: 'varchar',
-          },
-          {
-            name: 'price',
-            type: 'decimal',
-            precision: 5,
-            scale: 2,
-          },
+          { name: 'code', type: 'varchar' },
+          { name: 'name', type: 'varchar' },
+          { name: 'type', type: 'varchar' },
+          { name: 'price', type: 'decimal', precision: 5, scale: 2 },
           {
             name: 'lastPrice',
             type: 'decimal',
@@ -38,16 +24,8 @@ export default class CreateActives1592177391123 implements MigrationInterface {
             scale: 2,
             isNullable: true,
           },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'now()',
-          },
-          {
-            name: 'updated_at',
-            type: 'timestamp',
-            default: 'now()',
-          },
+          { name: 'created_at', type: 'timestamp', default: 'now()' },
+          { name: 'updated_at', type: 'timestamp', default: 'now()' },
         ],
       }),
     );
