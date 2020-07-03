@@ -6,6 +6,7 @@ import IActivesRepository from '../IActivesRepository';
 import IUserActiveRepository from '../IUserActivesRepository';
 
 import ICreateUserActiveDTO from '@modules/actives/dtos/ICreateUserActiveDTO';
+import IRefreshProvider from '@modules/actives/providers/RefreshProvider/models/IRefreshProvider';
 
 @injectable()
 export default class FakeUserActiveRepository implements IUserActiveRepository {
@@ -14,6 +15,9 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
   constructor(
     @inject('ActivesRepository')
     private activesRepository: IActivesRepository,
+
+    @inject('RefreshProvider')
+    private refreshProvider: IRefreshProvider,
   ) {}
 
   public async find(
@@ -44,6 +48,7 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
     Object.assign(userActive, {
       id: uuid(),
       active_id: findActive?.id,
+      active: findActive,
       user_id,
       buyPrice,
       quantity,
@@ -58,6 +63,27 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
     const userActives = this.userActives.filter(
       userActive => userActive.user_id === user_id,
     );
+
+    return userActives;
+  }
+
+  public async updateUserActives(data: UserActive[]): Promise<UserActive[]> {
+    const userActives = data;
+
+    for (let i = 0; i < userActives.length; i++) {
+      const { price, lastPrice } = await this.refreshProvider.refreshByCode(
+        userActives[i].active.code,
+      );
+
+      userActives[i].active.price = price;
+      userActives[i].active.lastPrice = lastPrice;
+
+      await this.activesRepository.updatePrice({
+        id: userActives[i].active.id,
+        price,
+        lastPrice,
+      });
+    }
 
     return userActives;
   }

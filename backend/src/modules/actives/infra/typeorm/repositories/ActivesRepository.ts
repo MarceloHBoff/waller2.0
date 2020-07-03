@@ -3,6 +3,7 @@ import { Repository, getRepository } from 'typeorm';
 
 import Active from '../entities/Active';
 
+import IUpdateActiveDTO from '@modules/actives/dtos/IUpdateActiveDTO';
 import IPriceProvider from '@modules/actives/providers/PriceProvider/models/IPriceProvider';
 import IActivesRepository from '@modules/actives/repositories/IActivesRepository';
 
@@ -19,6 +20,12 @@ export default class ActivesRepository implements IActivesRepository {
 
   public async findById(id: string): Promise<Active | undefined> {
     const findActive = await this.ormRepository.findOne(id);
+
+    return findActive;
+  }
+
+  public async getById(id: string): Promise<Active> {
+    const findActive = await this.ormRepository.findOneOrFail(id);
 
     return findActive;
   }
@@ -47,5 +54,20 @@ export default class ActivesRepository implements IActivesRepository {
     await this.ormRepository.save(user);
 
     return user;
+  }
+
+  public async updatePrice({
+    id,
+    price,
+    lastPrice,
+  }: IUpdateActiveDTO): Promise<Active> {
+    const active: Active = await this.getById(id);
+
+    active.price = price;
+    active.lastPrice = lastPrice;
+
+    await this.ormRepository.save(active);
+
+    return active;
   }
 }

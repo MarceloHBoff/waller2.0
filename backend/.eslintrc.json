@@ -32,6 +32,8 @@
       { "prefixWithI": "always" }
     ],
     "no-useless-constructor": "off",
+    "no-plusplus": "off",
+    "no-await-in-loop": "off",
     "import-helpers/order-imports": [
       "warn",
       {

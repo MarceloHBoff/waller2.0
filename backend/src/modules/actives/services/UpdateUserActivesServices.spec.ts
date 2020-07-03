@@ -5,7 +5,7 @@ import FakeUserActiveRepository from '../repositories/fakes/FakeUserActiveReposi
 
 import CreateActiveService from './CreateActiveService';
 import CreateUserActiveService from './CreateUserActiveService';
-import ListUserActivesService from './ListUserActivesService';
+import UpdateUserActivesService from './UpdateUserActivesService';
 
 import FakeRefreshProvider from '@modules/actives/providers/RefreshProvider/fakes/FakeRefreshProvider';
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
@@ -16,7 +16,7 @@ let fakeUserActiveRepository: FakeUserActiveRepository;
 let fakeRefreshProvider: FakeRefreshProvider;
 let createActive: CreateActiveService;
 let createUserActive: CreateUserActiveService;
-let listUserActives: ListUserActivesService;
+let updateUserActives: UpdateUserActivesService;
 
 describe('ListUserActives', () => {
   beforeEach(() => {
@@ -34,10 +34,11 @@ describe('ListUserActives', () => {
     createActive = new CreateActiveService(fakeActivesRepository);
 
     createUserActive = new CreateUserActiveService(fakeUserActiveRepository);
-    listUserActives = new ListUserActivesService(fakeUserActiveRepository);
+
+    updateUserActives = new UpdateUserActivesService(fakeUserActiveRepository);
   });
 
-  it('should be able to list user actives', async () => {
+  it('should be able to update user actives', async () => {
     const { id } = await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -57,14 +58,13 @@ describe('ListUserActives', () => {
     const userActive2 = await createUserActive.execute({
       user_id: id,
       buyPrice: 100,
-      code: 'PETR3',
+      code: 'ITUB3',
       quantity: 10,
     });
 
-    const userActives = await listUserActives.execute(id);
+    const updatedActives = await updateUserActives.execute(id);
 
-    expect(userActives).toHaveLength(2);
-    expect(userActives[0].active_id).toBe(userActive1.active_id);
-    expect(userActives[1].active_id).toBe(userActive2.active_id);
+    expect(updatedActives[0]).toEqual(userActive1);
+    expect(updatedActives[1]).toEqual(userActive2);
   });
 });

@@ -3,6 +3,8 @@ import { uuid } from 'uuidv4';
 import Active from '../../infra/typeorm/entities/Active';
 import IActivesRepository from '../IActivesRepository';
 
+import IUpdateActiveDTO from '@modules/actives/dtos/IUpdateActiveDTO';
+
 export default class FakeActivesRepository implements IActivesRepository {
   private actives: Active[] = [];
 
@@ -10,6 +12,12 @@ export default class FakeActivesRepository implements IActivesRepository {
     const findActive = this.actives.find(active => active.id === id);
 
     return findActive;
+  }
+
+  public async getById(id: string): Promise<Active> {
+    const findActive = this.actives.find(active => active.id !== id);
+
+    return findActive || this.actives[0];
   }
 
   public async findByCode(code: string): Promise<Active | undefined> {
@@ -31,6 +39,23 @@ export default class FakeActivesRepository implements IActivesRepository {
     });
 
     this.actives.push(active);
+
+    return active;
+  }
+
+  public async updatePrice({
+    id,
+    price,
+    lastPrice,
+  }: IUpdateActiveDTO): Promise<Active> {
+    const active: Active = await this.getById(id);
+
+    this.actives.map(actives =>
+      actives.id === id ? { ...actives, price, lastPrice } : actives,
+    );
+
+    active.price = price;
+    active.lastPrice = lastPrice;
 
     return active;
   }

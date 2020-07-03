@@ -6,11 +6,13 @@ import FakeUserActiveRepository from '../repositories/fakes/FakeUserActiveReposi
 import CreateActiveService from './CreateActiveService';
 import CreateUserActiveService from './CreateUserActiveService';
 
+import FakeRefreshProvider from '@modules/actives/providers/RefreshProvider/fakes/FakeRefreshProvider';
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 
 let fakeActivesRepository: FakeActivesRepository;
 let fakeUsersRepository: FakeUsersRepository;
 let fakeUserActiveRepository: FakeUserActiveRepository;
+let fakeRefreshProvider: FakeRefreshProvider;
 let createActive: CreateActiveService;
 let createUserActive: CreateUserActiveService;
 
@@ -20,11 +22,14 @@ describe('CreateUserActive', () => {
 
     fakeUsersRepository = new FakeUsersRepository();
 
-    createActive = new CreateActiveService(fakeActivesRepository);
+    fakeRefreshProvider = new FakeRefreshProvider();
 
     fakeUserActiveRepository = new FakeUserActiveRepository(
       fakeActivesRepository,
+      fakeRefreshProvider,
     );
+
+    createActive = new CreateActiveService(fakeActivesRepository);
 
     createUserActive = new CreateUserActiveService(fakeUserActiveRepository);
   });

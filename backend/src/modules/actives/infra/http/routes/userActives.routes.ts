@@ -11,5 +11,6 @@ userActivesRouter.use(ensureAuthenticated);
 
 userActivesRouter.post('/', userActivesController.create);
 userActivesRouter.get('/', userActivesController.index);
+userActivesRouter.put('/', userActivesController.update);
 
 export default userActivesRouter;
