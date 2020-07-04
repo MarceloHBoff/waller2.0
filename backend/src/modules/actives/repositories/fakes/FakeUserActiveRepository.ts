@@ -87,4 +87,11 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
 
     return userActives;
   }
+
+  public async removeAutomaticByUserId(user_id: string): Promise<void> {
+    this.userActives.filter(
+      userActive =>
+        userActive.user_id !== user_id && userActive.automatic === false,
+    );
+  }
 }

@@ -15,8 +15,8 @@ export class CreateUserBonds1593896435134 implements MigrationInterface {
           },
           { name: 'user_id', type: 'uuid' },
           { name: 'name', type: 'varchar' },
-          { name: 'buyPrice', type: 'decimal', precision: 5, scale: 2 },
-          { name: 'nowPrice', type: 'decimal', precision: 5, scale: 2 },
+          { name: 'buyPrice', type: 'decimal', precision: 10, scale: 2 },
+          { name: 'nowPrice', type: 'decimal', precision: 10, scale: 2 },
           { name: 'dueDate', type: 'date' },
           {
             name: 'automatic',

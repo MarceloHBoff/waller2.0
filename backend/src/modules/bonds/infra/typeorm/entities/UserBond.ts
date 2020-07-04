@@ -28,10 +28,10 @@ export default class UserBond {
   @Column()
   name: string;
 
-  @Column({ precision: 5, scale: 2 })
+  @Column({ precision: 10, scale: 2 })
   buyPrice: number;
 
-  @Column({ precision: 5, scale: 2 })
+  @Column({ precision: 10, scale: 2 })
   nowPrice: number;
 
   @Column()

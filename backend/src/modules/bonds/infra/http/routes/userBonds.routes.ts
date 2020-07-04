@@ -11,6 +11,6 @@ const userBondsController = new UserBondsController();
 userBondsRouter.use(ensureAuthenticated);
 
 userBondsRouter.post('/', UserBondsPost, userBondsController.create);
-// userBondsRouter.get('/', userActivesController.index);
+userBondsRouter.get('/', userBondsController.index);
 
 export default userBondsRouter;

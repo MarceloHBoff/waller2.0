@@ -7,7 +7,7 @@ interface IRequest {
   user_id: string;
   code: string;
   buyPrice: number;
-  buyDate: Date;
+  buyDate?: Date;
   quantity: number;
 }
 

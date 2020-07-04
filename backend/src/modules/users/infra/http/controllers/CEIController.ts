@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import FindActivesByCEIService from '@modules/actives/services/FindActivesByCEIService';
+import FindActivesByCEIService from '@modules/users/services/FindActivesByCEIService';
 
 export default class CEIController {
   public async create(request: Request, response: Response): Promise<Response> {
