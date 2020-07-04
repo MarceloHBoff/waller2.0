@@ -3,4 +3,5 @@ export default interface ICreateUserActiveDTO {
   code: string;
   quantity: number;
   buyPrice: number;
+  buyDate: Date;
 }

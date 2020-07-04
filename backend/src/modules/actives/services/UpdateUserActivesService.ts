@@ -1,21 +1,21 @@
 import { injectable, inject } from 'tsyringe';
 
 import UserActive from '../infra/typeorm/entities/UserActive';
-import IUserActiveRepository from '../repositories/IUserActivesRepository';
+import IUserActivesRepository from '../repositories/IUserActivesRepository';
 
 @injectable()
 export default class UpdateUserActivesService {
   constructor(
     @inject('UserActivesRepository')
-    private userActiveRepository: IUserActiveRepository,
+    private userActivesRepository: IUserActivesRepository,
   ) {}
 
   public async execute(user_id: string): Promise<UserActive[]> {
-    const userActives = await this.userActiveRepository.findAllByUserId(
+    const userActives = await this.userActivesRepository.findAllByUserId(
       user_id,
     );
 
-    const updatedUserActives = await this.userActiveRepository.updateUserActives(
+    const updatedUserActives = await this.userActivesRepository.updateUserActives(
       userActives,
     );
 

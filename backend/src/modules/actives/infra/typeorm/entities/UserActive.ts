@@ -41,6 +41,9 @@ export default class UserActive {
   @Column({ precision: 5, scale: 2 })
   buyPrice: number;
 
+  @Column()
+  buyDate: Date;
+
   @Column({ default: false })
   automatic: boolean;
 

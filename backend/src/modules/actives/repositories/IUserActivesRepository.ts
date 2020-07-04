@@ -6,4 +6,5 @@ export default interface IUserActivesRepository {
   findAllByUserId(user_id: string): Promise<UserActive[]>;
   create(data: ICreateUserActiveDTO): Promise<UserActive>;
   updateUserActives(userActives: UserActive[]): Promise<UserActive[]>;
+  removeAutomaticByUserId(user_id: string): Promise<void>;
 }

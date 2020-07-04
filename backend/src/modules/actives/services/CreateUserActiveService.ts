@@ -7,6 +7,7 @@ interface IRequest {
   user_id: string;
   code: string;
   buyPrice: number;
+  buyDate: Date;
   quantity: number;
 }
 
@@ -22,12 +23,14 @@ export default class CreateUserActiveService {
     code,
     quantity,
     buyPrice,
+    buyDate,
   }: IRequest): Promise<UserActive> {
     const userActive = await this.userActiveRepository.create({
       user_id,
-      buyPrice,
       quantity,
       code,
+      buyPrice,
+      buyDate: buyDate || new Date(),
     });
 
     return userActive;

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import activesRouter from '@modules/actives/infra/http/routes/actives.routes';
+import CEIRouter from '@modules/actives/infra/http/routes/CEI.routes';
 import userActivesRouter from '@modules/actives/infra/http/routes/userActives.routes';
 import passwordRouter from '@modules/users/infra/http/routes/password.routes';
 import profileRouter from '@modules/users/infra/http/routes/profile.routes';
@@ -16,5 +17,6 @@ routes.use('/profile', profileRouter);
 
 routes.use('/actives', activesRouter);
 routes.use('/userActives', userActivesRouter);
+routes.use('/cei', CEIRouter);
 
 export default routes;

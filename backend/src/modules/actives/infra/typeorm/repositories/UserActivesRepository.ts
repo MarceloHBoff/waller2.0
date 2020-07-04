@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { Repository, getRepository } from 'typeorm';
+import { Repository, getRepository, getConnection } from 'typeorm';
 
 import IUserActiveRepository from '../../../repositories/IUserActivesRepository';
 import UserActive from '../entities/UserActive';
@@ -12,6 +12,8 @@ import IRefreshProvider from '@modules/actives/providers/RefreshProvider/models/
 @injectable()
 export default class UserActivesRepository implements IUserActiveRepository {
   private ormRepository: Repository<UserActive>;
+
+  private connection = getConnection().createQueryRunner();
 
   constructor(
     @inject('ActivesRepository')
@@ -41,14 +43,16 @@ export default class UserActivesRepository implements IUserActiveRepository {
     code,
     quantity,
     buyPrice,
+    buyDate,
   }: ICreateUserActiveDTO): Promise<UserActive> {
     const active = await this.activesRepository.findByCode(code);
 
     const userActive = this.ormRepository.create({
       user_id,
       active_id: active?.id,
-      buyPrice,
       quantity,
+      buyPrice,
+      buyDate,
     });
 
     await this.ormRepository.save(userActive);
@@ -68,6 +72,8 @@ export default class UserActivesRepository implements IUserActiveRepository {
   public async updateUserActives(data: UserActive[]): Promise<UserActive[]> {
     const userActives = data;
 
+    this.connection.startTransaction();
+
     for (let i = 0; i < userActives.length; i++) {
       const { price, lastPrice } = await this.refreshProvider.refreshByCode(
         userActives[i].active.code,
@@ -83,6 +89,20 @@ export default class UserActivesRepository implements IUserActiveRepository {
       });
     }
 
+    this.connection.commitTransaction();
+
     return userActives;
+  }
+
+  public async removeAutomaticByUserId(user_id: string): Promise<void> {
+    this.connection.startTransaction();
+
+    const deleteUserActive = await this.ormRepository.find({
+      where: { user_id, automatic: true },
+    });
+
+    this.ormRepository.remove(deleteUserActive);
+
+    this.connection.commitTransaction();
   }
 }

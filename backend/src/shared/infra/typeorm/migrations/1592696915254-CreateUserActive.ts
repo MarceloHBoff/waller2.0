@@ -17,6 +17,7 @@ export class CreateUserActive1592696915254 implements MigrationInterface {
           { name: 'active_id', type: 'uuid' },
           { name: 'quantity', type: 'decimal', precision: 5, scale: 2 },
           { name: 'buyPrice', type: 'decimal', precision: 5, scale: 2 },
+          { name: 'buyDate', type: 'date' },
           {
             name: 'automatic',
             type: 'boolean',
