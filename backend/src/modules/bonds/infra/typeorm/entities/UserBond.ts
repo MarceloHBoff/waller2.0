@@ -9,12 +9,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import Active from './Active';
-
 import User from '@modules/users/infra/typeorm/entities/User';
 
-@Entity('user_actives')
-export default class UserActive {
+@Entity('user_bonds')
+export default class UserBond {
   @PrimaryGeneratedColumn('uuid')
   @Exclude()
   id: string;
@@ -28,21 +26,16 @@ export default class UserActive {
   user: User;
 
   @Column()
-  @Exclude()
-  active_id: string;
-
-  @OneToOne(() => Active, active => active.id)
-  @JoinColumn({ name: 'active_id' })
-  active: Active;
-
-  @Column({ precision: 5, scale: 2 })
-  quantity: number;
+  name: string;
 
   @Column({ precision: 5, scale: 2 })
   buyPrice: number;
 
+  @Column({ precision: 5, scale: 2 })
+  nowPrice: number;
+
   @Column()
-  buyDate: Date;
+  dueDate: Date;
 
   @Column({ default: false })
   automatic: boolean;

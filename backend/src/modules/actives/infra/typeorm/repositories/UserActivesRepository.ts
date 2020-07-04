@@ -4,10 +4,9 @@ import { Repository, getRepository, getConnection } from 'typeorm';
 import IUserActiveRepository from '../../../repositories/IUserActivesRepository';
 import UserActive from '../entities/UserActive';
 
-import ActivesRepository from './ActivesRepository';
-
 import ICreateUserActiveDTO from '@modules/actives/dtos/ICreateUserActiveDTO';
 import IRefreshProvider from '@modules/actives/providers/RefreshProvider/models/IRefreshProvider';
+import IActivesRepository from '@modules/actives/repositories/IActivesRepository';
 
 @injectable()
 export default class UserActivesRepository implements IUserActiveRepository {
@@ -17,7 +16,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
   constructor(
     @inject('ActivesRepository')
-    private activesRepository: ActivesRepository,
+    private activesRepository: IActivesRepository,
 
     @inject('RefreshProvider')
     private refreshProvider: IRefreshProvider,
