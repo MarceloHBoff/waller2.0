@@ -4,6 +4,7 @@ import { Repository, getRepository, getConnection } from 'typeorm';
 import IUserActiveRepository from '../../../repositories/IUserActivesRepository';
 import UserActive from '../entities/UserActive';
 
+import ICEIActiveDTO from '@modules/actives/dtos/ICEIActiveDTO';
 import ICreateUserActiveDTO from '@modules/actives/dtos/ICreateUserActiveDTO';
 import IRefreshProvider from '@modules/actives/providers/RefreshProvider/models/IRefreshProvider';
 import IActivesRepository from '@modules/actives/repositories/IActivesRepository';
@@ -43,6 +44,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
     quantity,
     buyPrice,
     buyDate,
+    automatic = false,
   }: ICreateUserActiveDTO): Promise<UserActive> {
     const active = await this.activesRepository.findByCode(code);
 
@@ -52,6 +54,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
       quantity,
       buyPrice,
       buyDate,
+      automatic,
     });
 
     await this.ormRepository.save(userActive);
@@ -103,5 +106,68 @@ export default class UserActivesRepository implements IUserActiveRepository {
     this.ormRepository.remove(deleteUserActive);
 
     this.connection.commitTransaction();
+  }
+
+  public async createOrUpdateByCEI(
+    user_id: string,
+    data: ICEIActiveDTO,
+  ): Promise<void> {
+    const { code, buyDate, type } = data;
+
+    let { price, quantity } = data;
+
+    if (code === 'SQIA3') {
+      quantity *= 4;
+      price /= 4;
+    }
+
+    if (code.substr(0, 4) === 'SAPR') {
+      quantity *= 3;
+      price /= 3;
+    }
+
+    const userActive = await this.findByBuyDate(user_id, code, buyDate);
+
+    if (userActive) {
+      if (type === 'C') {
+        userActive.quantity += quantity;
+
+        const totalValue = userActive.buyPrice * userActive.quantity;
+        const newTotalValue = price * userActive.quantity;
+
+        userActive.buyPrice =
+          (totalValue + newTotalValue) / userActive.quantity;
+      } else {
+        userActive.quantity -= quantity;
+        userActive.buyPrice = (userActive.buyPrice + price) / 2;
+      }
+
+      userActive.automatic = true;
+
+      await this.ormRepository.save(userActive);
+    } else {
+      await this.create({
+        user_id,
+        code,
+        quantity,
+        buyDate,
+        buyPrice: price,
+        automatic: true,
+      });
+    }
+  }
+
+  private async findByBuyDate(
+    user_id: string,
+    code: string,
+    buyDate: Date,
+  ): Promise<UserActive | undefined> {
+    const active = await this.activesRepository.findByCode(code);
+
+    const findUserActive = await this.ormRepository.findOne({
+      where: { user_id, active, buyDate },
+    });
+
+    return findUserActive;
   }
 }
