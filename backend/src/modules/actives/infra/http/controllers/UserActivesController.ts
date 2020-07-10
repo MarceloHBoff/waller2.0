@@ -32,7 +32,7 @@ export default class ActivesController {
 
     const userActives = await listUserActives.execute(request.user.id);
 
-    return response.status(201).json(classToClass(userActives));
+    return response.status(200).json(classToClass(userActives));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {

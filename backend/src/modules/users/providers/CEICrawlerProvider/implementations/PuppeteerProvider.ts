@@ -32,6 +32,8 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
     let actives: ICEIActiveDTO[] = [];
     let bonds: ICEIBond[] = [];
 
+    console.time(user_id);
+
     const connection = getConnection().createQueryRunner();
 
     const browser = await puppeteer.launch({
@@ -49,26 +51,17 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
     await page.keyboard.type(String(process.env.CEI_PASSWORD));
     await page.click(Fields.SubmitSelector);
 
-    console.log('Aqui ué');
-
     try {
-      await page.waitForNavigation({ timeout: 200000 });
+      await page.waitForNavigation();
     } catch {
       return;
     }
 
-    console.log('Aqui 1');
-    await page.screenshot({ path: 'dale.png' });
-
-    await page.goto(URLs.Negociation, { timeout: 200000 });
-
-    await page.screenshot({ path: 'dale1.png' });
+    await page.goto(URLs.Negociation);
 
     const $ = cheerio.load(await page.content());
 
     const options: string[] = [];
-
-    await page.screenshot({ path: 'dale3.png' });
 
     $(Fields.BrokerSelector).each((_, select) => {
       $(select)
@@ -84,77 +77,78 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
         });
     });
 
-    page.setDefaultTimeout(100000);
-
-    console.log('Aqui 2');
-    await page.screenshot({ path: 'dale2.png' });
+    page.setDefaultTimeout(300000);
 
     for (let i = 0; i < options.length; i++) {
-      await page.click(Fields.BrokerSelector);
-      await page.keyboard.type(options[i]);
-      await page.focus(Fields.SubmitSelector);
-      await page.waitFor(100);
-      await page.click(Fields.SubmitSelector);
-
       try {
+        await page.click(Fields.BrokerSelector);
+        await page.keyboard.type(options[i]);
+        await page.focus(Fields.SubmitSelector);
+        await page.waitFor(100);
+        await page.click(Fields.SubmitSelector);
         await page.waitFor(500);
-        await page.waitForSelector(Fields.TableSelector);
 
-        const brokerActives = await this.getDataByHTML(await page.content());
-        actives = [...actives, ...brokerActives];
+        const selectorFound = await this.raceSelectors(page, [
+          Fields.TableSelector,
+          Fields.NullQuery,
+        ]);
 
         await page.waitFor(500);
-      } catch {}
 
-      await this.resetCEIQuery(page);
+        if (selectorFound === Fields.TableSelector) {
+          const brokerActives = await this.getDataByHTML(await page.content());
+          actives = [...actives, ...brokerActives];
+        }
+
+        await this.resetCEIQuery(page);
+      } catch {
+        console.log('retry', options[i]);
+        await page.waitFor(1000);
+
+        await this.resetCEIQuery(page);
+
+        await page.waitFor(1000);
+        i--;
+      }
     }
-
-    console.log('Aqui 3');
 
     await page.goto(URLs.Bond);
 
-    await page.waitForNavigation();
-
-    await page.waitFor(1500);
+    await page.waitFor(2000);
 
     for (let i = 0; i < options.length; i++) {
       await page.focus(Fields.BrokerSelector);
       await page.keyboard.type(options[i]);
-      await page.waitFor(1500);
+      await page.waitFor(1000);
       await page.click(Fields.CountSelector);
-      await page.waitFor(1500);
+      await page.waitFor(1000);
       await page.keyboard.press('ArrowDown');
       await page.keyboard.press('Enter');
       await page.focus(Fields.SubmitSelector);
       await page.click(Fields.SubmitSelector);
 
       try {
-        await page.waitFor(500);
-        await page.waitForSelector(Fields.TitleTableSelector);
+        const selectorFound = await this.raceSelectors(page, [
+          Fields.TitleTableSelector,
+        ]);
 
-        const brokerBonds = await this.getDataByHTMLBonds(await page.content());
-        bonds = [...bonds, ...brokerBonds];
-
-        await page.waitFor(500);
-      } catch (err) {}
+        if (selectorFound === Fields.TitleTableSelector) {
+          const brokerBonds = await this.getDataByHTMLBonds(
+            await page.content(),
+          );
+          bonds = [...bonds, ...brokerBonds];
+        }
+      } catch {}
 
       await this.resetCEIQuery(page);
     }
-
-    console.log('Aqui 4');
 
     await browser.close();
 
     connection.startTransaction();
 
-    console.log('Aqui 5');
-
     await this.userActivesRepository.removeAutomaticByUserId(user_id);
     await this.userBondsRepository.removeAutomaticByUserId(user_id);
-
-    console.log(actives);
-
-    console.log('Aqui 6');
 
     for (let i = 0; i < actives.length; i++) {
       await this.userActivesRepository.createOrUpdateByCEI(user_id, actives[i]);
@@ -167,12 +161,13 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
         dueDate: bonds[i].dueDate,
         buyPrice: bonds[i].buyPrice,
         nowPrice: bonds[i].nowPrice,
+        automatic: true,
       });
     }
 
-    console.log('Aqui 7');
-
     connection.commitTransaction();
+
+    console.timeEnd(user_id);
   }
 
   private async getDataByHTML(html: string): Promise<ICEIActiveDTO[]> {
@@ -272,6 +267,22 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
     });
 
     return bonds;
+  }
+
+  private async raceSelectors(
+    page: Page,
+    selectors: string[],
+  ): Promise<string> {
+    return Promise.race(
+      selectors.map(selector => {
+        return page
+          .waitForSelector(selector, {
+            visible: true,
+            timeout: 10000,
+          })
+          .then(() => selector);
+      }),
+    );
   }
 
   private getDate(value: string): Date {

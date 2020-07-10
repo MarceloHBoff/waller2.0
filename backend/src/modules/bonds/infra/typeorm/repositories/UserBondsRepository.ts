@@ -31,6 +31,7 @@ export default class UserBondsRepository implements IUserBondsRepository {
     dueDate,
     buyPrice,
     nowPrice,
+    automatic = false,
   }: ICreateUserBondDTO): Promise<UserBond> {
     const userBond = this.ormRepository.create({
       user_id,
@@ -38,6 +39,7 @@ export default class UserBondsRepository implements IUserBondsRepository {
       buyPrice,
       dueDate,
       nowPrice,
+      automatic,
     });
 
     await this.ormRepository.save(userBond);
@@ -54,14 +56,6 @@ export default class UserBondsRepository implements IUserBondsRepository {
   }
 
   public async removeAutomaticByUserId(user_id: string): Promise<void> {
-    this.connection.startTransaction();
-
-    const deleteUserBonds = await this.ormRepository.find({
-      where: { user_id, automatic: true },
-    });
-
-    this.ormRepository.remove(deleteUserBonds);
-
-    this.connection.commitTransaction();
+    this.ormRepository.delete({ user_id, automatic: true });
   }
 }

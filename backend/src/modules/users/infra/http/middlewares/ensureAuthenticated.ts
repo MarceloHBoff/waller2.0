@@ -23,7 +23,7 @@ export default function ensureAuthenticated(
   const [, token] = authHeader.split(' ');
 
   try {
-    const decoded = verify(token, AuthConfig.secreteKey);
+    const decoded = verify(token, AuthConfig.secretKey);
 
     const { sub } = decoded as ITokenPayload;
 

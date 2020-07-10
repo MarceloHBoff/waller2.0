@@ -68,7 +68,29 @@ export default class UserActivesRepository implements IUserActiveRepository {
       relations: ['active'],
     });
 
-    return userActives;
+    const unifiedUserActives: UserActive[] = [];
+
+    userActives.forEach(userActive => {
+      const findIndex = unifiedUserActives.findIndex(
+        unifiedUserActive =>
+          unifiedUserActive.active_id === userActive.active_id,
+      );
+
+      if (findIndex >= 0) {
+        unifiedUserActives[findIndex].quantity =
+          Number(unifiedUserActives[findIndex].quantity) +
+          Number(userActive.quantity);
+
+        unifiedUserActives[findIndex].buyPrice =
+          (Number(unifiedUserActives[findIndex].buyPrice) +
+            Number(userActive.buyPrice)) /
+          2;
+      } else {
+        unifiedUserActives.push(userActive);
+      }
+    });
+
+    return unifiedUserActives;
   }
 
   public async updateUserActives(data: UserActive[]): Promise<UserActive[]> {
@@ -97,15 +119,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
   }
 
   public async removeAutomaticByUserId(user_id: string): Promise<void> {
-    this.connection.startTransaction();
-
-    const deleteUserActive = await this.ormRepository.find({
-      where: { user_id, automatic: true },
-    });
-
-    this.ormRepository.remove(deleteUserActive);
-
-    this.connection.commitTransaction();
+    this.ormRepository.delete({ user_id, automatic: true });
   }
 
   public async createOrUpdateByCEI(
@@ -126,20 +140,25 @@ export default class UserActivesRepository implements IUserActiveRepository {
       price /= 3;
     }
 
-    const userActive = await this.findByBuyDate(user_id, code, buyDate);
+    let active = await this.activesRepository.findByCode(code);
+
+    if (!active) active = await this.activesRepository.create(code);
+
+    const userActive = await this.findByBuyDate(user_id, active.id, buyDate);
 
     if (userActive) {
       if (type === 'C') {
-        userActive.quantity += quantity;
+        const totalValue =
+          Number(userActive.buyPrice) * Number(userActive.quantity);
+        const newTotalValue = Number(price) * Number(quantity);
 
-        const totalValue = userActive.buyPrice * userActive.quantity;
-        const newTotalValue = price * userActive.quantity;
+        userActive.quantity = Number(userActive.quantity) + Number(quantity);
 
         userActive.buyPrice =
-          (totalValue + newTotalValue) / userActive.quantity;
+          (totalValue + newTotalValue) / Number(userActive.quantity);
       } else {
-        userActive.quantity -= quantity;
-        userActive.buyPrice = (userActive.buyPrice + price) / 2;
+        userActive.quantity = Number(userActive.quantity) - Number(quantity);
+        userActive.buyPrice = (Number(userActive.buyPrice) + Number(price)) / 2;
       }
 
       userActive.automatic = true;
@@ -159,13 +178,11 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
   private async findByBuyDate(
     user_id: string,
-    code: string,
+    active_id: string,
     buyDate: Date,
   ): Promise<UserActive | undefined> {
-    const active = await this.activesRepository.findByCode(code);
-
     const findUserActive = await this.ormRepository.findOne({
-      where: { user_id, active, buyDate },
+      where: { user_id, active_id, buyDate },
     });
 
     return findUserActive;

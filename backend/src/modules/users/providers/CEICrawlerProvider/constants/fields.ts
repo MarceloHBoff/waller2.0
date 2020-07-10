@@ -6,5 +6,6 @@ export default {
   TitleTableSelector: '#ctl00_ContentPlaceHolder1_lblTituloTabela',
   TableSelector:
     '#ctl00_ContentPlaceHolder1_rptAgenteBolsa_ctl00_rptContaBolsa_ctl00_lblAgente',
+  NullQuery: '#CEIMessageDIV > div > a',
   SubmitSelector: 'input[type=submit]',
 };

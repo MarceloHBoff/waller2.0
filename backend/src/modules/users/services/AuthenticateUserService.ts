@@ -42,9 +42,9 @@ export default class AuthenticateUserService {
     if (!passwordMatched)
       throw new AppError('Incorrect email/password combination', 401);
 
-    const { secreteKey, expiresIn } = AuthConfig;
+    const { secretKey, expiresIn } = AuthConfig;
 
-    const token = sign({}, secreteKey, {
+    const token = sign({}, secretKey, {
       subject: user.id,
       expiresIn,
     });

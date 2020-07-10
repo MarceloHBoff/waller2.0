@@ -31,11 +31,11 @@ export default class ActivesRepository implements IActivesRepository {
   }
 
   public async findByCode(code: string): Promise<Active | undefined> {
-    const findUser = await this.ormRepository.findOne({
+    const findActive = await this.ormRepository.findOne({
       where: { code },
     });
 
-    return findUser;
+    return findActive;
   }
 
   public async create(code: string): Promise<Active> {
@@ -43,7 +43,7 @@ export default class ActivesRepository implements IActivesRepository {
       code,
     );
 
-    const user = this.ormRepository.create({
+    const active = this.ormRepository.create({
       code,
       name,
       type,
@@ -51,9 +51,9 @@ export default class ActivesRepository implements IActivesRepository {
       lastPrice,
     });
 
-    await this.ormRepository.save(user);
+    await this.ormRepository.save(active);
 
-    return user;
+    return active;
   }
 
   public async updatePrice({

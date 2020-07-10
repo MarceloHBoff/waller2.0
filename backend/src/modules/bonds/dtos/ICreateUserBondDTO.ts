@@ -4,4 +4,5 @@ export default interface ICreateUserBondDTO {
   buyPrice: number;
   nowPrice: number;
   dueDate: Date;
+  automatic?: boolean;
 }
