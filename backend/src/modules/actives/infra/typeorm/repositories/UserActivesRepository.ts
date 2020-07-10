@@ -70,21 +70,21 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
     const unifiedUserActives: UserActive[] = [];
 
-    userActives.forEach(userActive => {
+    userActives.forEach(data => {
+      const userActive = this.convertDecimalInNumber(data);
+
+      const { active_id, quantity, buyPrice } = userActive;
+
       const findIndex = unifiedUserActives.findIndex(
-        unifiedUserActive =>
-          unifiedUserActive.active_id === userActive.active_id,
+        unifiedUserActive => unifiedUserActive.active_id === active_id,
       );
 
       if (findIndex >= 0) {
         unifiedUserActives[findIndex].quantity =
-          Number(unifiedUserActives[findIndex].quantity) +
-          Number(userActive.quantity);
+          Number(unifiedUserActives[findIndex].quantity) + quantity;
 
         unifiedUserActives[findIndex].buyPrice =
-          (Number(unifiedUserActives[findIndex].buyPrice) +
-            Number(userActive.buyPrice)) /
-          2;
+          (Number(unifiedUserActives[findIndex].buyPrice) + buyPrice) / 2;
       } else {
         unifiedUserActives.push(userActive);
       }
@@ -130,6 +130,9 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
     let { price, quantity } = data;
 
+    price = Number(price);
+    quantity = Number(quantity);
+
     if (code === 'SQIA3') {
       quantity *= 4;
       price /= 4;
@@ -144,21 +147,22 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
     if (!active) active = await this.activesRepository.create(code);
 
-    const userActive = await this.findByBuyDate(user_id, active.id, buyDate);
+    let userActive = await this.findByBuyDate(user_id, active.id, buyDate);
 
     if (userActive) {
-      if (type === 'C') {
-        const totalValue =
-          Number(userActive.buyPrice) * Number(userActive.quantity);
-        const newTotalValue = Number(price) * Number(quantity);
+      userActive = this.convertDecimalInNumber(userActive);
 
-        userActive.quantity = Number(userActive.quantity) + Number(quantity);
+      if (type === 'C') {
+        const totalValue = userActive.buyPrice * userActive.quantity;
+        const newTotalValue = price * quantity;
+
+        userActive.quantity += quantity;
 
         userActive.buyPrice =
-          (totalValue + newTotalValue) / Number(userActive.quantity);
+          (totalValue + newTotalValue) / userActive.quantity;
       } else {
-        userActive.quantity = Number(userActive.quantity) - Number(quantity);
-        userActive.buyPrice = (Number(userActive.buyPrice) + Number(price)) / 2;
+        userActive.quantity -= quantity;
+        userActive.buyPrice = (userActive.buyPrice + price) / 2;
       }
 
       userActive.automatic = true;
@@ -186,5 +190,12 @@ export default class UserActivesRepository implements IUserActiveRepository {
     });
 
     return findUserActive;
+  }
+
+  private convertDecimalInNumber(userActive: UserActive): UserActive {
+    return Object.assign(userActive, {
+      quantity: Number(userActive.quantity),
+      buyPrice: Number(userActive.buyPrice),
+    });
   }
 }
