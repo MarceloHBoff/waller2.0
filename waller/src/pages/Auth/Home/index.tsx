@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Animated } from 'react-native';
+import { Animated, Dimensions } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -17,6 +17,8 @@ import {
   SignUpButtonText,
 } from './styles';
 
+const { width } = Dimensions.get('window');
+
 const Home: React.FC = () => {
   const offsetLeft = new Animated.ValueXY({ x: -800, y: 0 });
   const offsetRight = new Animated.ValueXY({ x: 800, y: 0 });
@@ -28,13 +30,13 @@ const Home: React.FC = () => {
     Animated.parallel([
       Animated.spring(offsetLeft.x, {
         toValue: 0,
-        speed: 0.003,
+        speed: 0.1,
         bounciness: 1000,
         useNativeDriver: true,
       }),
       Animated.spring(offsetRight.x, {
         toValue: 0,
-        speed: 0.003,
+        speed: 0.1,
         bounciness: 1000,
         useNativeDriver: true,
       }),
@@ -49,20 +51,18 @@ const Home: React.FC = () => {
   const handleLeavePage = useCallback(() => {
     Animated.parallel([
       Animated.spring(offsetLeft.x, {
-        toValue: -800,
-        speed: 0.001,
-        bounciness: 3000,
+        toValue: width * -1,
+        speed: 0.1,
         useNativeDriver: true,
       }),
       Animated.spring(offsetRight.x, {
-        toValue: 800,
-        speed: 0.001,
-        bounciness: 3000,
+        toValue: width,
+        speed: 0.1,
         useNativeDriver: true,
       }),
       Animated.timing(opacity, {
         toValue: 0,
-        duration: 3000,
+        duration: 500,
         useNativeDriver: true,
       }),
     ]).start();

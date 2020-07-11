@@ -1,5 +1,11 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { Animated, ScrollView, Keyboard, Alert } from 'react-native';
+import {
+  Animated,
+  ScrollView,
+  Keyboard,
+  Alert,
+  Dimensions,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { useNavigation } from '@react-navigation/native';
@@ -25,6 +31,8 @@ interface SignUpFormData {
   email: string;
   password: string;
 }
+
+const { width } = Dimensions.get('window');
 
 const SignUp: React.FC = () => {
   const offsetLeft = new Animated.ValueXY({ x: -800, y: 0 });
@@ -65,14 +73,14 @@ const SignUp: React.FC = () => {
   const handleGoBack = useCallback(() => {
     Animated.parallel([
       Animated.spring(offsetLeft.x, {
-        toValue: -800,
-        speed: 0.001,
+        toValue: width * -1,
+        speed: 0.1,
         bounciness: 100,
         useNativeDriver: true,
       }),
       Animated.spring(offsetRight.x, {
-        toValue: 800,
-        speed: 0.001,
+        toValue: width,
+        speed: 0.1,
         bounciness: 100,
         useNativeDriver: true,
       }),

@@ -1,5 +1,12 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { Animated, ScrollView, Keyboard, Alert } from 'react-native';
+import {
+  Animated,
+  ScrollView,
+  Keyboard,
+  Alert,
+  Dimensions,
+} from 'react-native';
+import TouchID from 'react-native-touch-id';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +15,7 @@ import * as Yup from 'yup';
 
 import signInImage from '../../../assets/signInImage.png';
 import Input from '../../../components/Input';
+import { useAuth } from '../../../hooks/auth';
 import getValidationErrors from '../../../utils/getValidationErrors';
 import {
   Container,
@@ -25,6 +33,8 @@ interface SignInFormData {
   password: string;
 }
 
+const { width } = Dimensions.get('window');
+
 const SignIn: React.FC = () => {
   const offsetLeft = new Animated.ValueXY({ x: -800, y: 0 });
   const offsetRight = new Animated.ValueXY({ x: 800, y: 0 });
@@ -34,6 +44,7 @@ const SignIn: React.FC = () => {
   const scrollViewRef = useRef<ScrollView>(null);
 
   const { goBack } = useNavigation();
+  const { signIn, signInByTouchId, touchId } = useAuth();
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () =>
@@ -55,29 +66,40 @@ const SignIn: React.FC = () => {
       }),
       Animated.timing(opacity, {
         toValue: 1,
-        duration: 1000,
+        duration: 500,
         useNativeDriver: true,
       }),
     ]).start();
   }, [opacity, offsetLeft, offsetRight]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      TouchID.isSupported().then(() => {
+        if (touchId)
+          TouchID.authenticate('dale', { title: 'dale' })
+            .then(() => signInByTouchId())
+            .catch(error => {
+              console.log('cancel');
+            });
+      });
+    }, 2000);
+  }, [touchId, signInByTouchId]);
+
   const handleGoBack = useCallback(() => {
     Animated.parallel([
       Animated.spring(offsetLeft.x, {
-        toValue: -800,
-        speed: 0.001,
-        bounciness: 100,
+        toValue: width * -1,
+        speed: 0.1,
         useNativeDriver: true,
       }),
       Animated.spring(offsetRight.x, {
-        toValue: 800,
-        speed: 0.001,
-        bounciness: 100,
+        toValue: width,
+        speed: 0.1,
         useNativeDriver: true,
       }),
       Animated.timing(opacity, {
         toValue: 0,
-        duration: 100,
+        duration: 500,
         useNativeDriver: true,
       }),
     ]).start();
@@ -85,30 +107,35 @@ const SignIn: React.FC = () => {
     goBack();
   }, [goBack, opacity, offsetRight, offsetLeft]);
 
-  const handleSubmit = useCallback(async (data: SignInFormData) => {
-    try {
-      formRef.current?.setErrors({});
+  const handleSubmit = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('E-mail is required')
-          .email('Type a valid e-mail'),
-        password: Yup.string().required('Password is required'),
-      });
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail is required')
+            .email('Type a valid e-mail'),
+          password: Yup.string().required('Password is required'),
+        });
 
-      await schema.validate(data, { abortEarly: false });
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+        await schema.validate(data, { abortEarly: false });
 
-        formRef.current?.setErrors(errors);
+        signIn({ email: data.email, password: data.password });
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
 
-        return;
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        Alert.alert('Error in SignIn', 'Email or password is invalid!');
       }
-
-      Alert.alert('Error in SignIn', 'Email or password is invalid!');
-    }
-  }, []);
+    },
+    [signIn],
+  );
 
   return (
     <ScrollView ref={scrollViewRef}>
