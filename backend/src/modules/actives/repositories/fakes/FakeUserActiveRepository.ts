@@ -88,6 +88,11 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
     return userActives;
   }
 
+  public async createOrUpdateByCEI(
+    user_id: string,
+    data: object,
+  ): Promise<void> {}
+
   public async removeAutomaticByUserId(user_id: string): Promise<void> {
     this.userActives.filter(
       userActive =>

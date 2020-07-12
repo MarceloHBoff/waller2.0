@@ -63,8 +63,9 @@ describe('ListUserActives', () => {
 
     const userActives = await listUserActives.execute(id);
 
-    expect(userActives).toHaveLength(2);
-    expect(userActives[0].active_id).toBe(userActive1.active_id);
-    expect(userActives[1].active_id).toBe(userActive2.active_id);
+    expect(userActives.actives).toHaveLength(2);
+    expect(userActives.actives[0].active_id).toBe(userActive1.active_id);
+    expect(userActives.actives[1].active_id).toBe(userActive2.active_id);
+    expect(userActives.totals.investment).toBe(100 * 10 * 2);
   });
 });
