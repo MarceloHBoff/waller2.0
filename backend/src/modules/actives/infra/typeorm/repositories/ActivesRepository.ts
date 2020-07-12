@@ -38,7 +38,7 @@ export default class ActivesRepository implements IActivesRepository {
     return findActive;
   }
 
-  public async create(code: string): Promise<Active> {
+  public async create(code: string, typeFixed: string): Promise<Active> {
     const { name, price, lastPrice, type } = await this.priceProvider.getByCode(
       code,
     );
@@ -46,7 +46,7 @@ export default class ActivesRepository implements IActivesRepository {
     const active = this.ormRepository.create({
       code,
       name,
-      type,
+      type: typeFixed || type,
       price,
       lastPrice,
     });

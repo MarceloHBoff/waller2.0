@@ -41,7 +41,7 @@ describe('CreateUserActive', () => {
       password: '123456',
     });
 
-    await createActive.execute('PETR3');
+    await createActive.execute('PETR3', 'Acao');
 
     const userActive = await createUserActive.execute({
       user_id: id,

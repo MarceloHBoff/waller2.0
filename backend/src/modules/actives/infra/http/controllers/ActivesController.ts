@@ -9,7 +9,7 @@ export default class ActivesController {
 
     const createActive = container.resolve(CreateActiveService);
 
-    const active = await createActive.execute(code);
+    const active = await createActive.execute(code, '');
 
     return response.status(201).json(active);
   }

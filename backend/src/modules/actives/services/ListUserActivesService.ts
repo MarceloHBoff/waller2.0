@@ -51,9 +51,6 @@ export default class CreateUserActiveService {
     let Bond = 0;
 
     userActives.forEach(userActive => {
-      investment += userActive.quantity * userActive.buyPrice;
-      currentValue += userActive.quantity * userActive.active.price;
-
       switch (userActive.active.type) {
         case 'Acao':
           Acao += userActive.quantity * userActive.active.price;
@@ -71,8 +68,11 @@ export default class CreateUserActiveService {
           Reit += userActive.quantity * userActive.active.price;
           break;
         default:
-          break;
+          return;
       }
+
+      investment += userActive.quantity * userActive.buyPrice;
+      currentValue += userActive.quantity * userActive.active.price;
     });
 
     userBonds.forEach(userBond => {

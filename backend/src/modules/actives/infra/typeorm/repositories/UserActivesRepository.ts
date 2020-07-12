@@ -145,7 +145,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
     let active = await this.activesRepository.findByCode(code);
 
-    if (!active) active = await this.activesRepository.create(code);
+    if (!active) active = await this.activesRepository.create(code, '');
 
     let userActive = await this.findByBuyDate(user_id, active.id, buyDate);
 

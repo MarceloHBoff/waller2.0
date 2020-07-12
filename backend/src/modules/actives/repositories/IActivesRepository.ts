@@ -6,5 +6,5 @@ export default interface IActivesRepository {
   getById(id: string): Promise<Active>;
   findByCode(code: string): Promise<Active | undefined>;
   updatePrice(data: IUpdateActiveDTO): Promise<Active>;
-  create(code: string): Promise<Active>;
+  create(code: string, type: string): Promise<Active>;
 }

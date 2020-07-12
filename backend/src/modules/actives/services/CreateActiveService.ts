@@ -10,12 +10,12 @@ export default class CreateActiveService {
     private activesRepository: IActivesRepository,
   ) {}
 
-  public async execute(code: string): Promise<Active> {
+  public async execute(code: string, type: string): Promise<Active> {
     const findActive = await this.activesRepository.findByCode(code);
 
     if (findActive) return findActive;
 
-    const active = await this.activesRepository.create(code);
+    const active = await this.activesRepository.create(code, type);
 
     return active;
   }

@@ -13,7 +13,7 @@ export default class ActivesController {
 
     const createActive = container.resolve(CreateActiveService);
 
-    await createActive.execute(code);
+    await createActive.execute(code, '');
 
     const createUserActive = container.resolve(CreateUserActiveService);
 

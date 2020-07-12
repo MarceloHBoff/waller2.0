@@ -45,8 +45,8 @@ describe('ListUserActives', () => {
       password: '123456',
     });
 
-    await createActive.execute('PETR3');
-    await createActive.execute('ITUB3');
+    await createActive.execute('PETR3', 'Acao');
+    await createActive.execute('ITUB3', 'Acao');
 
     const userActive1 = await createUserActive.execute({
       user_id: id,

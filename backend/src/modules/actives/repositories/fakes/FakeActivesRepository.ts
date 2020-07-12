@@ -26,13 +26,13 @@ export default class FakeActivesRepository implements IActivesRepository {
     return findActive;
   }
 
-  public async create(code: string): Promise<Active> {
+  public async create(code: string, type: string): Promise<Active> {
     const active = new Active();
 
     Object.assign(active, {
       id: uuid(),
       name: 'Name',
-      type: 'Acao',
+      type,
       price: 100,
       lastPrice: 90,
       code,
