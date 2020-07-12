@@ -1,4 +1,5 @@
 import React from 'react';
+import { ActivityIndicator } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -12,7 +13,9 @@ import AuthRoutes from './auth.routes';
 const Stack = createStackNavigator();
 
 const Routes: React.FC = () => {
-  const { signed } = useAuth();
+  const { signed, loading } = useAuth();
+
+  if (loading && !signed) return <ActivityIndicator size={40} />;
 
   return (
     <Stack.Navigator

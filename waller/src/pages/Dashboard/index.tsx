@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TouchableOpacity, Text, StatusBar } from 'react-native';
+import { StatusBar, TouchableOpacity } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -11,6 +11,7 @@ import { useFetch } from '../../hooks/swr';
 import { Colors } from '../../styles';
 import { formatPrice, round10 } from '../../utils/format';
 
+import PieChartLabels from './PieChartLabels';
 import { Container, Header, HeaderText, Cards, Card, CardText } from './styles';
 
 interface IUserActivesResponse {
@@ -42,6 +43,13 @@ const Dashboard: React.FC = () => {
 
   const { data } = useFetch<IUserActivesResponse>('userActives');
 
+  const { totals, types } = useMemo(() => {
+    return {
+      totals: data?.totals,
+      types: data?.types,
+    };
+  }, [data]);
+
   const greeting = () => {
     const nowHour = new Date().getHours();
 
@@ -58,7 +66,7 @@ const Dashboard: React.FC = () => {
     profitColor,
     percentColor,
   } = useMemo(() => {
-    if (!data)
+    if (!totals)
       return {
         investment: 0,
         currentValue: 0,
@@ -69,59 +77,26 @@ const Dashboard: React.FC = () => {
       };
 
     return {
-      investment: formatPrice(data?.totals.investment),
-      currentValue: formatPrice(data?.totals.currentValue),
-      profit: formatPrice(data?.totals.profit),
-      percent: round10(data?.totals.percent),
-      profitColor: data.totals.profit > 0 ? Colors.green : Colors.dangerDark,
-      percentColor: data.totals.percent > 0 ? Colors.green : Colors.dangerDark,
+      investment: formatPrice(totals.investment),
+      currentValue: formatPrice(totals.currentValue),
+      profit: formatPrice(totals.profit),
+      percent: round10(totals.percent),
+      profitColor: totals.profit > 0 ? Colors.green : Colors.dangerDark,
+      percentColor: totals.percent > 0 ? Colors.green : Colors.dangerDark,
     };
-  }, [data]);
+  }, [totals]);
 
-  const pieData = [
-    {
-      value: data?.types.Acao,
-      svg: {
-        fill: '#fff',
-      },
-      key: `pie-${data?.types.Acao}`,
-    },
-    {
-      value: data?.types.Stock,
-      svg: {
-        fill: '#fff',
-      },
-      key: `pie-${data?.types.Stock}`,
-    },
-    {
-      value: data?.types.ETF,
-      svg: {
-        fill: '#fff',
-      },
-      key: `pie-${data?.types.ETF}`,
-    },
-    {
-      value: data?.types.FII,
-      svg: {
-        fill: '#fff',
-      },
-      key: `pie-${data?.types.FII}`,
-    },
-    {
-      value: data?.types.Reit,
-      svg: {
-        fill: '#fff',
-      },
-      key: `pie-${data?.types.Reit}`,
-    },
-    {
-      value: data?.types.Bond,
-      svg: {
-        fill: '#fff',
-      },
-      key: `pie-${data?.types.Bond}`,
-    },
-  ];
+  const pieData = useMemo(() => {
+    if (!types || !totals) return [];
+
+    return Object.keys(types)
+      .filter((type: string) => types[type] !== 0)
+      .map((type: string) => ({
+        value: (types[type] / totals?.currentValue) * 100,
+        svg: { fill: '#fff' },
+        key: type,
+      }));
+  }, [types, totals]);
 
   return (
     <Container>
@@ -164,11 +139,15 @@ const Dashboard: React.FC = () => {
         </Card>
       </Cards>
 
-      <PieChart style={{ height: 200 }} data={pieData} />
+      {pieData.length !== 0 && (
+        <PieChart style={{ height: 200 }} data={pieData}>
+          <PieChartLabels />
+        </PieChart>
+      )}
 
-      <TouchableOpacity onPress={signOut}>
+      {/* <TouchableOpacity onPress={signOut}>
         <Text>Sair</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </Container>
   );
 };
