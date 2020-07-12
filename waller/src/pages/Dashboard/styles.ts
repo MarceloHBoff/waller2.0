@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 
+import ValueField from '../../components/ValueField';
 import { Colors, Fonts, Metrics } from '../../styles';
 
 export const Container = styled.View`
@@ -22,7 +23,7 @@ export const HeaderText = styled.Text`
 `;
 
 export const Cards = styled.ScrollView`
-  max-height: 220px;
+  max-height: ${Metrics.base * 2 + 180}px;
 `;
 
 export const Card = styled.View`
@@ -31,21 +32,19 @@ export const Card = styled.View`
   margin: ${Metrics.base}px;
   padding: ${Metrics.base}px;
 
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
 
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
-export const CardTitle = styled.Text`
-  color: ${Colors.white};
-  font-size: ${Fonts.regular}px;
-  font-family: ${Fonts.poppinsMedium};
-`;
+interface ICardText {
+  color: string;
+}
 
-export const CardValue = styled.Text`
-  color: ${Colors.white};
+export const CardText = styled.Text<ICardText>`
+  color: ${props => props.color};
   font-size: ${Fonts.regular}px;
   font-family: ${Fonts.poppinsMedium};
 `;

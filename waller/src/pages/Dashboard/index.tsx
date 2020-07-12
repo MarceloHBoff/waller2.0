@@ -1,29 +1,69 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TouchableOpacity, Text, StatusBar } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
+import ValueField from '../../components/ValueField';
 import { useAuth } from '../../hooks/auth';
+import { useFetch } from '../../hooks/swr';
 import { Colors } from '../../styles';
+import { formatPrice, round10 } from '../../utils/format';
 
-import {
-  Container,
-  Header,
-  HeaderText,
-  Cards,
-  Card,
-  CardTitle,
-  CardValue,
-} from './styles';
+import { Container, Header, HeaderText, Cards, Card, CardText } from './styles';
+
+interface IUserActivesResponse {
+  actives: UserActive[];
+  totals: {
+    investment: number;
+    currentValue: number;
+    profit: number;
+    percent: number;
+  };
+}
+
+interface UserActive {
+  quantity: number;
+}
 
 const Dashboard: React.FC = () => {
   const { signOut, user } = useAuth();
 
+  const { data } = useFetch<IUserActivesResponse>('userActives');
+
   const greeting = () => {
     const nowHour = new Date().getHours();
 
-    if (nowHour > 5) return 'Good morning';
+    if (nowHour > 18 || nowHour < 5) return 'Good night';
     if (nowHour > 12) return 'Good afternoon';
-    return 'Good night';
+    return 'Good morning';
   };
+
+  const {
+    investment,
+    currentValue,
+    profit,
+    percent,
+    profitColor,
+    percentColor,
+  } = useMemo(() => {
+    if (!data)
+      return {
+        investment: 0,
+        currentValue: 0,
+        profit: 0,
+        percent: 0,
+        profitColor: Colors.green,
+        percentColor: Colors.green,
+      };
+
+    return {
+      investment: formatPrice(data?.totals.investment),
+      currentValue: formatPrice(data?.totals.currentValue),
+      profit: formatPrice(data?.totals.profit),
+      percent: round10(data?.totals.percent),
+      profitColor: data.totals.profit > 0 ? Colors.green : Colors.dangerDark,
+      percentColor: data.totals.percent > 0 ? Colors.green : Colors.dangerDark,
+    };
+  }, [data]);
 
   return (
     <Container>
@@ -34,18 +74,30 @@ const Dashboard: React.FC = () => {
           {user.name}
         </HeaderText>
       </Header>
-      <Cards horizontal showsHorizontalScrollIndicator={false}>
+      <Cards
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ padding: 16 }}
+      >
         <Card>
-          <CardTitle>Equity</CardTitle>
-          <CardValue>R$ 1000,00</CardValue>
+          <CardText color={Colors.orange}>Investment</CardText>
+          <Icon name="wallet" size={50} color={Colors.orange} />
+          <ValueField color={Colors.orange}>{investment}</ValueField>
         </Card>
         <Card>
-          <CardTitle>Equity</CardTitle>
-          <CardValue>R$ 1000,00</CardValue>
+          <CardText color={Colors.orange}>Current Value</CardText>
+          <Icon name="money-bill-wave" size={50} color={Colors.orange} />
+          <ValueField color={Colors.orange}>{currentValue}</ValueField>
         </Card>
         <Card>
-          <CardTitle>Equity</CardTitle>
-          <CardValue>R$ 1000,00</CardValue>
+          <CardText color={profitColor}>Profit</CardText>
+          <Icon name="hand-holding-usd" size={50} color={profitColor} />
+          <ValueField color={profitColor}>{profit}</ValueField>
+        </Card>
+        <Card>
+          <CardText color={percentColor}>Profit percent</CardText>
+          <Icon name="percentage" size={50} color={percentColor} />
+          <ValueField color={percentColor}>{percent} %</ValueField>
         </Card>
       </Cards>
       <TouchableOpacity onPress={signOut}>
