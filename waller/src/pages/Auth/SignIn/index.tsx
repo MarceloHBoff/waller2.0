@@ -35,6 +35,8 @@ interface SignInFormData {
 
 const { width } = Dimensions.get('window');
 
+let timeout = 0;
+
 const SignIn: React.FC = () => {
   const offsetLeft = new Animated.ValueXY({ x: -800, y: 0 });
   const offsetRight = new Animated.ValueXY({ x: 800, y: 0 });
@@ -73,7 +75,7 @@ const SignIn: React.FC = () => {
   }, [opacity, offsetLeft, offsetRight]);
 
   useEffect(() => {
-    setTimeout(() => {
+    timeout = setTimeout(() => {
       TouchID.isSupported().then(() => {
         if (touchId)
           TouchID.authenticate('dale', { title: 'dale' })
@@ -86,6 +88,8 @@ const SignIn: React.FC = () => {
   }, [touchId, signInByTouchId]);
 
   const handleGoBack = useCallback(() => {
+    clearTimeout(timeout);
+
     Animated.parallel([
       Animated.spring(offsetLeft.x, {
         toValue: width * -1,

@@ -1,6 +1,9 @@
 import React, { useMemo } from 'react';
 import { TouchableOpacity, Text, StatusBar } from 'react-native';
+import { PieChart } from 'react-native-svg-charts';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
+import { useNavigation } from '@react-navigation/native';
 
 import ValueField from '../../components/ValueField';
 import { useAuth } from '../../hooks/auth';
@@ -12,6 +15,14 @@ import { Container, Header, HeaderText, Cards, Card, CardText } from './styles';
 
 interface IUserActivesResponse {
   actives: UserActive[];
+  types: {
+    Acao: number;
+    Stock: number;
+    ETF: number;
+    FII: number;
+    Reit: number;
+    Bond: number;
+  };
   totals: {
     investment: number;
     currentValue: number;
@@ -26,6 +37,8 @@ interface UserActive {
 
 const Dashboard: React.FC = () => {
   const { signOut, user } = useAuth();
+
+  const { navigate } = useNavigation();
 
   const { data } = useFetch<IUserActivesResponse>('userActives');
 
@@ -65,15 +78,65 @@ const Dashboard: React.FC = () => {
     };
   }, [data]);
 
+  const pieData = [
+    {
+      value: data?.types.Acao,
+      svg: {
+        fill: '#fff',
+      },
+      key: `pie-${data?.types.Acao}`,
+    },
+    {
+      value: data?.types.Stock,
+      svg: {
+        fill: '#fff',
+      },
+      key: `pie-${data?.types.Stock}`,
+    },
+    {
+      value: data?.types.ETF,
+      svg: {
+        fill: '#fff',
+      },
+      key: `pie-${data?.types.ETF}`,
+    },
+    {
+      value: data?.types.FII,
+      svg: {
+        fill: '#fff',
+      },
+      key: `pie-${data?.types.FII}`,
+    },
+    {
+      value: data?.types.Reit,
+      svg: {
+        fill: '#fff',
+      },
+      key: `pie-${data?.types.Reit}`,
+    },
+    {
+      value: data?.types.Bond,
+      svg: {
+        fill: '#fff',
+      },
+      key: `pie-${data?.types.Bond}`,
+    },
+  ];
+
   return (
     <Container>
       <StatusBar backgroundColor={Colors.primarySuperDark} />
+
       <Header style={{ elevation: 10 }}>
         <HeaderText>
           {greeting()}, {'\n'}
           {user.name}
         </HeaderText>
+        <TouchableOpacity onPress={() => navigate('Config')}>
+          <Icon name="user-cog" size={30} color={Colors.white} />
+        </TouchableOpacity>
       </Header>
+
       <Cards
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -100,8 +163,11 @@ const Dashboard: React.FC = () => {
           <ValueField color={percentColor}>{percent} %</ValueField>
         </Card>
       </Cards>
+
+      <PieChart style={{ height: 200 }} data={pieData} />
+
       <TouchableOpacity onPress={signOut}>
-        <Text>Siar</Text>
+        <Text>Sair</Text>
       </TouchableOpacity>
     </Container>
   );

@@ -62,8 +62,8 @@ const AuthProvider: React.FC = ({ children }) => {
 
       if (token && user) setData({ token, user: JSON.parse(user) });
 
-      if (touchStorage) setTouchId(!!touchStorage);
-      if (signedStorage) setSigned(!!signedStorage);
+      if (touchStorage) setTouchId(JSON.parse(touchStorage));
+      if (signedStorage) setSigned(JSON.parse(signedStorage));
 
       setLoading(false);
     }

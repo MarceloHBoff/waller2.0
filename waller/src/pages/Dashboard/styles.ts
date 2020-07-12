@@ -13,13 +13,18 @@ export const Header = styled.View`
   border-bottom-left-radius: ${Metrics.radius * 2}px;
   border-bottom-right-radius: ${Metrics.radius * 2}px;
   background: ${Colors.primarySuperDark};
+
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: ${Metrics.base}px;
 `;
 
 export const HeaderText = styled.Text`
   color: ${Colors.white};
   font-size: ${Fonts.regular}px;
   font-family: ${Fonts.poppinsMedium};
-  padding: ${Metrics.base}px;
 `;
 
 export const Cards = styled.ScrollView`
