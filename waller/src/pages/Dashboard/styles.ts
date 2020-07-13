@@ -1,24 +1,10 @@
 import styled from 'styled-components/native';
 
-import ValueField from '../../components/ValueField';
 import { Colors, Fonts, Metrics } from '../../styles';
 
 export const Container = styled.View`
   flex: 1;
   background: ${Colors.grayDarker};
-`;
-
-export const Header = styled.View`
-  height: 80px;
-  border-bottom-left-radius: ${Metrics.radius * 2}px;
-  border-bottom-right-radius: ${Metrics.radius * 2}px;
-  background: ${Colors.primarySuperDark};
-
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: ${Metrics.base}px;
 `;
 
 export const HeaderText = styled.Text`
@@ -34,7 +20,7 @@ export const Cards = styled.ScrollView`
 export const Card = styled.View`
   border-radius: ${Metrics.radius}px;
   background: ${Colors.gray};
-  margin: ${Metrics.base}px;
+  margin: 0 ${Metrics.base}px;
   padding: ${Metrics.base}px;
 
   width: 160px;

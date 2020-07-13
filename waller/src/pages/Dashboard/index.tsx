@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { useNavigation } from '@react-navigation/native';
 
+import Header from '../../components/Header';
 import ValueField from '../../components/ValueField';
 import { useAuth } from '../../hooks/auth';
 import { useFetch } from '../../hooks/swr';
@@ -12,7 +13,7 @@ import { Colors } from '../../styles';
 import { formatPrice, round10 } from '../../utils/format';
 
 import PieChartLabels from './PieChartLabels';
-import { Container, Header, HeaderText, Cards, Card, CardText } from './styles';
+import { Container, HeaderText, Cards, Card, CardText } from './styles';
 
 interface IUserActivesResponse {
   actives: UserActive[];
@@ -102,7 +103,7 @@ const Dashboard: React.FC = () => {
     <Container>
       <StatusBar backgroundColor={Colors.primarySuperDark} />
 
-      <Header style={{ elevation: 10 }}>
+      <Header>
         <HeaderText>
           {greeting()}, {'\n'}
           {user.name}

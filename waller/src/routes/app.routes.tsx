@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Dashboard from '../pages/Dashboard';
+import ListActives from '../pages/ListActives';
 import { Colors } from '../styles';
 
 const App = createBottomTabNavigator();
@@ -16,10 +17,11 @@ const AppRoutes: React.FC = () => (
       inactiveTintColor: Colors.graySuperLight,
       showLabel: false,
     }}
+    initialRouteName="Dashboard"
   >
     <App.Screen
-      name="Dashboard"
-      component={Dashboard}
+      name="ListActives"
+      component={ListActives}
       options={{
         tabBarIcon: ({ color, size }) => (
           <Icon name="list" color={color} size={size} />
@@ -27,11 +29,11 @@ const AppRoutes: React.FC = () => (
       }}
     />
     <App.Screen
-      name="Dashboard1"
+      name="Dashboard"
       component={Dashboard}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <Icon name="list" color={color} size={size} />
+          <Icon name="cog" color={color} size={size} />
         ),
       }}
     />
