@@ -38,6 +38,7 @@ export default class UserBond {
   dueDate: Date;
 
   @Column({ default: false })
+  @Exclude()
   automatic: boolean;
 
   @CreateDateColumn()

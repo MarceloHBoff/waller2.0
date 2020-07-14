@@ -77,6 +77,9 @@ export default class CreateUserActiveService {
 
     userBonds.forEach(userBond => {
       Bond += Number(userBond.nowPrice);
+
+      investment += Number(userBond.buyPrice);
+      currentValue += Number(userBond.nowPrice);
     });
 
     return {

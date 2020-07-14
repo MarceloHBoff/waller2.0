@@ -45,6 +45,7 @@ export default class UserActive {
   buyDate: Date;
 
   @Column({ default: false })
+  @Exclude()
   automatic: boolean;
 
   @CreateDateColumn()
