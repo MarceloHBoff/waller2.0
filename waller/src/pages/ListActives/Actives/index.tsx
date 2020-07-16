@@ -2,7 +2,8 @@ import React, { useMemo, createContext, useState } from 'react';
 
 import { useRoute } from '@react-navigation/native';
 
-import OrderTableHeader, {
+import {
+  OrderTableHeader,
   IOrderTableContext,
 } from '../../../components/OrderTableHeader';
 import { useFetch } from '../../../hooks/swr';
@@ -15,9 +16,9 @@ export interface UserActive {
   id: string;
   code: string;
   quantity: number;
-  buyPrice: string;
-  nowPrice: string;
-  totalValue: string;
+  buyPrice: number | string;
+  nowPrice: number | string;
+  totalValue: number | string;
 }
 
 interface IUserActivesResponse {
@@ -34,7 +35,7 @@ interface IUserActivesResponse {
 }
 
 const Actives: React.FC = () => {
-  const [orderBy, setOrderBy] = useState('quantity');
+  const [orderBy, setOrderBy] = useState('code');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
 
   const { data } = useFetch<IUserActivesResponse>('userActives');
@@ -48,45 +49,48 @@ const Actives: React.FC = () => {
     return '(R$)';
   }, [name]);
 
+  const ActivesHeader = useMemo(
+    () => [
+      { id: 'code', width: 15, align: 'left', text: 'Code' },
+      { id: 'quantity', width: 18, text: 'Quantity' },
+      { id: 'buyPrice', width: 23, text: `Buy${currency}` },
+      { id: 'nowPrice', width: 20, text: `Now${currency}` },
+      { id: 'totalValue', width: 25, text: `Total${currency}` },
+    ],
+    [currency],
+  );
+
   const userActives = useMemo(() => {
     if (!data) return [];
 
-    const dale = data.actives
+    let userActivesEdited: UserActive[] = data.actives
       .filter(userActive => userActive.active.type === name)
       .map(userActive => ({
         id: userActive.active.id,
         code: userActive.active.code,
         quantity: userActive.quantity,
-        buyPrice: round10(userActive.buyPrice).toFixed(2),
-        nowPrice: round10(Number(userActive.active.price)).toFixed(2),
-        totalValue: round10(
-          userActive.quantity * userActive.active.price,
-        ).toFixed(2),
+        buyPrice: userActive.buyPrice,
+        nowPrice: Number(userActive.active.price),
+        totalValue: userActive.quantity * userActive.active.price,
       }));
 
-    return SortArray<UserActive>(dale, Sorting<UserActive>(order, orderBy));
+    userActivesEdited = SortArray<UserActive>(
+      userActivesEdited,
+      Sorting<UserActive>(order, orderBy),
+    );
+
+    return userActivesEdited.map(userActive => ({
+      ...userActive,
+      buyPrice: round10(userActive.buyPrice).toFixed(2),
+      nowPrice: round10(userActive.nowPrice).toFixed(2),
+      totalValue: round10(userActive.totalValue).toFixed(2),
+    }));
   }, [data, name, orderBy, order]);
 
   return (
     <Container>
-      <Context.Provider value={{ orderBy, setOrderBy, order, setOrder }}>
-        <Active style={{ elevation: 1 }}>
-          <OrderTableHeader context={Context} width={15}>
-            code
-          </OrderTableHeader>
-          <OrderTableHeader context={Context} width={18}>
-            quantity
-          </OrderTableHeader>
-          <OrderTableHeader context={Context} width={22}>
-            buyPrice
-          </OrderTableHeader>
-          <OrderTableHeader context={Context} width={20}>
-            {`Now${currency}`}
-          </OrderTableHeader>
-          <OrderTableHeader context={Context} width={25}>
-            {`Total${currency}`}
-          </OrderTableHeader>
-        </Active>
+      <Context.Provider value={{ order, orderBy, setOrder, setOrderBy }}>
+        <OrderTableHeader headers={ActivesHeader} context={Context} />
       </Context.Provider>
 
       <ActivesContainer

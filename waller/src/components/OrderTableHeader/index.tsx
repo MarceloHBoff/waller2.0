@@ -4,7 +4,12 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { Colors } from '../../styles';
 
-import { Container, TableHeaderText } from './styles';
+import {
+  TableHeaderContainer,
+  Container,
+  TableHeaderButton,
+  TableHeaderText,
+} from './styles';
 
 export interface IOrderTableContext {
   orderBy: string;
@@ -13,56 +18,62 @@ export interface IOrderTableContext {
   setOrder: (data: 'asc' | 'desc') => void;
 }
 
-interface IOrderTableHeaderProps {
+interface IOrderTableHeader {
+  id: string;
   width: number;
+  align?: string;
+  text: string;
+}
+
+interface IOrderTableHeaderProps {
+  headers: IOrderTableHeader[];
   context: React.Context<IOrderTableContext>;
 }
 
 const OrderTableHeader: React.FC<IOrderTableHeaderProps> = ({
-  width,
+  headers,
   context,
-  children,
 }) => {
   const { orderBy, setOrderBy, order, setOrder } = useContext(context);
 
   function handleClick(text: string) {
-    if (orderBy === text) {
-      if (order === 'desc') {
-        setOrder('asc');
-      } else {
-        setOrder('desc');
-      }
-    } else {
-      setOrder('asc');
-    }
+    const isDesc = orderBy === text && order === 'asc';
 
+    setOrder(isDesc ? 'desc' : 'asc');
     setOrderBy(text);
   }
 
   return (
-    <Container width={width}>
-      <TouchableOpacity onPress={() => handleClick(String(children))}>
-        <TableHeaderText>{children}</TableHeaderText>
-      </TouchableOpacity>
+    <TableHeaderContainer style={{ elevation: 1 }}>
+      {headers.map(header => (
+        <Container width={header.width} key={header.id}>
+          <TableHeaderButton
+            align={header.align}
+            onPress={() => handleClick(header.id)}
+          >
+            <TableHeaderText>{header.text}</TableHeaderText>
 
-      {orderBy === children &&
-        (order === 'asc' ? (
-          <Icon
-            name="sort-up"
-            size={20}
-            color={Colors.primary}
-            style={{ paddingTop: 5 }}
-          />
-        ) : (
-          <Icon
-            name="sort-down"
-            size={20}
-            color={Colors.primary}
-            style={{ paddingBottom: 10 }}
-          />
-        ))}
-    </Container>
+            {orderBy === header.id &&
+              (order === 'desc' ? (
+                <Icon
+                  name="sort-up"
+                  size={20}
+                  color={Colors.primary}
+                  style={{ paddingTop: 5 }}
+                />
+              ) : (
+                <Icon
+                  name="sort-down"
+                  size={20}
+                  color={Colors.primary}
+                  style={{ paddingBottom: 10 }}
+                />
+              ))}
+          </TableHeaderButton>
+        </Container>
+      ))}
+    </TableHeaderContainer>
   );
 };
 
-export default OrderTableHeader;
+export { OrderTableHeader };

@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import { Colors, Fonts } from '../../styles';
 
 import Actives from './Actives';
+import Bonds from './Bonds';
 import { Container, HeaderText } from './styles';
 
 const Tab = createMaterialTopTabNavigator();
@@ -18,6 +19,7 @@ const ListActives: React.FC = () => {
       </Header>
 
       <Tab.Navigator
+        sceneContainerStyle={{ backgroundColor: Colors.grayDark }}
         tabBarOptions={{
           style: { backgroundColor: Colors.grayDark },
           labelStyle: {
@@ -34,7 +36,7 @@ const ListActives: React.FC = () => {
         <Tab.Screen name="ETF" component={Actives} />
         <Tab.Screen name="Stock" component={Actives} />
         <Tab.Screen name="Reit" component={Actives} />
-        <Tab.Screen name="Bond" component={Actives} />
+        <Tab.Screen name="Bond" component={Bonds} />
       </Tab.Navigator>
     </Container>
   );

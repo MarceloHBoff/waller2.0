@@ -4,25 +4,22 @@ import styled, { css } from 'styled-components/native';
 
 import { Colors, Fonts, Metrics } from '../../../styles';
 
-import { UserActive } from '.';
+import { UserBond } from '.';
 
 export const Container = styled.View`
-  width: 100%;
-  height: 100%;
-  /* background: ${Colors.grayDark}; */
-`;
-
-export const ActivesContainer = styled(
-  FlatList as new () => FlatList<UserActive>,
-)`
+  flex: 1;
   background: ${Colors.grayDark};
 `;
 
-interface IActive {
+export const BondsContainer = styled(FlatList as new () => FlatList<UserBond>)`
+  background: ${Colors.grayDark};
+`;
+
+interface IBond {
   index?: number;
 }
 
-export const Active = styled.View<IActive>`
+export const Bond = styled.View<IBond>`
   flex-direction: row;
   width: 100%;
   padding: 0 ${Metrics.base / 2}px;
@@ -35,7 +32,7 @@ export const Active = styled.View<IActive>`
     `}
 `;
 
-export const ActiveText = styled.Text`
+export const BondText = styled.Text`
   width: 20%;
   padding: ${Metrics.base / 2}px;
   color: ${Colors.white};

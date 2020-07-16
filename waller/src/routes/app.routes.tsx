@@ -13,6 +13,8 @@ const AppRoutes: React.FC = () => (
   <App.Navigator
     tabBarOptions={{
       style: { backgroundColor: Colors.grayDark },
+      tabStyle: { backgroundColor: Colors.grayDark },
+
       activeTintColor: Colors.primaryDark,
       inactiveTintColor: Colors.graySuperLight,
       showLabel: false,
@@ -24,7 +26,7 @@ const AppRoutes: React.FC = () => (
       component={ListActives}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <Icon name="list" color={color} size={size} />
+          <Icon name="bars" color={color} size={size} />
         ),
       }}
     />
@@ -33,7 +35,7 @@ const AppRoutes: React.FC = () => (
       component={Dashboard}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <Icon name="cog" color={color} size={size} />
+          <Icon name="home" color={color} size={size} />
         ),
       }}
     />

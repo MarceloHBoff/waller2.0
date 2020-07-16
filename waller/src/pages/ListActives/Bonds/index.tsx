@@ -1,82 +1,72 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, createContext, useState } from 'react';
 
-import { useRoute } from '@react-navigation/native';
-
+import {
+  OrderTableHeader,
+  IOrderTableContext,
+} from '../../../components/OrderTableHeader';
 import { useFetch } from '../../../hooks/swr';
 import { round10 } from '../../../utils/format';
+import { SortArray, Sorting } from '../../../utils/sorting';
 
-import { Container, ActivesContainer, Active, ActiveText } from './styles';
+import { Container, BondsContainer, Bond, BondText } from './styles';
 
 export interface UserBond {
-  id: string;
   name: string;
-  buyPrice: number;
+  buyPrice: string;
   nowPrice: string;
   dueDate: string;
 }
 
-interface IUserActivesResponse {
-  actives: {
-    quantity: number;
-    buyPrice: number;
-    active: {
-      id: string;
-      type: string;
-      code: string;
-      price: number;
-    };
-  }[];
-}
+const BondsHeader = [
+  { id: 'name', align: 'left', width: 40, text: 'Name' },
+  { id: 'buyPrice', width: 20, text: `Buy(R$)` },
+  { id: 'nowPrice', width: 20, text: `Now(R$)` },
+  { id: 'dueDate', width: 20, text: `Due Date` },
+];
 
 const Bonds: React.FC = () => {
-  const { data } = useFetch<IUserActivesResponse>('userBonds');
+  const [orderBy, setOrderBy] = useState('name');
+  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
 
-  const { name } = useRoute();
+  const { data } = useFetch<UserBond[]>('userBonds');
+
+  const Context = createContext({} as IOrderTableContext);
 
   const userBonds = useMemo(() => {
     if (!data) return [];
 
-    return data.actives
-      .filter(userActive => userActive.active.type === name)
-      .map(userActive => ({
-        id: userActive.active.id,
-        code: userActive.active.code,
-        quantity: userActive.quantity,
-        buyPrice: round10(userActive.buyPrice).toFixed(2),
-        nowPrice: round10(Number(userActive.active.price)).toFixed(2),
-        totalValue: round10(
-          userActive.quantity * userActive.active.price,
-        ).toFixed(2),
-      }));
-  }, [data, name]);
+    const userBondsUnsorted = data.map(userBond => ({
+      name: userBond.name,
+      buyPrice: round10(userBond.buyPrice).toFixed(2),
+      nowPrice: round10(userBond.nowPrice).toFixed(2),
+      dueDate: '15/10/2035',
+      // dueDate: userBond.dueDate,
+    }));
+
+    return SortArray<UserBond>(
+      userBondsUnsorted,
+      Sorting<UserBond>(order, orderBy),
+    );
+  }, [data]);
 
   return (
     <Container>
-      <Active style={{ elevation: 1 }}>
-        <ActiveText style={{ width: '15%', textAlign: 'left' }}>
-          Code
-        </ActiveText>
-        <ActiveText style={{ width: '18%' }}>Quantity</ActiveText>
-        <ActiveText style={{ width: '22%' }}>Buy{currency}</ActiveText>
-        <ActiveText style={{ width: '20%' }}>Now{currency}</ActiveText>
-        <ActiveText style={{ width: '25%' }}>Total{currency}</ActiveText>
-      </Active>
+      <Context.Provider value={{ order, orderBy, setOrder, setOrderBy }}>
+        <OrderTableHeader headers={BondsHeader} context={Context} />
+      </Context.Provider>
 
-      <ActivesContainer
-        data={userActives}
-        keyExtractor={active => active.id}
-        renderItem={({ item: active, index }) => (
-          <Active index={index}>
-            <ActiveText style={{ width: '15%', textAlign: 'left' }}>
-              {active.code}
-            </ActiveText>
-            <ActiveText style={{ width: '18%' }}>{active.quantity}</ActiveText>
-            <ActiveText style={{ width: '23%' }}>{active.buyPrice}</ActiveText>
-            <ActiveText style={{ width: '20%' }}>{active.nowPrice}</ActiveText>
-            <ActiveText style={{ width: '25%' }}>
-              {active.totalValue}
-            </ActiveText>
-          </Active>
+      <BondsContainer
+        data={userBonds}
+        keyExtractor={bond => bond.name}
+        renderItem={({ item: bond, index }) => (
+          <Bond index={index}>
+            <BondText style={{ width: '40%', textAlign: 'left' }}>
+              {bond.name}
+            </BondText>
+            <BondText style={{ width: '20%' }}>{bond.buyPrice}</BondText>
+            <BondText style={{ width: '20%' }}>{bond.nowPrice}</BondText>
+            <BondText style={{ width: '20%' }}>{bond.dueDate}</BondText>
+          </Bond>
         )}
       />
     </Container>
