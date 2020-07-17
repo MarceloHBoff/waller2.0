@@ -25,10 +25,9 @@ export const Bond = styled.View<IBond>`
   padding: 0 ${Metrics.base / 2}px;
 
   ${props =>
-    props.index !== 0 &&
+    Number(props.index) % 2 === 0 &&
     css`
-      border-top-width: 0.5px;
-      border-color: ${Colors.graySuperLight};
+      background: ${Colors.grayDarker};
     `}
 `;
 

@@ -7,6 +7,7 @@ import {
 import { useFetch } from '../../../hooks/swr';
 import { round10 } from '../../../utils/format';
 import { SortArray, Sorting } from '../../../utils/sorting';
+import Nothing from '../Nothing';
 
 import { Container, BondsContainer, Bond, BondText } from './styles';
 
@@ -47,28 +48,34 @@ const Bonds: React.FC = () => {
       userBondsUnsorted,
       Sorting<UserBond>(order, orderBy),
     );
-  }, [data]);
+  }, [data, order, orderBy]);
 
   return (
     <Container>
-      <Context.Provider value={{ order, orderBy, setOrder, setOrderBy }}>
-        <OrderTableHeader headers={BondsHeader} context={Context} />
-      </Context.Provider>
+      {userBonds.length === 0 ? (
+        <Nothing />
+      ) : (
+        <>
+          <Context.Provider value={{ order, orderBy, setOrder, setOrderBy }}>
+            <OrderTableHeader headers={BondsHeader} context={Context} />
+          </Context.Provider>
 
-      <BondsContainer
-        data={userBonds}
-        keyExtractor={bond => bond.name}
-        renderItem={({ item: bond, index }) => (
-          <Bond index={index}>
-            <BondText style={{ width: '40%', textAlign: 'left' }}>
-              {bond.name}
-            </BondText>
-            <BondText style={{ width: '20%' }}>{bond.buyPrice}</BondText>
-            <BondText style={{ width: '20%' }}>{bond.nowPrice}</BondText>
-            <BondText style={{ width: '20%' }}>{bond.dueDate}</BondText>
-          </Bond>
-        )}
-      />
+          <BondsContainer
+            data={userBonds}
+            keyExtractor={bond => bond.name}
+            renderItem={({ item: bond, index }) => (
+              <Bond index={index}>
+                <BondText style={{ width: '40%', textAlign: 'left' }}>
+                  {bond.name}
+                </BondText>
+                <BondText style={{ width: '20%' }}>{bond.buyPrice}</BondText>
+                <BondText style={{ width: '20%' }}>{bond.nowPrice}</BondText>
+                <BondText style={{ width: '20%' }}>{bond.dueDate}</BondText>
+              </Bond>
+            )}
+          />
+        </>
+      )}
     </Container>
   );
 };

@@ -9,7 +9,6 @@ import { UserActive } from '.';
 export const Container = styled.View`
   width: 100%;
   height: 100%;
-  /* background: ${Colors.grayDark}; */
 `;
 
 export const ActivesContainer = styled(
@@ -28,10 +27,9 @@ export const Active = styled.View<IActive>`
   padding: 0 ${Metrics.base / 2}px;
 
   ${props =>
-    props.index !== 0 &&
+    Number(props.index) % 2 === 0 &&
     css`
-      border-top-width: 0.5px;
-      border-color: ${Colors.graySuperLight};
+      background: ${Colors.grayDarker};
     `}
 `;
 

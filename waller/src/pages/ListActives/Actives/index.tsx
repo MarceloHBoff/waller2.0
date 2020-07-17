@@ -9,6 +9,7 @@ import {
 import { useFetch } from '../../../hooks/swr';
 import { round10 } from '../../../utils/format';
 import { SortArray, Sorting } from '../../../utils/sorting';
+import Nothing from '../Nothing';
 
 import { Container, ActivesContainer, Active, ActiveText } from './styles';
 
@@ -89,27 +90,39 @@ const Actives: React.FC = () => {
 
   return (
     <Container>
-      <Context.Provider value={{ order, orderBy, setOrder, setOrderBy }}>
-        <OrderTableHeader headers={ActivesHeader} context={Context} />
-      </Context.Provider>
+      {userActives.length === 0 ? (
+        <Nothing />
+      ) : (
+        <>
+          <Context.Provider value={{ order, orderBy, setOrder, setOrderBy }}>
+            <OrderTableHeader headers={ActivesHeader} context={Context} />
+          </Context.Provider>
 
-      <ActivesContainer
-        data={userActives}
-        keyExtractor={active => active.id}
-        renderItem={({ item: active, index }) => (
-          <Active index={index}>
-            <ActiveText style={{ width: '15%', textAlign: 'left' }}>
-              {active.code}
-            </ActiveText>
-            <ActiveText style={{ width: '18%' }}>{active.quantity}</ActiveText>
-            <ActiveText style={{ width: '23%' }}>{active.buyPrice}</ActiveText>
-            <ActiveText style={{ width: '20%' }}>{active.nowPrice}</ActiveText>
-            <ActiveText style={{ width: '25%' }}>
-              {active.totalValue}
-            </ActiveText>
-          </Active>
-        )}
-      />
+          <ActivesContainer
+            data={userActives}
+            keyExtractor={active => active.id}
+            renderItem={({ item: active, index }) => (
+              <Active index={index}>
+                <ActiveText style={{ width: '15%', textAlign: 'left' }}>
+                  {active.code}
+                </ActiveText>
+                <ActiveText style={{ width: '18%' }}>
+                  {active.quantity}
+                </ActiveText>
+                <ActiveText style={{ width: '23%' }}>
+                  {active.buyPrice}
+                </ActiveText>
+                <ActiveText style={{ width: '20%' }}>
+                  {active.nowPrice}
+                </ActiveText>
+                <ActiveText style={{ width: '25%' }}>
+                  {active.totalValue}
+                </ActiveText>
+              </Active>
+            )}
+          />
+        </>
+      )}
     </Container>
   );
 };

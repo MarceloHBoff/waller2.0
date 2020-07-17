@@ -38,7 +38,7 @@ interface UserActive {
 }
 
 const Dashboard: React.FC = () => {
-  const { signOut, user } = useAuth();
+  const { user } = useAuth();
 
   const { navigate } = useNavigation();
 
