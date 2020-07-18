@@ -5,10 +5,11 @@ import { useRoute } from '@react-navigation/native';
 import {
   OrderTableHeader,
   IOrderTableContext,
-} from '../../../components/OrderTableHeader';
-import { useFetch } from '../../../hooks/swr';
-import { round10 } from '../../../utils/format';
-import { SortArray, Sorting } from '../../../utils/sorting';
+} from '#components/OrderTableHeader';
+import { useFetch } from '#hooks/swr';
+import { round10 } from '#utils/format';
+import { SortArray, Sorting } from '#utils/sorting';
+
 import Nothing from '../Nothing';
 
 import { Container, ActivesContainer, Active, ActiveText } from './styles';

@@ -9,7 +9,7 @@ import { TextInputProps } from 'react-native';
 
 import { useField } from '@unform/core';
 
-import { Colors } from '../../styles';
+import { Colors } from '#styles';
 
 import { Container, TextInput, Icon } from './styles';
 

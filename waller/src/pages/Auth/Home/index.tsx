@@ -3,7 +3,7 @@ import { Animated, Dimensions } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
-import homeImage from '../../../assets/homeImage.png';
+import homeImage from '#assets/homeImage.png';
 
 import {
   Container,

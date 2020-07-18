@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native-svg';
 
-import { round10 } from '../../../utils/format';
+import { round10 } from '#utils/format';
 
 interface Slice {
   pieCentroid: [number, number];

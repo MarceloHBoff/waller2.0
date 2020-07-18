@@ -2,7 +2,7 @@ import { FlatList } from 'react-native';
 
 import styled, { css } from 'styled-components/native';
 
-import { Colors, Fonts, Metrics } from '../../../styles';
+import { Colors, Fonts, Metrics } from '#styles';
 
 import { UserBond } from '.';
 

@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
-import { TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import { Colors } from '../../styles';
+import { Colors } from '#styles';
 
 import {
   TableHeaderContainer,

@@ -2,8 +2,8 @@ import React from 'react';
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import Header from '../../components/Header';
-import { Colors, Fonts } from '../../styles';
+import Header from '#components/Header';
+import { Colors, Fonts } from '#styles';
 
 import Actives from './Actives';
 import Bonds from './Bonds';

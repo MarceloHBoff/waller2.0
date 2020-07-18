@@ -3,10 +3,10 @@ import { StatusBar } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Loading from '../components/Loading';
-import { useAuth } from '../hooks/auth';
-import Config from '../pages/Config';
-import { Colors } from '../styles';
+import Loading from '#components/Loading';
+import { useAuth } from '#hooks/auth';
+import Config from '#pages/Config';
+import { Colors } from '#styles';
 
 import AppRoutes from './app.routes';
 import AuthRoutes from './auth.routes';

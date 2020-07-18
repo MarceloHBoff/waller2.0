@@ -10,11 +10,13 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { useNavigation } from '@react-navigation/native';
 import { FormHandles, Form } from '@unform/core';
+
 import * as Yup from 'yup';
 
-import signUpImage from '../../../assets/signUpImage.png';
-import Input from '../../../components/Input';
-import getValidationErrors from '../../../utils/getValidationErrors';
+import signUpImage from '#assets/signUpImage.png';
+import Input from '#components/Input';
+import getValidationErrors from '#utils/getValidationErrors';
+
 import {
   Container,
   Content,

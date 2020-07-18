@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-import { Fonts } from '../../styles';
+import { Fonts } from '#styles';
 
 export const Container = styled.View`
   width: 100%;
@@ -18,6 +18,4 @@ export const ValueText = styled.Text<IValueText>`
   font-family: ${Fonts.poppinsMedium};
   text-align: center;
   width: 100%;
-
-  /* background: ${props => props.color}; */
 `;

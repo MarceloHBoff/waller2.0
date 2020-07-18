@@ -36,7 +36,14 @@
     /* Module Resolution Options */
     "moduleResolution": "node",
     "baseUrl": "./src",
-    // "paths": {},
+    "paths": {
+      "#assets/*": ["assets/*"],
+      "#components/*": ["components/*"],
+      "#pages/*": ["pages/*"],
+      "#hooks/*": ["hooks/*"],
+      "#utils/*": ["utils/*"],
+      "#styles": ["styles"]
+    },
     "rootDirs": ["./src"],
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     // "types": [],                           /* Type declaration files to be included in compilation. */

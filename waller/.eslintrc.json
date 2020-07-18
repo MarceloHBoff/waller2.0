@@ -52,8 +52,10 @@
         "newlinesBetween": "always",
         "groups": [
           "/^react/",
+          "/^@/",
           "/^redux/",
           "module",
+          "/^#/",
           "/^\\.\\./",
           "/^\\./",
           ["parent", "sibling", "index"]
@@ -64,7 +66,8 @@
   },
   "settings": {
     "import/resolver": {
-      "typescript": {}
+      "typescript": {},
+      "babel-plugin-root-import": {}
     }
   }
 }

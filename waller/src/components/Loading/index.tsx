@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Animated, Easing } from 'react-native';
 
-import logo from '../../assets/logo.png';
+import logo from '#assets/logo.png';
 
 import { Container, Image } from './styles';
 

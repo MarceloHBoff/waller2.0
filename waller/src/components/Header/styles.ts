@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-import { Colors, Metrics } from '../../styles';
+import { Colors, Metrics } from '#styles';
 
 export const Container = styled.View`
   height: 80px;

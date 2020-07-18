@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-import { Colors, Fonts, Metrics } from '../../styles';
+import { Colors, Fonts, Metrics } from '#styles';
 
 export const TableHeaderContainer = styled.View`
   flex-direction: row;

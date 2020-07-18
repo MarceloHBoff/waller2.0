@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import { Colors } from '../../../styles';
+import { Colors } from '#styles';
 
 import { Container, NothingText } from './styles';
 

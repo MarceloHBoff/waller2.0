@@ -3,9 +3,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Dashboard from '../pages/Dashboard';
-import ListActives from '../pages/ListActives';
-import { Colors } from '../styles';
+import Dashboard from '#pages/Dashboard';
+import ListActives from '#pages/ListActives';
+import { Colors } from '#styles';
 
 const App = createBottomTabNavigator();
 

@@ -2,7 +2,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 
 import styled, { css } from 'styled-components/native';
 
-import { Colors, Metrics, Fonts } from '../../styles';
+import { Colors, Metrics, Fonts } from '#styles';
 
 interface InputProps {
   isFocused: boolean;
