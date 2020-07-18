@@ -5,20 +5,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Dashboard from '#pages/Dashboard';
 import ListActives from '#pages/ListActives';
-import { Colors } from '#styles';
+
+import CustomTabBar from './CustomTabBar';
 
 const App = createBottomTabNavigator();
 
 const AppRoutes: React.FC = () => (
   <App.Navigator
-    tabBarOptions={{
-      style: { backgroundColor: Colors.grayDark },
-      tabStyle: { backgroundColor: Colors.grayDark },
-
-      activeTintColor: Colors.primaryDark,
-      inactiveTintColor: Colors.graySuperLight,
-      showLabel: false,
-    }}
+    tabBar={props => <CustomTabBar {...props} />}
     initialRouteName="Dashboard"
   >
     <App.Screen
@@ -32,6 +26,15 @@ const AppRoutes: React.FC = () => (
     />
     <App.Screen
       name="Dashboard"
+      component={Dashboard}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="home" color={color} size={size} />
+        ),
+      }}
+    />
+    <App.Screen
+      name="Dashboard1"
       component={Dashboard}
       options={{
         tabBarIcon: ({ color, size }) => (

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { StatusBar, TouchableOpacity } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -51,13 +51,13 @@ const Dashboard: React.FC = () => {
     };
   }, [data]);
 
-  const greeting = () => {
+  const greeting = useCallback(() => {
     const nowHour = new Date().getHours();
 
     if (nowHour > 18 || nowHour < 5) return 'Good night';
     if (nowHour > 12) return 'Good afternoon';
     return 'Good morning';
-  };
+  }, []);
 
   const {
     investment,
@@ -101,8 +101,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>
-      <StatusBar backgroundColor={Colors.primarySuperDark} />
-
       <Header>
         <HeaderText>
           {greeting()}, {'\n'}

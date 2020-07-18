@@ -11,8 +11,7 @@ import { round10 } from '#utils/format';
 import { SortArray, Sorting } from '#utils/sorting';
 
 import Nothing from '../Nothing';
-
-import { Container, ActivesContainer, Active, ActiveText } from './styles';
+import { ListContainer, ActiveList, List, ListText } from '../styles';
 
 export interface UserActive {
   id: string;
@@ -90,7 +89,7 @@ const Actives: React.FC = () => {
   }, [data, name, orderBy, order]);
 
   return (
-    <Container>
+    <ListContainer>
       {userActives.length === 0 ? (
         <Nothing />
       ) : (
@@ -99,32 +98,26 @@ const Actives: React.FC = () => {
             <OrderTableHeader headers={ActivesHeader} context={Context} />
           </Context.Provider>
 
-          <ActivesContainer
+          <ActiveList
             data={userActives}
             keyExtractor={active => active.id}
             renderItem={({ item: active, index }) => (
-              <Active index={index}>
-                <ActiveText style={{ width: '15%', textAlign: 'left' }}>
+              <List index={index}>
+                <ListText style={{ width: '15%', textAlign: 'left' }}>
                   {active.code}
-                </ActiveText>
-                <ActiveText style={{ width: '18%' }}>
-                  {active.quantity}
-                </ActiveText>
-                <ActiveText style={{ width: '23%' }}>
-                  {active.buyPrice}
-                </ActiveText>
-                <ActiveText style={{ width: '20%' }}>
-                  {active.nowPrice}
-                </ActiveText>
-                <ActiveText style={{ width: '25%' }}>
+                </ListText>
+                <ListText style={{ width: '18%' }}>{active.quantity}</ListText>
+                <ListText style={{ width: '23%' }}>{active.buyPrice}</ListText>
+                <ListText style={{ width: '20%' }}>{active.nowPrice}</ListText>
+                <ListText style={{ width: '25%' }}>
                   {active.totalValue}
-                </ActiveText>
-              </Active>
+                </ListText>
+              </List>
             )}
           />
         </>
       )}
-    </Container>
+    </ListContainer>
   );
 };
 

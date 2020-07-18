@@ -9,8 +9,7 @@ import { round10 } from '#utils/format';
 import { SortArray, Sorting } from '#utils/sorting';
 
 import Nothing from '../Nothing';
-
-import { Container, BondsContainer, Bond, BondText } from './styles';
+import { ListContainer, BondList, List, ListText } from '../styles';
 
 export interface UserBond {
   name: string;
@@ -23,7 +22,7 @@ const BondsHeader = [
   { id: 'name', align: 'left', width: 40, text: 'Name' },
   { id: 'buyPrice', width: 20, text: `Buy(R$)` },
   { id: 'nowPrice', width: 20, text: `Now(R$)` },
-  { id: 'dueDate', width: 20, text: `Due Date` },
+  { id: 'dueDate', width: 22, text: `Due Date` },
 ];
 
 const Bonds: React.FC = () => {
@@ -41,8 +40,7 @@ const Bonds: React.FC = () => {
       name: userBond.name,
       buyPrice: round10(userBond.buyPrice).toFixed(2),
       nowPrice: round10(userBond.nowPrice).toFixed(2),
-      dueDate: '15/10/2035',
-      // dueDate: userBond.dueDate,
+      dueDate: userBond.dueDate,
     }));
 
     return SortArray<UserBond>(
@@ -52,7 +50,7 @@ const Bonds: React.FC = () => {
   }, [data, order, orderBy]);
 
   return (
-    <Container>
+    <ListContainer>
       {userBonds.length === 0 ? (
         <Nothing />
       ) : (
@@ -61,23 +59,23 @@ const Bonds: React.FC = () => {
             <OrderTableHeader headers={BondsHeader} context={Context} />
           </Context.Provider>
 
-          <BondsContainer
+          <BondList
             data={userBonds}
             keyExtractor={bond => bond.name}
             renderItem={({ item: bond, index }) => (
-              <Bond index={index}>
-                <BondText style={{ width: '40%', textAlign: 'left' }}>
+              <List index={index}>
+                <ListText style={{ width: '40%', textAlign: 'left' }}>
                   {bond.name}
-                </BondText>
-                <BondText style={{ width: '20%' }}>{bond.buyPrice}</BondText>
-                <BondText style={{ width: '20%' }}>{bond.nowPrice}</BondText>
-                <BondText style={{ width: '20%' }}>{bond.dueDate}</BondText>
-              </Bond>
+                </ListText>
+                <ListText style={{ width: '20%' }}>{bond.buyPrice}</ListText>
+                <ListText style={{ width: '20%' }}>{bond.nowPrice}</ListText>
+                <ListText style={{ width: '22%' }}>{bond.dueDate}</ListText>
+              </List>
             )}
           />
         </>
       )}
-    </Container>
+    </ListContainer>
   );
 };
 
