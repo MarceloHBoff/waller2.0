@@ -6,13 +6,14 @@ export function useFetch<Data = any, Error = any>(
   url: string,
 ): {
   data: Data | undefined;
+  mutate(data: Data): Promise<Data | undefined>;
   error: Error | undefined;
 } {
-  const { data, error } = useSWR<Data, Error>(url, async endPoint => {
+  const { data, mutate, error } = useSWR<Data, Error>(url, async endPoint => {
     const response = await api.get(endPoint);
 
     return response.data;
   });
 
-  return { data, error };
+  return { data, mutate, error };
 }

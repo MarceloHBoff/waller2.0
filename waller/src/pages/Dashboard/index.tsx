@@ -1,41 +1,20 @@
 import React, { useMemo, useCallback } from 'react';
-import { StatusBar, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { useNavigation } from '@react-navigation/native';
 
-import Header from '#components/Header';
+import Header, { HeaderText } from '#components/Header';
 import ValueField from '#components/ValueField';
 import { useAuth } from '#hooks/auth';
 import { useFetch } from '#hooks/swr';
 import { Colors } from '#styles';
+import { IUserActivesResponse } from '#types/UserActive';
 import { formatPrice, round10 } from '#utils/format';
 
 import PieChartLabels from './PieChartLabels';
-import { Container, HeaderText, Cards, Card, CardText } from './styles';
-
-interface IUserActivesResponse {
-  actives: UserActive[];
-  types: {
-    Acao: number;
-    Stock: number;
-    ETF: number;
-    FII: number;
-    Reit: number;
-    Bond: number;
-  };
-  totals: {
-    investment: number;
-    currentValue: number;
-    profit: number;
-    percent: number;
-  };
-}
-
-interface UserActive {
-  quantity: number;
-}
+import { Container, Cards, Card, CardText } from './styles';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -143,10 +122,6 @@ const Dashboard: React.FC = () => {
           <PieChartLabels />
         </PieChart>
       )}
-
-      {/* <TouchableOpacity onPress={signOut}>
-        <Text>Sair</Text>
-      </TouchableOpacity> */}
     </Container>
   );
 };

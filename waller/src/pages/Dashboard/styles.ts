@@ -7,12 +7,6 @@ export const Container = styled.View`
   background: ${Colors.grayDarker};
 `;
 
-export const HeaderText = styled.Text`
-  color: ${Colors.white};
-  font-size: ${Fonts.regular}px;
-  font-family: ${Fonts.poppinsMedium};
-`;
-
 export const Cards = styled.ScrollView`
   max-height: ${Metrics.base * 2 + 180}px;
 `;

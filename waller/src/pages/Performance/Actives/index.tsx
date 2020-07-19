@@ -7,32 +7,20 @@ import {
   IOrderTableContext,
 } from '#components/OrderTableHeader';
 import { useFetch } from '#hooks/swr';
+import { IUserActivesResponse } from '#types/UserActive';
 import { round10 } from '#utils/format';
 import { SortArray, Sorting } from '#utils/sorting';
 
 import Nothing from '../Nothing';
 import { ListContainer, ActiveList, List, ListText } from '../styles';
 
-export interface UserActive {
+export interface IUserActiveList {
   id: string;
   code: string;
   quantity: number;
   buyPrice: number | string;
   nowPrice: number | string;
   totalValue: number | string;
-}
-
-interface IUserActivesResponse {
-  actives: {
-    quantity: number;
-    buyPrice: number;
-    active: {
-      id: string;
-      type: string;
-      code: string;
-      price: number;
-    };
-  }[];
 }
 
 const Actives: React.FC = () => {
@@ -64,20 +52,20 @@ const Actives: React.FC = () => {
   const userActives = useMemo(() => {
     if (!data) return [];
 
-    let userActivesEdited: UserActive[] = data.actives
+    let userActivesEdited: IUserActiveList[] = data.actives
       .filter(userActive => userActive.active.type === name)
       .map(userActive => ({
         id: userActive.active.id,
         code: userActive.active.code,
         quantity: userActive.quantity,
         buyPrice: userActive.buyPrice,
-        nowPrice: Number(userActive.active.price),
+        nowPrice: userActive.active.price,
         totalValue: userActive.quantity * userActive.active.price,
       }));
 
-    userActivesEdited = SortArray<UserActive>(
+    userActivesEdited = SortArray<IUserActiveList>(
       userActivesEdited,
-      Sorting<UserActive>(order, orderBy),
+      Sorting<IUserActiveList>(order, orderBy),
     );
 
     return userActivesEdited.map(userActive => ({

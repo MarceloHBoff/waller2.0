@@ -1,43 +1,90 @@
-import React from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Header, { HeaderText } from '#components/Header';
+import { useFetch } from '#hooks/swr';
+import { IUserActivesResponse } from '#types/UserActive';
+import { formatPrice, round10 } from '#utils/format';
 
-import Header from '#components/Header';
-import { Colors, Fonts } from '#styles';
+import api from '../../services/api';
 
-import Actives from './Actives';
-import Bonds from './Bonds';
-import { Container, HeaderText } from './styles';
+import {
+  Container,
+  Cards,
+  Card,
+  Code,
+  Name,
+  Quantity,
+  Footer,
+  Variation,
+  Price,
+} from './styles';
 
-const Tab = createMaterialTopTabNavigator();
+export interface IListActives {
+  id: string;
+  code: string;
+  name: string;
+  quantity: number;
+  variation: number;
+  price: string;
+}
 
 const ListActives: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { data, mutate } = useFetch<IUserActivesResponse>('userActives');
+
+  const userActives = useMemo(() => {
+    if (!data?.actives) return [];
+
+    return data?.actives.map(userActive => ({
+      id: userActive.active.id,
+      code: userActive.active.code,
+      name: userActive.active.name,
+      quantity: userActive.quantity,
+      variation: round10(
+        (userActive.active.price / userActive.active.lastPrice - 1) * 100,
+      ),
+      price: formatPrice(userActive.active.price),
+    }));
+  }, [data]);
+
+  const updateActivesPrice = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const responde = await api.put<IUserActivesResponse>('userActives');
+
+      mutate(responde.data);
+    } catch {}
+
+    setLoading(false);
+  }, [mutate]);
+
   return (
     <Container>
       <Header>
-        <HeaderText>Wallet</HeaderText>
+        <HeaderText>Today price</HeaderText>
       </Header>
 
-      <Tab.Navigator
-        sceneContainerStyle={{ backgroundColor: Colors.grayDark }}
-        tabBarOptions={{
-          style: { backgroundColor: Colors.grayDark },
-          labelStyle: {
-            fontSize: 12,
-            fontFamily: Fonts.poppinsMedium,
-          },
-          activeTintColor: Colors.primary,
-          inactiveTintColor: Colors.white,
-          allowFontScaling: true,
-        }}
-      >
-        <Tab.Screen name="Acao" component={Actives} />
-        <Tab.Screen name="FII" component={Actives} />
-        <Tab.Screen name="ETF" component={Actives} />
-        <Tab.Screen name="Stock" component={Actives} />
-        <Tab.Screen name="Reit" component={Actives} />
-        <Tab.Screen name="Bond" component={Bonds} />
-      </Tab.Navigator>
+      <Cards
+        data={userActives}
+        numColumns={2}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{ alignItems: 'center' }}
+        onRefresh={updateActivesPrice}
+        refreshing={loading}
+        renderItem={({ item }) => (
+          <Card>
+            <Code>{item.code}</Code>
+            <Name numberOfLines={1}>{item.name}</Name>
+            <Quantity>{item.quantity}</Quantity>
+            <Footer>
+              <Variation signal={item.variation}>{item.variation}%</Variation>
+              <Price>{item.price}</Price>
+            </Footer>
+          </Card>
+        )}
+      />
     </Container>
   );
 };

@@ -1,57 +1,56 @@
 import { FlatList } from 'react-native';
 
-import styled, { css } from 'styled-components/native';
+import styled from 'styled-components/native';
 
-import { Colors, Fonts, Metrics } from '#styles';
+import { Colors, Metrics, Fonts } from '#styles';
 
-import { UserActive } from './Actives';
-import { UserBond } from './Bonds';
+import { IListActives } from '.';
 
 export const Container = styled.View`
   flex: 1;
   background: ${Colors.grayDarker};
 `;
 
-export const HeaderText = styled.Text`
+export const Cards = styled(FlatList as new () => FlatList<IListActives>)``;
+
+export const Card = styled.View`
+  height: 100px;
+  width: 180px;
+
+  border-radius: ${Metrics.radius}px;
+  margin: ${Metrics.base / 2}px;
+  padding: ${Metrics.base / 2}px;
+  background: ${Colors.primaryDark};
+`;
+
+const DefaultText = styled.Text`
   color: ${Colors.white};
-  font-size: ${Fonts.big}px;
+  font-size: ${Fonts.small}px;
   font-family: ${Fonts.poppinsMedium};
 `;
 
-export const ListContainer = styled.View`
-  flex: 1;
-  background: ${Colors.grayDark};
+export const Code = styled(DefaultText)``;
+
+export const Name = styled(DefaultText)`
+  font-size: ${Fonts.superSmall}px;
 `;
 
-export const ActiveList = styled(FlatList as new () => FlatList<UserActive>)`
-  background: ${Colors.grayDark};
+export const Quantity = styled(DefaultText)`
+  font-size: ${Fonts.superSmall}px;
 `;
 
-export const BondList = styled(FlatList as new () => FlatList<UserBond>)`
-  background: ${Colors.grayDark};
+export const Footer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
-interface IList {
-  index?: number;
+interface IVariation {
+  signal: number;
 }
 
-export const List = styled.View<IList>`
-  flex-direction: row;
-  width: 100%;
-  padding: 0 ${Metrics.base / 2}px;
-
-  ${props =>
-    Number(props.index) % 2 === 0 &&
-    css`
-      background: ${Colors.grayDarker};
-    `}
+export const Variation = styled(DefaultText)<IVariation>`
+  color: ${props =>
+    props.signal > 0 ? Colors.greenLight : Colors.dangerSuperDark};
 `;
 
-export const ListText = styled.Text`
-  width: 20%;
-  padding: ${Metrics.base / 2}px;
-  color: ${Colors.white};
-  font-size: ${Fonts.superSmall}px;
-  font-family: ${Fonts.poppinsMedium};
-  text-align: right;
-`;
+export const Price = styled(DefaultText)``;

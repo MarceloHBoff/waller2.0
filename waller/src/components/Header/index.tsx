@@ -5,7 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Colors } from '#styles';
 
-import { Container } from './styles';
+import { Container, HeaderText } from './styles';
+
+export { HeaderText };
 
 const Header: React.FC = ({ children }) => {
   const opacity = new Animated.Value(50);
@@ -63,7 +65,7 @@ const Header: React.FC = ({ children }) => {
 
   return (
     <>
-      <StatusBar backgroundColor={Colors.primary} />
+      <StatusBar backgroundColor={Colors.primaryDark} />
 
       <Container
         style={{

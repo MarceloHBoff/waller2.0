@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Dashboard from '#pages/Dashboard';
 import ListActives from '#pages/ListActives';
+import Performance from '#pages/Performance';
 
 import CustomTabBar from './CustomTabBar';
 
@@ -16,8 +17,8 @@ const AppRoutes: React.FC = () => (
     initialRouteName="Dashboard"
   >
     <App.Screen
-      name="ListActives"
-      component={ListActives}
+      name="Performance"
+      component={Performance}
       options={{
         tabBarIcon: ({ color, size }) => (
           <Icon name="bars" color={color} size={size} />
@@ -34,11 +35,11 @@ const AppRoutes: React.FC = () => (
       }}
     />
     <App.Screen
-      name="Dashboard1"
-      component={Dashboard}
+      name="ListActives"
+      component={ListActives}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <Icon name="home" color={color} size={size} />
+          <Icon name="th-large" color={color} size={size} />
         ),
       }}
     />

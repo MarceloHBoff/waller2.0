@@ -6,7 +6,7 @@ export default {
   primaryLight: '#629CEB',
   primarySuperLight: '#8EB6EC',
 
-  dangerSuperDark: '#8a0c17',
+  dangerSuperDark: '#FA0017',
   dangerDarker: '#a31c27',
   dangerDark: '#bd2633',
   danger: '#d4313f',
@@ -24,4 +24,5 @@ export default {
   black: '#000',
   orange: '#F2994A',
   green: '#27AE60',
+  greenLight: '#01E862',
 };

@@ -2,13 +2,13 @@ import { Animated } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import { Colors, Metrics } from '#styles';
+import { Colors, Fonts, Metrics } from '#styles';
 
 export const Container = styled(Animated.View)`
-  height: 80px;
+  height: 60px;
   border-bottom-left-radius: ${Metrics.radius * 2}px;
   border-bottom-right-radius: ${Metrics.radius * 2}px;
-  background: ${Colors.primary};
+  background: ${Colors.primaryDark};
 
   flex-direction: row;
   justify-content: space-between;
@@ -16,4 +16,10 @@ export const Container = styled(Animated.View)`
 
   padding: ${Metrics.base}px;
   margin-bottom: ${Metrics.base}px;
+`;
+
+export const HeaderText = styled.Text`
+  color: ${Colors.white};
+  font-size: ${Fonts.regular}px;
+  font-family: ${Fonts.poppinsMedium};
 `;
