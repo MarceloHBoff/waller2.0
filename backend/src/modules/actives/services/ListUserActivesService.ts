@@ -60,27 +60,27 @@ export default class CreateUserActiveService {
       switch (userActive.active.type) {
         case 'Acao':
           Acao += userActive.quantity * userActive.active.price;
-          investment += userActive.quantity * userActive.buyPrice;
+          investment += userActive.quantity * userActive.buy_price;
           currentValue += userActive.quantity * userActive.active.price;
           break;
         case 'Stock':
           Stock += userActive.quantity * userActive.active.price * USD;
-          investment += userActive.quantity * userActive.buyPrice * USD;
+          investment += userActive.quantity * userActive.buy_price * USD;
           currentValue += userActive.quantity * userActive.active.price * USD;
           break;
         case 'ETF':
           ETF += userActive.quantity * userActive.active.price;
-          investment += userActive.quantity * userActive.buyPrice;
+          investment += userActive.quantity * userActive.buy_price;
           currentValue += userActive.quantity * userActive.active.price;
           break;
         case 'FII':
           FII += userActive.quantity * userActive.active.price;
-          investment += userActive.quantity * userActive.buyPrice;
+          investment += userActive.quantity * userActive.buy_price;
           currentValue += userActive.quantity * userActive.active.price;
           break;
         case 'Reit':
           Reit += userActive.quantity * userActive.active.price * USD;
-          investment += userActive.quantity * userActive.buyPrice * USD;
+          investment += userActive.quantity * userActive.buy_price * USD;
           currentValue += userActive.quantity * userActive.active.price * USD;
           break;
         default:
@@ -88,10 +88,10 @@ export default class CreateUserActiveService {
     });
 
     userBonds.forEach(userBond => {
-      Bond += Number(userBond.nowPrice);
+      Bond += Number(userBond.now_price);
 
-      investment += Number(userBond.buyPrice);
-      currentValue += Number(userBond.nowPrice);
+      investment += Number(userBond.buy_price);
+      currentValue += Number(userBond.now_price);
     });
 
     return {

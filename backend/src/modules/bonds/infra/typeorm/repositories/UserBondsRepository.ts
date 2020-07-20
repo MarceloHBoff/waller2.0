@@ -28,17 +28,17 @@ export default class UserBondsRepository implements IUserBondsRepository {
   public async create({
     user_id,
     name,
-    dueDate,
-    buyPrice,
-    nowPrice,
+    due_date,
+    buy_price,
+    now_price,
     automatic = false,
   }: ICreateUserBondDTO): Promise<UserBond> {
     const userBond = this.ormRepository.create({
       user_id,
       name,
-      buyPrice,
-      dueDate,
-      nowPrice,
+      buy_price,
+      due_date,
+      now_price,
       automatic,
     });
 

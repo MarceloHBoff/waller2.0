@@ -1,5 +1,5 @@
 export default interface IUpdateActiveDTO {
   id: string;
   price: number;
-  lastPrice: number;
+  last_price: number;
 }

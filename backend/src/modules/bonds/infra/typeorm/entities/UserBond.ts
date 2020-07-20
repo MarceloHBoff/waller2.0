@@ -31,15 +31,15 @@ export default class UserBond {
 
   @Column('decimal', { precision: 10, scale: 2 })
   @Transform(value => Number(value), { toClassOnly: true })
-  buyPrice: number;
+  buy_price: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
   @Transform(value => Number(value), { toClassOnly: true })
-  nowPrice: number;
+  now_price: number;
 
   @Column()
   @Transform(value => format(value, 'dd/MM/yyyy'), { toClassOnly: true })
-  dueDate: Date;
+  due_date: Date;
 
   @Column({ default: false })
   @Exclude()

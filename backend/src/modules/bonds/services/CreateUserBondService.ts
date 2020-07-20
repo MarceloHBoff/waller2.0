@@ -6,9 +6,9 @@ import IUserBondsRepository from '../repositories/IUserBondsRepository';
 interface IRequest {
   user_id: string;
   name: string;
-  buyPrice: number;
-  nowPrice: number;
-  dueDate: Date;
+  buy_price: number;
+  now_price: number;
+  due_date: Date;
 }
 
 @injectable()
@@ -21,16 +21,16 @@ export default class CreateUserBondService {
   public async execute({
     user_id,
     name,
-    dueDate,
-    buyPrice,
-    nowPrice,
+    due_date,
+    buy_price,
+    now_price,
   }: IRequest): Promise<UserBond> {
     const active = await this.userBondsRepository.create({
       user_id,
       name,
-      dueDate,
-      buyPrice,
-      nowPrice,
+      due_date,
+      buy_price,
+      now_price,
     });
 
     return active;

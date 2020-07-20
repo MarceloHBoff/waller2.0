@@ -42,11 +42,11 @@ export default class UserActive {
 
   @Column('decimal', { precision: 10, scale: 2 })
   @Transform(value => Number(value), { toClassOnly: true })
-  buyPrice: number;
+  buy_price: number;
 
   @Column()
   @Transform(value => format(value, 'dd/MM/yyyy'), { toClassOnly: true })
-  buyDate: Date;
+  buy_date: Date;
 
   @Column({ default: false })
   @Exclude()

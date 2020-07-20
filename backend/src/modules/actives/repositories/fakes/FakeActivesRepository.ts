@@ -34,7 +34,7 @@ export default class FakeActivesRepository implements IActivesRepository {
       name: 'Name',
       type,
       price: 100,
-      lastPrice: 90,
+      last_price: 90,
       code,
     });
 
@@ -46,16 +46,16 @@ export default class FakeActivesRepository implements IActivesRepository {
   public async updatePrice({
     id,
     price,
-    lastPrice,
+    last_price,
   }: IUpdateActiveDTO): Promise<Active> {
     const active: Active = await this.getById(id);
 
     this.actives.map(actives =>
-      actives.id === id ? { ...actives, price, lastPrice } : actives,
+      actives.id === id ? { ...actives, price, last_price } : actives,
     );
 
     active.price = price;
-    active.lastPrice = lastPrice;
+    active.last_price = last_price;
 
     return active;
   }

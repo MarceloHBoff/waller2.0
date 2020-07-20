@@ -1,4 +1,4 @@
 export default interface IRefreshProviderDTO {
   price: number;
-  lastPrice: number;
+  last_price: number;
 }

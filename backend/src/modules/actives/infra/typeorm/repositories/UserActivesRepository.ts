@@ -42,8 +42,8 @@ export default class UserActivesRepository implements IUserActiveRepository {
     user_id,
     code,
     quantity,
-    buyPrice,
-    buyDate,
+    buy_price,
+    buy_date,
     automatic = false,
   }: ICreateUserActiveDTO): Promise<UserActive> {
     const active = await this.activesRepository.findByCode(code);
@@ -52,8 +52,8 @@ export default class UserActivesRepository implements IUserActiveRepository {
       user_id,
       active_id: active?.id,
       quantity,
-      buyPrice,
-      buyDate,
+      buy_price,
+      buy_date,
       automatic,
     });
 
@@ -73,7 +73,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
     userActives.forEach(data => {
       const userActive = this.convertDecimalInNumber(data);
 
-      const { active_id, quantity, buyPrice } = userActive;
+      const { active_id, quantity, buy_price } = userActive;
 
       const findIndex = unifiedUserActives.findIndex(
         unifiedUserActive => unifiedUserActive.active_id === active_id,
@@ -83,8 +83,8 @@ export default class UserActivesRepository implements IUserActiveRepository {
         unifiedUserActives[findIndex].quantity =
           Number(unifiedUserActives[findIndex].quantity) + quantity;
 
-        unifiedUserActives[findIndex].buyPrice =
-          (Number(unifiedUserActives[findIndex].buyPrice) + buyPrice) / 2;
+        unifiedUserActives[findIndex].buy_price =
+          (Number(unifiedUserActives[findIndex].buy_price) + buy_price) / 2;
       } else {
         unifiedUserActives.push(userActive);
       }
@@ -99,17 +99,17 @@ export default class UserActivesRepository implements IUserActiveRepository {
     this.connection.startTransaction();
 
     for (let i = 0; i < userActives.length; i++) {
-      const { price, lastPrice } = await this.refreshProvider.refreshByCode(
+      const { price, last_price } = await this.refreshProvider.refreshByCode(
         userActives[i].active.code,
       );
 
       userActives[i].active.price = price;
-      userActives[i].active.lastPrice = lastPrice;
+      userActives[i].active.last_price = last_price;
 
       await this.activesRepository.updatePrice({
         id: userActives[i].active.id,
         price,
-        lastPrice,
+        last_price,
       });
     }
 
@@ -126,7 +126,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
     user_id: string,
     data: ICEIActiveDTO,
   ): Promise<void> {
-    const { code, buyDate, type } = data;
+    const { code, buy_date, type } = data;
 
     let { price, quantity } = data;
 
@@ -147,22 +147,22 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
     if (!active) active = await this.activesRepository.create(code, '');
 
-    let userActive = await this.findByBuyDate(user_id, active.id, buyDate);
+    let userActive = await this.findByBuy_date(user_id, active.id, buy_date);
 
     if (userActive) {
       userActive = this.convertDecimalInNumber(userActive);
 
       if (type === 'C') {
-        const totalValue = userActive.buyPrice * userActive.quantity;
+        const totalValue = userActive.buy_price * userActive.quantity;
         const newTotalValue = price * quantity;
 
         userActive.quantity += quantity;
 
-        userActive.buyPrice =
+        userActive.buy_price =
           (totalValue + newTotalValue) / userActive.quantity;
       } else {
         userActive.quantity -= quantity;
-        userActive.buyPrice = (userActive.buyPrice + price) / 2;
+        userActive.buy_price = (userActive.buy_price + price) / 2;
       }
 
       userActive.automatic = true;
@@ -173,20 +173,20 @@ export default class UserActivesRepository implements IUserActiveRepository {
         user_id,
         code,
         quantity,
-        buyDate,
-        buyPrice: price,
+        buy_date,
+        buy_price: price,
         automatic: true,
       });
     }
   }
 
-  private async findByBuyDate(
+  private async findByBuy_date(
     user_id: string,
     active_id: string,
-    buyDate: Date,
+    buy_date: Date,
   ): Promise<UserActive | undefined> {
     const findUserActive = await this.ormRepository.findOne({
-      where: { user_id, active_id, buyDate },
+      where: { user_id, active_id, buy_date },
     });
 
     return findUserActive;
@@ -195,7 +195,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
   private convertDecimalInNumber(userActive: UserActive): UserActive {
     return Object.assign(userActive, {
       quantity: Number(userActive.quantity),
-      buyPrice: Number(userActive.buyPrice),
+      buy_price: Number(userActive.buy_price),
     });
   }
 }

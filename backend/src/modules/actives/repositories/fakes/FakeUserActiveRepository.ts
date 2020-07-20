@@ -37,7 +37,7 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
 
   public async create({
     code,
-    buyPrice,
+    buy_price,
     quantity,
     user_id,
   }: ICreateUserActiveDTO): Promise<UserActive> {
@@ -50,7 +50,7 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
       active_id: findActive?.id,
       active: findActive,
       user_id,
-      buyPrice,
+      buy_price,
       quantity,
     });
 
@@ -71,17 +71,17 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
     const userActives = data;
 
     for (let i = 0; i < userActives.length; i++) {
-      const { price, lastPrice } = await this.refreshProvider.refreshByCode(
+      const { price, last_price } = await this.refreshProvider.refreshByCode(
         userActives[i].active.code,
       );
 
       userActives[i].active.price = price;
-      userActives[i].active.lastPrice = lastPrice;
+      userActives[i].active.last_price = last_price;
 
       await this.activesRepository.updatePrice({
         id: userActives[i].active.id,
         price,
-        lastPrice,
+        last_price,
       });
     }
 

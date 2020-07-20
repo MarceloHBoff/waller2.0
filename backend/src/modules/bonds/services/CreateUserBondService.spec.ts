@@ -28,17 +28,17 @@ describe('CreateUserBond', () => {
     const userBond1 = await createUserBond.execute({
       user_id: id,
       name: 'Bond test 1',
-      dueDate: new Date(),
-      buyPrice: 1000.0,
-      nowPrice: 1300.0,
+      due_date: new Date(),
+      buy_price: 1000.0,
+      now_price: 1300.0,
     });
 
     const userBond2 = await createUserBond.execute({
       user_id: id,
       name: 'Bond test 2',
-      dueDate: new Date(),
-      buyPrice: 5000.0,
-      nowPrice: 6100.0,
+      due_date: new Date(),
+      buy_price: 5000.0,
+      now_price: 6100.0,
     });
 
     expect(userBond1.name).toBe('Bond test 1');

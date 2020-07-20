@@ -45,7 +45,7 @@ describe('CreateUserActive', () => {
 
     const userActive = await createUserActive.execute({
       user_id: id,
-      buyPrice: 100,
+      buy_price: 100,
       code: 'PETR3',
       quantity: 10,
     });

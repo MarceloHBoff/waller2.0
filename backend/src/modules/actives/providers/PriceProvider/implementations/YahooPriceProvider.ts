@@ -39,7 +39,7 @@ export default class YahooPriceProvider implements IPriceProvider {
       name: price.longName || price.shortName,
       type,
       price: price.regularMarketPrice,
-      lastPrice: price.regularMarketPreviousClose,
+      last_price: price.regularMarketPreviousClose,
     };
   }
 }

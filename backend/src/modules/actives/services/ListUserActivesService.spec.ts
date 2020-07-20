@@ -72,56 +72,56 @@ describe('ListUserActives', () => {
     await createUserBond.execute({
       user_id: id,
       name: 'Bond',
-      buyPrice: 1000,
-      dueDate: new Date(),
-      nowPrice: 1200,
+      buy_price: 1000,
+      due_date: new Date(),
+      now_price: 1200,
     });
 
     const userActive1 = await createUserActive.execute({
       user_id: id,
-      buyPrice: 100,
+      buy_price: 100,
       code: 'PETR3',
       quantity: 10,
     });
 
     const userActive2 = await createUserActive.execute({
       user_id: id,
-      buyPrice: 80,
+      buy_price: 80,
       code: 'ITUB3',
       quantity: 10,
     });
 
     await createUserActive.execute({
       user_id: id,
-      buyPrice: 200,
+      buy_price: 200,
       code: 'MSFT',
       quantity: 1,
     });
 
     await createUserActive.execute({
       user_id: id,
-      buyPrice: 90,
+      buy_price: 90,
       code: 'BOVA11',
       quantity: 10,
     });
 
     await createUserActive.execute({
       user_id: id,
-      buyPrice: 150,
+      buy_price: 150,
       code: 'KNRI11',
       quantity: 10,
     });
 
     await createUserActive.execute({
       user_id: id,
-      buyPrice: 160,
+      buy_price: 160,
       code: 'PSA',
       quantity: 10,
     });
 
     await createUserActive.execute({
       user_id: id,
-      buyPrice: 10,
+      buy_price: 10,
       code: 'TEST',
       quantity: 1,
     });

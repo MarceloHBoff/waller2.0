@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateUserBonds1593896435134 implements MigrationInterface {
+export class CreateDividends1595206891043 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'user_bonds',
+        name: 'dividends',
         columns: [
           {
             name: 'id',
@@ -13,26 +13,21 @@ export class CreateUserBonds1593896435134 implements MigrationInterface {
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
           },
-          { name: 'user_id', type: 'uuid' },
-          { name: 'name', type: 'varchar' },
-          { name: 'buy_price', type: 'decimal', precision: 10, scale: 2 },
-          { name: 'now_price', type: 'decimal', precision: 10, scale: 2 },
-          { name: 'due_date', type: 'date' },
-          {
-            name: 'automatic',
-            type: 'boolean',
-            default: false,
-            isNullable: true,
-          },
+          { name: 'active_id', type: 'uuid' },
+          { name: 'type', type: 'enum', enum: ['jscp', 'dividends'] },
+          { name: 'value', type: 'decimal', precision: 10, scale: 2 },
+          { name: 'aproved_date', type: 'date' },
+          { name: 'EX_date', type: 'date' },
+          { name: 'pay_date', type: 'date' },
           { name: 'created_at', type: 'timestamp', default: 'now()' },
           { name: 'updated_at', type: 'timestamp', default: 'now()' },
         ],
         foreignKeys: [
           {
-            name: 'UserActive',
-            referencedTableName: 'users',
+            name: 'DividendActive',
+            referencedTableName: 'actives',
             referencedColumnNames: ['id'],
-            columnNames: ['user_id'],
+            columnNames: ['active_id'],
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           },
@@ -42,6 +37,6 @@ export class CreateUserBonds1593896435134 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('user_bonds');
+    await queryRunner.dropTable('dividends');
   }
 }

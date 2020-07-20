@@ -29,7 +29,7 @@ export default class YahooRefreshProvider implements IRefreshProvider {
 
     return {
       price: price.regularMarketPrice,
-      lastPrice: price.regularMarketPreviousClose,
+      last_price: price.regularMarketPreviousClose,
     };
   }
 }

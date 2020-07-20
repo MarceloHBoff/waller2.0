@@ -39,16 +39,19 @@ export default class ActivesRepository implements IActivesRepository {
   }
 
   public async create(code: string, typeFixed: string): Promise<Active> {
-    const { name, price, lastPrice, type } = await this.priceProvider.getByCode(
-      code,
-    );
+    const {
+      name,
+      price,
+      last_price,
+      type,
+    } = await this.priceProvider.getByCode(code);
 
     const active = this.ormRepository.create({
       code,
       name,
       type: typeFixed || type,
       price,
-      lastPrice,
+      last_price,
     });
 
     await this.ormRepository.save(active);
@@ -59,12 +62,12 @@ export default class ActivesRepository implements IActivesRepository {
   public async updatePrice({
     id,
     price,
-    lastPrice,
+    last_price,
   }: IUpdateActiveDTO): Promise<Active> {
     const active: Active = await this.getById(id);
 
     active.price = price;
-    active.lastPrice = lastPrice;
+    active.last_price = last_price;
 
     await this.ormRepository.save(active);
 

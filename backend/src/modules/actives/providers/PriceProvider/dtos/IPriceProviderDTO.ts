@@ -3,5 +3,5 @@ export default interface IPriceProviderDTO {
   name: string;
   type: string;
   price: number;
-  lastPrice?: number;
+  last_price?: number;
 }

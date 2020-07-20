@@ -21,9 +21,9 @@ export default class FakeBondsRepository implements IUserBondsRepository {
   public async create({
     user_id,
     name,
-    dueDate,
-    buyPrice,
-    nowPrice,
+    due_date,
+    buy_price,
+    now_price,
   }: ICreateUserBondDTO): Promise<UserBond> {
     const userBond = new UserBond();
 
@@ -31,9 +31,9 @@ export default class FakeBondsRepository implements IUserBondsRepository {
       id: uuid(),
       user_id,
       name,
-      buyPrice,
-      dueDate,
-      nowPrice,
+      buy_price,
+      due_date,
+      now_price,
     });
 
     this.userBonds.push(userBond);

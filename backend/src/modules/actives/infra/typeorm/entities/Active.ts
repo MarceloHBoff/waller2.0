@@ -30,7 +30,7 @@ export default class Active {
 
   @Column('decimal', { precision: 10, scale: 2 })
   @Transform(value => Number(value), { toClassOnly: true })
-  lastPrice: number;
+  last_price: number;
 
   @CreateDateColumn()
   @Exclude()

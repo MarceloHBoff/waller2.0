@@ -13,9 +13,9 @@ import IUserBondsRepository from '@modules/bonds/repositories/IUserBondsReposito
 
 interface ICEIBond {
   name: string;
-  dueDate: Date;
-  buyPrice: number;
-  nowPrice: number;
+  due_date: Date;
+  buy_price: number;
+  now_price: number;
 }
 
 @injectable()
@@ -158,9 +158,9 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
       await this.userBondsRepository.create({
         user_id,
         name: bonds[i].name,
-        dueDate: bonds[i].dueDate,
-        buyPrice: bonds[i].buyPrice,
-        nowPrice: bonds[i].nowPrice,
+        due_date: bonds[i].due_date,
+        buy_price: bonds[i].buy_price,
+        now_price: bonds[i].now_price,
         automatic: true,
       });
     }
@@ -196,7 +196,7 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
                 if (value !== '') {
                   switch (ic) {
                     case 0:
-                      data.buyDate = this.getDate(value);
+                      data.buy_date = this.getDate(value);
                       break;
                     case 1:
                       data.type = value;
@@ -249,13 +249,13 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
                   data.name = value;
                   break;
                 case 1:
-                  data.dueDate = this.getDate(value);
+                  data.due_date = this.getDate(value);
                   break;
                 case 2:
-                  data.buyPrice = this.getValue(value);
+                  data.buy_price = this.getValue(value);
                   break;
                 case 4:
-                  data.nowPrice = this.getValue(value);
+                  data.now_price = this.getValue(value);
                   break;
                 default:
                   break;

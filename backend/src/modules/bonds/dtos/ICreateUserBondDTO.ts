@@ -1,8 +1,8 @@
 export default interface ICreateUserBondDTO {
   user_id: string;
   name: string;
-  buyPrice: number;
-  nowPrice: number;
-  dueDate: Date;
+  buy_price: number;
+  now_price: number;
+  due_date: Date;
   automatic?: boolean;
 }

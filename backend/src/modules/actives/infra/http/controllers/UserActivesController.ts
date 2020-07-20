@@ -9,7 +9,7 @@ import UpdateUserActivesService from '@modules/actives/services/UpdateUserActive
 
 export default class ActivesController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { code, quantity, buyPrice } = request.body;
+    const { code, quantity, buy_price } = request.body;
 
     const createActive = container.resolve(CreateActiveService);
 
@@ -21,7 +21,7 @@ export default class ActivesController {
       user_id: request.user.id,
       code,
       quantity,
-      buyPrice,
+      buy_price,
     });
 
     return response.status(201).json(classToClass(userActive));
