@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
 import {
   PrimaryGeneratedColumn,
   Entity,
@@ -24,10 +24,12 @@ export default class Active {
   })
   type: string;
 
-  @Column({ precision: 5, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
+  @Transform(value => Number(value), { toClassOnly: true })
   price: number;
 
-  @Column({ precision: 5, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
+  @Transform(value => Number(value), { toClassOnly: true })
   lastPrice: number;
 
   @CreateDateColumn()

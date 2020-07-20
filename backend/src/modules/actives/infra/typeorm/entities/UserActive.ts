@@ -1,4 +1,5 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
+import { format } from 'date-fns';
 import {
   PrimaryGeneratedColumn,
   Entity,
@@ -35,13 +36,16 @@ export default class UserActive {
   @JoinColumn({ name: 'active_id' })
   active: Active;
 
-  @Column({ precision: 5, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
+  @Transform(value => Number(value), { toClassOnly: true })
   quantity: number;
 
-  @Column({ precision: 5, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
+  @Transform(value => Number(value), { toClassOnly: true })
   buyPrice: number;
 
   @Column()
+  @Transform(value => format(value, 'dd/MM/yyyy'), { toClassOnly: true })
   buyDate: Date;
 
   @Column({ default: false })

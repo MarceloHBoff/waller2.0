@@ -10,6 +10,7 @@ import CreateUserActiveService from './CreateUserActiveService';
 import ListUserActivesService from './ListUserActivesService';
 
 import FakeRefreshProvider from '@modules/actives/providers/RefreshProvider/fakes/FakeRefreshProvider';
+import FakeUSDProvider from '@modules/actives/providers/USDProvider/fakes/FakeUSDProvider';
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 
 let fakeActivesRepository: FakeActivesRepository;
@@ -17,6 +18,7 @@ let fakeUsersRepository: FakeUsersRepository;
 let fakeUserActiveRepository: FakeUserActiveRepository;
 let fakeUserBondRepository: FakeUserBondRepository;
 let fakeRefreshProvider: FakeRefreshProvider;
+let fakeUSDProvider: FakeUSDProvider;
 let createActive: CreateActiveService;
 let createUserActive: CreateUserActiveService;
 let createUserBond: CreateUserBondService;
@@ -32,6 +34,8 @@ describe('ListUserActives', () => {
 
     fakeRefreshProvider = new FakeRefreshProvider();
 
+    fakeUSDProvider = new FakeUSDProvider();
+
     fakeUserActiveRepository = new FakeUserActiveRepository(
       fakeActivesRepository,
       fakeRefreshProvider,
@@ -46,6 +50,7 @@ describe('ListUserActives', () => {
     listUserActives = new ListUserActivesService(
       fakeUserActiveRepository,
       fakeUserBondRepository,
+      fakeUSDProvider,
     );
   });
 
@@ -126,12 +131,12 @@ describe('ListUserActives', () => {
     expect(userActives.actives[0].active_id).toBe(userActive1.active_id);
     expect(userActives.actives[1].active_id).toBe(userActive2.active_id);
     expect(userActives.types.Acao).toBe(2000);
-    expect(userActives.types.Stock).toBe(100);
+    expect(userActives.types.Stock).toBe(500);
     expect(userActives.types.ETF).toBe(1000);
     expect(userActives.types.FII).toBe(1000);
-    expect(userActives.types.Reit).toBe(1000);
+    expect(userActives.types.Reit).toBe(5000);
     expect(userActives.types.Bond).toBe(1200);
-    expect(userActives.totals.investment).toBe(6000);
-    expect(userActives.totals.currentValue).toBe(5100);
+    expect(userActives.totals.investment).toBe(14200);
+    expect(userActives.totals.currentValue).toBe(10700);
   });
 });

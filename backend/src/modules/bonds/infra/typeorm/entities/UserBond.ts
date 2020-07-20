@@ -1,4 +1,5 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
+import { format } from 'date-fns';
 import {
   PrimaryGeneratedColumn,
   Entity,
@@ -28,13 +29,16 @@ export default class UserBond {
   @Column()
   name: string;
 
-  @Column({ precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
+  @Transform(value => Number(value), { toClassOnly: true })
   buyPrice: number;
 
-  @Column({ precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
+  @Transform(value => Number(value), { toClassOnly: true })
   nowPrice: number;
 
   @Column()
+  @Transform(value => format(value, 'dd/MM/yyyy'), { toClassOnly: true })
   dueDate: Date;
 
   @Column({ default: false })

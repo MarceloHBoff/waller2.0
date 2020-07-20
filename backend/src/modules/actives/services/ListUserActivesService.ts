@@ -1,6 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 
 import UserActive from '../infra/typeorm/entities/UserActive';
+import IUSDProvider from '../providers/USDProvider/models/IUSDProvider';
 import IUserActiveRepository from '../repositories/IUserActivesRepository';
 
 import IUserBondsRepository from '@modules/bonds/repositories/IUserBondsRepository';
@@ -31,6 +32,9 @@ export default class CreateUserActiveService {
 
     @inject('UserBondsRepository')
     private userBondsRepository: IUserBondsRepository,
+
+    @inject('USDProvider')
+    private USDProvider: IUSDProvider,
   ) {}
 
   public async execute(user_id: string): Promise<IResponse> {
@@ -39,6 +43,8 @@ export default class CreateUserActiveService {
     );
 
     const userBonds = await this.userBondsRepository.findAllByUserId(user_id);
+
+    const USD = await this.USDProvider.getUSD();
 
     let investment = 0;
     let currentValue = 0;
@@ -54,25 +60,31 @@ export default class CreateUserActiveService {
       switch (userActive.active.type) {
         case 'Acao':
           Acao += userActive.quantity * userActive.active.price;
+          investment += userActive.quantity * userActive.buyPrice;
+          currentValue += userActive.quantity * userActive.active.price;
           break;
         case 'Stock':
-          Stock += userActive.quantity * userActive.active.price;
+          Stock += userActive.quantity * userActive.active.price * USD;
+          investment += userActive.quantity * userActive.buyPrice * USD;
+          currentValue += userActive.quantity * userActive.active.price * USD;
           break;
         case 'ETF':
           ETF += userActive.quantity * userActive.active.price;
+          investment += userActive.quantity * userActive.buyPrice;
+          currentValue += userActive.quantity * userActive.active.price;
           break;
         case 'FII':
           FII += userActive.quantity * userActive.active.price;
+          investment += userActive.quantity * userActive.buyPrice;
+          currentValue += userActive.quantity * userActive.active.price;
           break;
         case 'Reit':
-          Reit += userActive.quantity * userActive.active.price;
+          Reit += userActive.quantity * userActive.active.price * USD;
+          investment += userActive.quantity * userActive.buyPrice * USD;
+          currentValue += userActive.quantity * userActive.active.price * USD;
           break;
         default:
-          return;
       }
-
-      investment += userActive.quantity * userActive.buyPrice;
-      currentValue += userActive.quantity * userActive.active.price;
     });
 
     userBonds.forEach(userBond => {
