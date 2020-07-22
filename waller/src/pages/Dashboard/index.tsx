@@ -9,7 +9,7 @@ import Header, { HeaderText } from '#components/Header';
 import ValueField from '#components/ValueField';
 import { useAuth } from '#hooks/auth';
 import { useFetch } from '#hooks/swr';
-import { Colors } from '#styles';
+import { Colors, ChartColors } from '#styles';
 import { IUserActivesResponse } from '#types/UserActive';
 import { formatPrice, round10 } from '#utils/format';
 
@@ -71,9 +71,9 @@ const Dashboard: React.FC = () => {
 
     return Object.keys(types)
       .filter((type: string) => types[type] !== 0)
-      .map((type: string) => ({
+      .map((type: string, index: number) => ({
         value: (types[type] / totals?.currentValue) * 100,
-        svg: { fill: '#fff' },
+        svg: { fill: ChartColors[index] },
         key: type,
       }));
   }, [types, totals]);
@@ -118,7 +118,7 @@ const Dashboard: React.FC = () => {
       </Cards>
 
       {pieData.length !== 0 && (
-        <PieChart style={{ height: 200 }} data={pieData}>
+        <PieChart style={{ height: 200 }} data={pieData} padAngle={0.02}>
           <PieChartLabels />
         </PieChart>
       )}

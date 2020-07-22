@@ -13,16 +13,16 @@ import { ListContainer, BondList, List, ListText } from '../styles';
 
 export interface UserBond {
   name: string;
-  buyPrice: string;
-  nowPrice: string;
-  dueDate: string;
+  buy_price: string;
+  now_price: string;
+  due_date: string;
 }
 
 const BondsHeader = [
   { id: 'name', align: 'left', width: 40, text: 'Name' },
-  { id: 'buyPrice', width: 20, text: `Buy(R$)` },
-  { id: 'nowPrice', width: 20, text: `Now(R$)` },
-  { id: 'dueDate', width: 22, text: `Due Date` },
+  { id: 'buy_price', width: 20, text: `Buy(R$)` },
+  { id: 'now_price', width: 20, text: `Now(R$)` },
+  { id: 'due_date', width: 22, text: `Due Date` },
 ];
 
 const Bonds: React.FC = () => {
@@ -38,9 +38,9 @@ const Bonds: React.FC = () => {
 
     const userBondsUnsorted = data.map(userBond => ({
       name: userBond.name,
-      buyPrice: round10(userBond.buyPrice).toFixed(2),
-      nowPrice: round10(userBond.nowPrice).toFixed(2),
-      dueDate: userBond.dueDate,
+      buy_price: round10(userBond.buy_price).toFixed(2),
+      now_price: round10(userBond.now_price).toFixed(2),
+      due_date: userBond.due_date,
     }));
 
     return SortArray<UserBond>(
@@ -67,9 +67,9 @@ const Bonds: React.FC = () => {
                 <ListText style={{ width: '40%', textAlign: 'left' }}>
                   {bond.name}
                 </ListText>
-                <ListText style={{ width: '20%' }}>{bond.buyPrice}</ListText>
-                <ListText style={{ width: '20%' }}>{bond.nowPrice}</ListText>
-                <ListText style={{ width: '22%' }}>{bond.dueDate}</ListText>
+                <ListText style={{ width: '20%' }}>{bond.buy_price}</ListText>
+                <ListText style={{ width: '20%' }}>{bond.now_price}</ListText>
+                <ListText style={{ width: '22%' }}>{bond.due_date}</ListText>
               </List>
             )}
           />

@@ -42,6 +42,8 @@
     "import/prefer-default-export": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/no-empty-function": "off",
+    "no-empty": "off",
+    "camelcase": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

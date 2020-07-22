@@ -24,7 +24,7 @@ export interface IListActives {
   code: string;
   name: string;
   quantity: number;
-  variation: number;
+  variation: string;
   price: string;
 }
 
@@ -42,8 +42,8 @@ const ListActives: React.FC = () => {
       name: userActive.active.name,
       quantity: userActive.quantity,
       variation: round10(
-        (userActive.active.price / userActive.active.lastPrice - 1) * 100,
-      ),
+        (userActive.active.price / userActive.active.last_price - 1) * 100,
+      ).toFixed(2),
       price: formatPrice(userActive.active.price),
     }));
   }, [data]);

@@ -45,7 +45,7 @@ export const Footer = styled.View`
 `;
 
 interface IVariation {
-  signal: number;
+  signal: string;
 }
 
 export const Variation = styled(DefaultText)<IVariation>`

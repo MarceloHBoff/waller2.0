@@ -1,13 +1,13 @@
 export interface IUserActives {
   quantity: number;
-  buyPrice: number;
+  buy_price: number;
   active: {
     id: string;
     type: string;
     code: string;
     name: string;
     price: number;
-    lastPrice: number;
+    last_price: number;
   };
 }
 

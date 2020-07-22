@@ -16,25 +16,29 @@ interface IPieChartLabelsProps {
 }
 
 const PieChartLabels: React.FC<IPieChartLabelsProps> = ({ slices }) => {
-  return slices.map((slice, index) => {
-    const { pieCentroid, data } = slice;
+  return (
+    <>
+      {slices.map(slice => {
+        const { pieCentroid, data } = slice;
 
-    return (
-      <Text
-        key={index}
-        x={pieCentroid[0]}
-        y={pieCentroid[1]}
-        fill="black"
-        textAnchor="middle"
-        alignmentBaseline="hanging"
-        fontSize={12}
-        stroke="black"
-        strokeWidth={0.8}
-      >
-        {round10(data.value)}
-      </Text>
-    );
-  });
+        return (
+          <Text
+            key={data.key}
+            x={pieCentroid[0]}
+            y={pieCentroid[1]}
+            fill="white"
+            textAnchor="middle"
+            alignmentBaseline="hanging"
+            fontSize={12}
+            stroke="white"
+            strokeWidth={0.8}
+          >
+            {round10(data.value)}
+          </Text>
+        );
+      })}
+    </>
+  );
 };
 
 export default PieChartLabels;

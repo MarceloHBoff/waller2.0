@@ -18,8 +18,8 @@ export interface IUserActiveList {
   id: string;
   code: string;
   quantity: number;
-  buyPrice: number | string;
-  nowPrice: number | string;
+  buy_price: number | string;
+  now_price: number | string;
   totalValue: number | string;
 }
 
@@ -42,8 +42,8 @@ const Actives: React.FC = () => {
     () => [
       { id: 'code', width: 15, align: 'left', text: 'Code' },
       { id: 'quantity', width: 18, text: 'Quantity' },
-      { id: 'buyPrice', width: 23, text: `Buy${currency}` },
-      { id: 'nowPrice', width: 20, text: `Now${currency}` },
+      { id: 'buy_price', width: 23, text: `Buy${currency}` },
+      { id: 'now_price', width: 20, text: `Now${currency}` },
       { id: 'totalValue', width: 25, text: `Total${currency}` },
     ],
     [currency],
@@ -58,8 +58,8 @@ const Actives: React.FC = () => {
         id: userActive.active.id,
         code: userActive.active.code,
         quantity: userActive.quantity,
-        buyPrice: userActive.buyPrice,
-        nowPrice: userActive.active.price,
+        buy_price: userActive.buy_price,
+        now_price: userActive.active.price,
         totalValue: userActive.quantity * userActive.active.price,
       }));
 
@@ -70,8 +70,8 @@ const Actives: React.FC = () => {
 
     return userActivesEdited.map(userActive => ({
       ...userActive,
-      buyPrice: round10(userActive.buyPrice).toFixed(2),
-      nowPrice: round10(userActive.nowPrice).toFixed(2),
+      buy_price: round10(userActive.buy_price).toFixed(2),
+      now_price: round10(userActive.now_price).toFixed(2),
       totalValue: round10(userActive.totalValue).toFixed(2),
     }));
   }, [data, name, orderBy, order]);
@@ -95,8 +95,8 @@ const Actives: React.FC = () => {
                   {active.code}
                 </ListText>
                 <ListText style={{ width: '18%' }}>{active.quantity}</ListText>
-                <ListText style={{ width: '23%' }}>{active.buyPrice}</ListText>
-                <ListText style={{ width: '20%' }}>{active.nowPrice}</ListText>
+                <ListText style={{ width: '23%' }}>{active.buy_price}</ListText>
+                <ListText style={{ width: '20%' }}>{active.now_price}</ListText>
                 <ListText style={{ width: '25%' }}>
                   {active.totalValue}
                 </ListText>
