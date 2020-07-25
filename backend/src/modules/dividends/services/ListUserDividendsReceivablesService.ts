@@ -21,7 +21,9 @@ export default class ListUserDividendsReceivablesService {
     private userActivesRepository: IUserActivesRepository,
   ) {}
 
-  public async execute(user_id: string): Promise<IDividendResponse[]> {
+  public async execute(
+    user_id: string,
+  ): Promise<{ dividends: IDividendResponse[]; total: number }> {
     const userActives = await this.userActivesRepository.findAllByUserId(
       user_id,
     );
@@ -37,6 +39,7 @@ export default class ListUserDividendsReceivablesService {
     for (let i = 0; i < actives.length; i++) {
       const getActiveDividends = await this.dividendsRepository.getDividendsReceivable(
         actives[i].buy_date,
+        actives[i].active_id,
       );
 
       const editedDividends = classToClass(getActiveDividends).map(
@@ -50,6 +53,11 @@ export default class ListUserDividendsReceivablesService {
       dividends = [...dividends, ...editedDividends];
     }
 
-    return dividends;
+    const total = dividends.reduce(
+      (acc, current) => acc + current.quantity * current.value,
+      0,
+    );
+
+    return { dividends, total };
   }
 }

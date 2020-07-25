@@ -51,6 +51,10 @@ describe('ListUserDividendsReceivables', () => {
     const active1 = await createActive.execute('PETR3', 'Acao');
     const active2 = await createActive.execute('ITUB3', 'Acao');
 
+    const dateMock = jest
+      .spyOn(Date, 'now')
+      .mockImplementation(() => new Date(2020, 8, 1).getTime());
+
     await createUserActive.execute({
       user_id: id,
       buy_price: 100,
@@ -64,6 +68,8 @@ describe('ListUserDividendsReceivables', () => {
       code: 'ITUB3',
       quantity: 20,
     });
+
+    dateMock.mockClear();
 
     await fakeDividendsRepository.createMany([
       {
@@ -80,10 +86,39 @@ describe('ListUserDividendsReceivables', () => {
         pay_date: new Date(2020, 8, 10),
         value: 0.01,
       },
+      {
+        active_id: active2.id,
+        type: 'dividends',
+        EX_date: new Date(2020, 8, 10),
+        pay_date: new Date(2020, 8, 10),
+        value: 0.01,
+      },
+      {
+        active_id: active1.id,
+        type: 'dividends',
+        EX_date: new Date(2020, 7, 10),
+        pay_date: new Date(2020, 7, 10),
+        value: 0.01,
+      },
+      {
+        active_id: active2.id,
+        type: 'dividends',
+        EX_date: new Date(2020, 7, 10),
+        pay_date: new Date(2020, 7, 10),
+        value: 0.01,
+      },
     ]);
 
     jest
       .spyOn(Date, 'now')
-      .mockImplementationOnce(() => new Date(2020, 8, 9).getTime());
+      .mockImplementation(() => new Date(2020, 8, 1).getTime());
+
+    const dividends = await listUserDividendsReceivables.execute(id);
+
+    expect(dividends.dividends.length).toBe(3);
+    expect(dividends.dividends[0].active_id).toBe(active1.id);
+    expect(dividends.dividends[1].active_id).toBe(active1.id);
+    expect(dividends.dividends[2].active_id).toBe(active2.id);
+    expect(dividends.total).toBe(0.4);
   });
 });

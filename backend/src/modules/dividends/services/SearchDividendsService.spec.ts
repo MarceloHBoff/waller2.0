@@ -22,7 +22,7 @@ let createUserActive: CreateUserActiveService;
 
 let searchDividends: SearchDividendsService;
 
-describe('ListUserDividendsReceivables', () => {
+describe('SearchDividends', () => {
   beforeEach(() => {
     fakeRefreshProvider = new FakeRefreshProvider();
     fakeActivesRepository = new FakeActivesRepository();
@@ -45,7 +45,7 @@ describe('ListUserDividendsReceivables', () => {
     createUserActive = new CreateUserActiveService(fakeUserActiveRepository);
   });
 
-  it('should be able to list user dividends receivable', async () => {
+  it('should be able to search active dividends', async () => {
     const { id } = await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',

@@ -26,9 +26,13 @@ export default class DividendRepository implements IDividendRepository {
     return dividendsCreated;
   }
 
-  public async getDividendsReceivable(date: Date): Promise<Dividend[]> {
+  public async getDividendsReceivable(
+    date: Date,
+    active_id: string,
+  ): Promise<Dividend[]> {
     const dividendsReceivable = await this.ormRepository.find({
       where: {
+        active_id,
         EX_date: MoreThanOrEqual(date),
         pay_date: MoreThan(new Date(Date.now())),
       },

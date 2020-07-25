@@ -51,6 +51,7 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
       active: findActive,
       user_id,
       buy_price,
+      buy_date: new Date(),
       quantity,
     });
 
