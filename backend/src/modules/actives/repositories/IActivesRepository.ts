@@ -8,4 +8,5 @@ export default interface IActivesRepository {
   getByCode(code: string): Promise<Active>;
   updatePrice(data: IUpdateActiveDTO): Promise<Active>;
   create(code: string, type: string): Promise<Active>;
+  getAllCodes(): Promise<{ id: string; code: string }[]>;
 }

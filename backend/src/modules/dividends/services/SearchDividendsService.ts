@@ -1,6 +1,5 @@
 import { injectable, inject } from 'tsyringe';
 
-import Dividend from '../infra/typeorm/entities/Dividend';
 import IGetDividendsProvider from '../providers/GetDividendsProvider/models/IGetDividendsProvider';
 import IDividendRepository from '../repositories/IDividendsRepository';
 
@@ -23,21 +22,22 @@ export default class ListDividendsService {
     await this.getDividendsProvider.createPage();
   }
 
-  public async execute(code: string): Promise<void> {
-    const active = await this.activesRepository.getByCode(code);
+  public async execute(code: string, id?: string): Promise<void> {
+    let active_id = id;
+
+    if (!id) {
+      const active = await this.activesRepository.getByCode(code);
+      active_id = active.id;
+    }
 
     const dividends = await this.getDividendsProvider.getActiveDividends(code);
 
     const dividendSerialized = dividends.map(dividend => ({
-      active_id: active?.id,
+      active_id,
       ...dividend,
     }));
 
-    const response = await this.dividendsRepository.createMany(
-      dividendSerialized,
-    );
-
-    console.log(response);
+    await this.dividendsRepository.createMany(dividendSerialized);
   }
 
   public async finish(): Promise<void> {

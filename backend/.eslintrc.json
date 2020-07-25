@@ -36,6 +36,7 @@
     "no-await-in-loop": "off",
     "no-empty": "off",
     "no-loop-func": "off",
+    "@typescript-eslint/no-empty-function": "off",
     "import-helpers/order-imports": [
       "warn",
       {

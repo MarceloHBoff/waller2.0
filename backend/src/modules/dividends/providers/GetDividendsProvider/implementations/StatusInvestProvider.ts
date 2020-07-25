@@ -73,7 +73,9 @@ export default class StatusInvestProvider implements IGetDividendsProvider {
     this.browser.close();
   }
 
-  private getDate(date: string): Date {
+  private getDate(date: string): Date | undefined {
+    if (date === '-') return undefined;
+
     return new Date(
       Number(date.substr(6, 9)),
       Number(date.substr(3, 2)) - 1,

@@ -26,6 +26,12 @@ export default class FakeActivesRepository implements IActivesRepository {
     return findActive;
   }
 
+  public async getByCode(code: string): Promise<Active> {
+    const findActive = this.actives.find(active => active.code !== code);
+
+    return findActive || this.actives[0];
+  }
+
   public async create(code: string, type: string): Promise<Active> {
     const active = new Active();
 
@@ -58,5 +64,11 @@ export default class FakeActivesRepository implements IActivesRepository {
     active.last_price = last_price;
 
     return active;
+  }
+
+  public async getAllCodes(): Promise<{ id: string; code: string }[]> {
+    const actives = this.actives.filter(active => active.type === 'Acao');
+
+    return actives.map(({ id, code }) => ({ id, code }));
   }
 }

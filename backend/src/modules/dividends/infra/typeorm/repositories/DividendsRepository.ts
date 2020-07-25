@@ -1,4 +1,4 @@
-import { Repository, getRepository, getConnection } from 'typeorm';
+import { Repository, getRepository, MoreThan, MoreThanOrEqual } from 'typeorm';
 
 import Dividend from '../entities/Dividend';
 
@@ -8,18 +8,8 @@ import IDividendRepository from '@modules/dividends/repositories/IDividendsRepos
 export default class DividendRepository implements IDividendRepository {
   private ormRepository: Repository<Dividend>;
 
-  private connection = getConnection().createQueryRunner();
-
   constructor() {
     this.ormRepository = getRepository(Dividend);
-  }
-
-  public async create(active_id: string): Promise<Dividend> {
-    const dividend = this.ormRepository.create({ active_id });
-
-    await this.ormRepository.save(dividend);
-
-    return dividend;
   }
 
   public async findAllByActive(active_id: string): Promise<Dividend[]> {
@@ -29,11 +19,22 @@ export default class DividendRepository implements IDividendRepository {
   }
 
   public async createMany(dividends: ICreateManyDTO[]): Promise<Dividend[]> {
-    console.log(dividends);
     const dividendsCreated = this.ormRepository.create(dividends);
 
     await this.ormRepository.save(dividendsCreated);
 
     return dividendsCreated;
+  }
+
+  public async getDividendsReceivable(date: Date): Promise<Dividend[]> {
+    const dividendsReceivable = await this.ormRepository.find({
+      where: {
+        EX_date: MoreThanOrEqual(date),
+        pay_date: MoreThan(new Date(Date.now())),
+      },
+      relations: ['active'],
+    });
+
+    return dividendsReceivable;
   }
 }

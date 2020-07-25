@@ -81,4 +81,10 @@ export default class ActivesRepository implements IActivesRepository {
 
     return active;
   }
+
+  public async getAllCodes(): Promise<{ id: string; code: string }[]> {
+    const actives = await this.ormRepository.find({ where: { type: 'Acao' } });
+
+    return actives.map(({ id, code }) => ({ id, code }));
+  }
 }
