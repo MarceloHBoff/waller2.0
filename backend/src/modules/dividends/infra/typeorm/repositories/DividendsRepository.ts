@@ -2,7 +2,8 @@ import { Repository, getRepository, getConnection } from 'typeorm';
 
 import Dividend from '../entities/Dividend';
 
-import IDividendRepository from '@modules/dividends/repositories/IDividendRepository';
+import ICreateManyDTO from '@modules/dividends/dtos/ICreateManyDTO';
+import IDividendRepository from '@modules/dividends/repositories/IDividendsRepository';
 
 export default class DividendRepository implements IDividendRepository {
   private ormRepository: Repository<Dividend>;
@@ -25,5 +26,14 @@ export default class DividendRepository implements IDividendRepository {
     const activeDividends = await this.ormRepository.find({ active_id });
 
     return activeDividends;
+  }
+
+  public async createMany(dividends: ICreateManyDTO[]): Promise<Dividend[]> {
+    console.log(dividends);
+    const dividendsCreated = this.ormRepository.create(dividends);
+
+    await this.ormRepository.save(dividendsCreated);
+
+    return dividendsCreated;
   }
 }

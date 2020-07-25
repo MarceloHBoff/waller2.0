@@ -38,6 +38,14 @@ export default class ActivesRepository implements IActivesRepository {
     return findActive;
   }
 
+  public async getByCode(code: string): Promise<Active> {
+    const findActive = await this.ormRepository.findOneOrFail({
+      where: { code },
+    });
+
+    return findActive;
+  }
+
   public async create(code: string, typeFixed: string): Promise<Active> {
     const {
       name,

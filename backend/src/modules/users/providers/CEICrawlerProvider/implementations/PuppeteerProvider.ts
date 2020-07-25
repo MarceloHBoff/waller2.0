@@ -285,11 +285,11 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
     );
   }
 
-  private getDate(value: string): Date {
+  private getDate(date: string): Date {
     return new Date(
-      Number(value.substr(6, 9)),
-      Number(value.substr(3, 2)) - 1,
-      Number(value.substr(0, 2)),
+      Number(date.substr(6, 9)),
+      Number(date.substr(3, 2)) - 1,
+      Number(date.substr(0, 2)),
     );
   }
 

@@ -1,7 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 
 import Dividend from '../infra/typeorm/entities/Dividend';
-import IDividendRepository from '../repositories/IDividendRepository';
+import IDividendRepository from '../repositories/IDividendsRepository';
 
 @injectable()
 export default class ListDividendsService {

@@ -11,5 +11,6 @@ const dividendsController = new DividendsController();
 dividendsRouter.use(ensureAuthenticated);
 
 dividendsRouter.get('/', dividendsController.index);
+dividendsRouter.post('/', dividendsController.store);
 
 export default dividendsRouter;

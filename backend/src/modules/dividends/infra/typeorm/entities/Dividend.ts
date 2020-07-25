@@ -13,7 +13,7 @@ import {
 import Active from '@modules/actives/infra/typeorm/entities/Active';
 
 @Entity('dividends')
-export default class UserBond {
+export default class Dividend {
   @PrimaryGeneratedColumn('uuid')
   @Exclude()
   id: string;
@@ -29,13 +29,9 @@ export default class UserBond {
   @Column({ enum: ['jscp', 'dividends'] })
   type: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', { precision: 8, scale: 8 })
   @Transform(value => Number(value), { toClassOnly: true })
   value: number;
-
-  @Column()
-  @Transform(value => format(value, 'dd/MM/yyyy'), { toClassOnly: true })
-  aproved_date: Date;
 
   @Column()
   @Transform(value => format(value, 'dd/MM/yyyy'), { toClassOnly: true })
