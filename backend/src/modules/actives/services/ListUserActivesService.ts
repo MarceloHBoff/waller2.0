@@ -38,11 +38,13 @@ export default class CreateUserActiveService {
   ) {}
 
   public async execute(user_id: string): Promise<IResponse> {
-    const userActives = await this.userActiveRepository.findAllByUserId(
+    const userActives = await this.userActiveRepository.findActivesByUserId(
       user_id,
     );
 
-    const userBonds = await this.userBondsRepository.findAllByUserId(user_id);
+    const userBonds = await this.userBondsRepository.findActivesByUserId(
+      user_id,
+    );
 
     const USD = await this.USDProvider.getUSD();
 

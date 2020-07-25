@@ -11,7 +11,7 @@ export default class ListUserBondsService {
   ) {}
 
   public async execute(user_id: string): Promise<UserBond[]> {
-    const userBonds = this.userBondsRepository.findAllByUserId(user_id);
+    const userBonds = this.userBondsRepository.findActivesByUserId(user_id);
 
     return userBonds;
   }

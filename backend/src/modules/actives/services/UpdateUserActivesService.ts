@@ -11,7 +11,7 @@ export default class UpdateUserActivesService {
   ) {}
 
   public async execute(user_id: string): Promise<UserActive[]> {
-    const userActives = await this.userActivesRepository.findAllByUserId(
+    const userActives = await this.userActivesRepository.findActivesByUserId(
       user_id,
     );
 

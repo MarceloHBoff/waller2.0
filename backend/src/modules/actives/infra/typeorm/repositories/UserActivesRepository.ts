@@ -62,7 +62,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
     return userActive;
   }
 
-  public async findAllByUserId(user_id: string): Promise<UserActive[]> {
+  public async findActivesByUserId(user_id: string): Promise<UserActive[]> {
     const userActives = await this.ormRepository.find({
       where: { user_id },
       relations: ['active'],
@@ -91,6 +91,15 @@ export default class UserActivesRepository implements IUserActiveRepository {
     });
 
     return unifiedUserActives;
+  }
+
+  public async findAllByUserId(user_id: string): Promise<UserActive[]> {
+    const userActives = await this.ormRepository.find({
+      where: { user_id },
+      relations: ['active'],
+    });
+
+    return userActives;
   }
 
   public async updateUserActives(data: UserActive[]): Promise<UserActive[]> {

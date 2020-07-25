@@ -60,6 +60,14 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
     return userActive;
   }
 
+  public async findActivesByUserId(user_id: string): Promise<UserActive[]> {
+    const userActives = this.userActives.filter(
+      userActive => userActive.user_id === user_id,
+    );
+
+    return userActives;
+  }
+
   public async findAllByUserId(user_id: string): Promise<UserActive[]> {
     const userActives = this.userActives.filter(
       userActive => userActive.user_id === user_id,
@@ -89,10 +97,7 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
     return userActives;
   }
 
-  public async createOrUpdateByCEI(
-    user_id: string,
-    data: object,
-  ): Promise<void> {}
+  public async createOrUpdateByCEI(): Promise<void> {}
 
   public async removeAutomaticByUserId(user_id: string): Promise<void> {
     this.userActives.filter(

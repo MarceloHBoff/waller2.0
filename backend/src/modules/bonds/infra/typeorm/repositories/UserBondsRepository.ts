@@ -47,7 +47,7 @@ export default class UserBondsRepository implements IUserBondsRepository {
     return userBond;
   }
 
-  public async findAllByUserId(user_id: string): Promise<UserBond[]> {
+  public async findActivesByUserId(user_id: string): Promise<UserBond[]> {
     const userBonds = await this.ormRepository.find({
       where: { user_id },
     });

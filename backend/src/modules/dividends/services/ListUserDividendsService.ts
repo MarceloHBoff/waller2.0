@@ -12,7 +12,7 @@ interface IDividendResponse extends Dividend {
 }
 
 @injectable()
-export default class ListUserDividendsReceivablesService {
+export default class ListUserDividendsService {
   constructor(
     @inject('DividendsRepository')
     private dividendsRepository: IDividendRepository,
@@ -37,7 +37,7 @@ export default class ListUserDividendsReceivablesService {
     let dividends: IDividendResponse[] = [];
 
     for (let i = 0; i < actives.length; i++) {
-      const getActiveDividends = await this.dividendsRepository.getDividendsReceivable(
+      const getActiveDividends = await this.dividendsRepository.getDividends(
         actives[i].buy_date,
         actives[i].active_id,
       );
@@ -53,11 +53,28 @@ export default class ListUserDividendsReceivablesService {
       dividends = [...dividends, ...editedDividends];
     }
 
-    const total = dividends.reduce(
+    const unifiedDividends: IDividendResponse[] = [];
+
+    dividends.forEach(dividend => {
+      const findIndex = unifiedDividends.findIndex(
+        unifiedDividend =>
+          unifiedDividend.active_id === dividend.active_id &&
+          unifiedDividend.type === dividend.type &&
+          unifiedDividend.EX_date === dividend.EX_date,
+      );
+
+      if (findIndex >= 0) {
+        unifiedDividends[findIndex].quantity += dividend.quantity;
+      } else {
+        unifiedDividends.push(dividend);
+      }
+    });
+
+    const total = unifiedDividends.reduce(
       (acc, current) => acc + current.quantity * current.value,
       0,
     );
 
-    return { dividends, total };
+    return { dividends: unifiedDividends, total };
   }
 }

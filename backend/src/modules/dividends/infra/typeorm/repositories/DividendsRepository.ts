@@ -1,4 +1,10 @@
-import { Repository, getRepository, MoreThan, MoreThanOrEqual } from 'typeorm';
+import {
+  Repository,
+  getRepository,
+  MoreThan,
+  MoreThanOrEqual,
+  LessThanOrEqual,
+} from 'typeorm';
 
 import Dividend from '../entities/Dividend';
 
@@ -40,5 +46,21 @@ export default class DividendRepository implements IDividendRepository {
     });
 
     return dividendsReceivable;
+  }
+
+  public async getDividends(
+    date: Date,
+    active_id: string,
+  ): Promise<Dividend[]> {
+    const dividends = await this.ormRepository.find({
+      where: {
+        active_id,
+        EX_date: MoreThanOrEqual(date),
+        pay_date: LessThanOrEqual(new Date(Date.now())),
+      },
+      relations: ['active'],
+    });
+
+    return dividends;
   }
 }

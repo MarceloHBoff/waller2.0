@@ -41,7 +41,7 @@ export default class FakeBondsRepository implements IUserBondsRepository {
     return userBond;
   }
 
-  public async findAllByUserId(user_id: string): Promise<UserBond[]> {
+  public async findActivesByUserId(user_id: string): Promise<UserBond[]> {
     const userBonds = this.userBonds.filter(
       userBond => userBond.user_id === user_id,
     );

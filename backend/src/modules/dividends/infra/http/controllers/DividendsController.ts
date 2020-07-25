@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import ActivesRepository from '@modules/actives/infra/typeorm/repositories/ActivesRepository';
-import ListUserDividendsReceivablesService from '@modules/dividends/services/ListUserDividendsReceivablesService';
+import ListUserDividendsService from '@modules/dividends/services/ListUserDividendsService';
 import SearchDividendsService from '@modules/dividends/services/SearchDividendsService';
 
 export default class DividendsController {
@@ -25,9 +25,7 @@ export default class DividendsController {
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
-    const listDividends = container.resolve(
-      ListUserDividendsReceivablesService,
-    );
+    const listDividends = container.resolve(ListUserDividendsService);
 
     const dividends = await listDividends.execute(request.user.id);
 

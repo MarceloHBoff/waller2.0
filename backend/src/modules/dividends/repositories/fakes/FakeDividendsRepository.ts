@@ -50,4 +50,18 @@ export default class FakeBondsRepository implements IDividendRepository {
 
     return dividendsReceivable;
   }
+
+  public async getDividends(
+    date: Date,
+    active_id: string,
+  ): Promise<Dividend[]> {
+    const dividends = this.dividends.filter(
+      dividend =>
+        dividend.active_id === active_id &&
+        dividend.EX_date >= date &&
+        dividend.pay_date <= new Date(Date.now()),
+    );
+
+    return dividends;
+  }
 }
