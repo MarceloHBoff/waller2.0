@@ -1,18 +1,16 @@
 import 'reflect-metadata';
 
-import {
-  initCreateUserActive,
-  initCreateActiveService,
-  createActiveRepository,
-  createActives,
-} from '@tests/actives/createUserActive';
-import { initCreateUser, createUser } from '@tests/users/createUser';
-
-import FakeUserActiveRepository from '../repositories/fakes/FakeUserActiveRepository';
-
 import CreateUserActiveService from './CreateUserActiveService';
 
-let fakeUserActiveRepository: FakeUserActiveRepository;
+import {
+  initCreateActiveService,
+  initCreateUserActiveService,
+  createUserActiveRepository,
+  createActiveRepository,
+  createActives,
+} from '@shared/infra/typeorm/tests/actives';
+import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
+
 let createUserActive: CreateUserActiveService;
 
 describe('CreateUserActive', () => {
@@ -21,17 +19,17 @@ describe('CreateUserActive', () => {
 
     createActiveRepository();
 
-    fakeUserActiveRepository = initCreateUserActive();
+    createUserActiveRepository();
 
     initCreateActiveService();
 
-    createUserActive = new CreateUserActiveService(fakeUserActiveRepository);
+    createUserActive = initCreateUserActiveService();
   });
 
   it('should be able to create a user active in database', async () => {
     const { id } = await createUser();
 
-    createActives();
+    await createActives();
 
     const userActive = await createUserActive.execute({
       user_id: id,

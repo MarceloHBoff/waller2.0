@@ -1,4 +1,4 @@
-import { initCreateUser, createUser } from '@tests/users/createUser';
+import 'reflect-metadata';
 
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
@@ -6,6 +6,7 @@ import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import UpdateProfileService from '@modules/users/services/UpdateProfileService';
 
 import AppError from '@shared/errors/AppError';
+import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeHashProvider: FakeHashProvider;

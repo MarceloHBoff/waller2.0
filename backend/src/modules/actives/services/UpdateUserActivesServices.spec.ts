@@ -1,21 +1,18 @@
 import 'reflect-metadata';
 
-import {
-  initCreateUserActive,
-  initCreateActiveService,
-  createActiveRepository,
-} from '@tests/actives/createUserActive';
-import { initCreateUser, createUser } from '@tests/users/createUser';
-
-import FakeUserActiveRepository from '../repositories/fakes/FakeUserActiveRepository';
-
-import CreateActiveService from './CreateActiveService';
-import CreateUserActiveService from './CreateUserActiveService';
 import UpdateUserActivesService from './UpdateUserActivesService';
 
-let fakeUserActiveRepository: FakeUserActiveRepository;
-let createActive: CreateActiveService;
-let createUserActive: CreateUserActiveService;
+import {
+  initCreateActiveService,
+  initCreateUserActiveService,
+  createActiveRepository,
+  createUserActiveRepository,
+  createActives,
+  createUserActives,
+} from '@shared/infra/typeorm/tests/actives';
+import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
+
+let fakeUserActiveRepository;
 let updateUserActives: UpdateUserActivesService;
 
 describe('ListUserActives', () => {
@@ -24,11 +21,11 @@ describe('ListUserActives', () => {
 
     createActiveRepository();
 
-    fakeUserActiveRepository = initCreateUserActive();
+    initCreateActiveService();
 
-    createActive = initCreateActiveService();
+    fakeUserActiveRepository = createUserActiveRepository();
 
-    createUserActive = new CreateUserActiveService(fakeUserActiveRepository);
+    initCreateUserActiveService();
 
     updateUserActives = new UpdateUserActivesService(fakeUserActiveRepository);
   });
@@ -36,22 +33,9 @@ describe('ListUserActives', () => {
   it('should be able to update user actives', async () => {
     const { id } = await createUser();
 
-    await createActive.execute('PETR3', 'Acao');
-    await createActive.execute('ITUB3', 'Acao');
+    await createActives();
 
-    const userActive1 = await createUserActive.execute({
-      user_id: id,
-      buy_price: 100,
-      code: 'PETR3',
-      quantity: 10,
-    });
-
-    const userActive2 = await createUserActive.execute({
-      user_id: id,
-      buy_price: 100,
-      code: 'ITUB3',
-      quantity: 10,
-    });
+    const { userActive1, userActive2 } = await createUserActives(id);
 
     const updatedActives = await updateUserActives.execute(id);
 

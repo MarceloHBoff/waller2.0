@@ -1,22 +1,21 @@
 import 'reflect-metadata';
 
-import { initCreateUser, createUser } from '@tests/users/createUser';
-
 import ListUserDividendsReceivablesService from './ListUserDividendsReceivablesService';
 
-import FakeRefreshProvider from '@modules/actives/providers/RefreshProvider/fakes/FakeRefreshProvider';
-import FakeActivesRepository from '@modules/actives/repositories/fakes/FakeActivesRepository';
-import FakeUserActiveRepository from '@modules/actives/repositories/fakes/FakeUserActiveRepository';
-import CreateActiveService from '@modules/actives/services/CreateActiveService';
-import CreateUserActiveService from '@modules/actives/services/CreateUserActiveService';
 import FakeDividendsRepository from '@modules/dividends/repositories/fakes/FakeDividendsRepository';
 
-let fakeRefreshProvider: FakeRefreshProvider;
-let fakeActivesRepository: FakeActivesRepository;
-let fakeUserActiveRepository: FakeUserActiveRepository;
+import {
+  createUserActiveRepository,
+  initCreateActiveService,
+  initCreateUserActiveService,
+  createActiveRepository,
+  createActives,
+  createUserActives,
+} from '@shared/infra/typeorm/tests/actives';
+import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
+
+let fakeUserActiveRepository;
 let fakeDividendsRepository: FakeDividendsRepository;
-let createActive: CreateActiveService;
-let createUserActive: CreateUserActiveService;
 
 let listUserDividendsReceivables: ListUserDividendsReceivablesService;
 
@@ -24,47 +23,32 @@ describe('ListUserDividendsReceivables', () => {
   beforeEach(() => {
     initCreateUser();
 
-    fakeRefreshProvider = new FakeRefreshProvider();
-    fakeActivesRepository = new FakeActivesRepository();
-    fakeUserActiveRepository = new FakeUserActiveRepository(
-      fakeActivesRepository,
-      fakeRefreshProvider,
-    );
+    createActiveRepository();
+
+    fakeUserActiveRepository = createUserActiveRepository();
+
+    initCreateActiveService();
+
+    initCreateUserActiveService();
+
     fakeDividendsRepository = new FakeDividendsRepository();
 
     listUserDividendsReceivables = new ListUserDividendsReceivablesService(
       fakeDividendsRepository,
       fakeUserActiveRepository,
     );
-
-    createActive = new CreateActiveService(fakeActivesRepository);
-
-    createUserActive = new CreateUserActiveService(fakeUserActiveRepository);
   });
 
   it('should be able to list user dividends receivable', async () => {
     const { id } = await createUser();
 
-    const active1 = await createActive.execute('PETR3', 'Acao');
-    const active2 = await createActive.execute('ITUB3', 'Acao');
+    const { active1, active2 } = await createActives();
+
+    await createUserActives(id);
 
     const dateMock = jest
       .spyOn(Date, 'now')
       .mockImplementation(() => new Date(2020, 8, 1).getTime());
-
-    await createUserActive.execute({
-      user_id: id,
-      buy_price: 100,
-      code: 'PETR3',
-      quantity: 10,
-    });
-
-    await createUserActive.execute({
-      user_id: id,
-      buy_price: 10,
-      code: 'ITUB3',
-      quantity: 20,
-    });
 
     dateMock.mockClear();
 

@@ -1,8 +1,10 @@
-import { initCreateUser, createUser } from '@tests/users/createUser';
+import 'reflect-metadata';
 
 import FakeCEICrawlerProvider from '../providers/CEICrawlerProvider/fakes/FakeCEICrawlerProvider';
 
 import FindActivesByCEIService from './FindActivesByCEIService';
+
+import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
 
 let fakeCEICrawler: FakeCEICrawlerProvider;
 

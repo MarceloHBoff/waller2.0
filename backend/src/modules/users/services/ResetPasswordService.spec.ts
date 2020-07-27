@@ -1,5 +1,3 @@
-import { initCreateUser, createUser } from '@tests/users/createUser';
-
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeUserTokensRepository from '../repositories/fakes/FakeUserTokensRepository';
@@ -7,6 +5,7 @@ import FakeUserTokensRepository from '../repositories/fakes/FakeUserTokensReposi
 import ResetPasswordService from './ResetPasswordService';
 
 import AppError from '@shared/errors/AppError';
+import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeUserTokenRepository: FakeUserTokensRepository;

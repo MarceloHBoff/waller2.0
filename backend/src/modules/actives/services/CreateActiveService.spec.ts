@@ -1,9 +1,9 @@
-import {
-  initCreateActiveService,
-  createActiveRepository,
-} from '@tests/actives/createUserActive';
-
 import CreateActiveService from './CreateActiveService';
+
+import {
+  createActiveRepository,
+  initCreateActiveService,
+} from '@shared/infra/typeorm/tests/actives';
 
 let createActive: CreateActiveService;
 

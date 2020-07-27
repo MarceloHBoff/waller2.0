@@ -1,10 +1,11 @@
-import { initCreateUser, createUser } from '@tests/users/createUser';
+import 'reflect-metadata';
 
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 
 import ShowProfileService from '@modules/users/services/ShowProfileService';
 
 import AppError from '@shared/errors/AppError';
+import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
 
 let fakeUsersRepository: FakeUsersRepository;
 let showProfile: ShowProfileService;

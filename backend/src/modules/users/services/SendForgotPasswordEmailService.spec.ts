@@ -1,5 +1,3 @@
-import { initCreateUser, createUser } from '@tests/users/createUser';
-
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeUserTokensRepository from '../repositories/fakes/FakeUserTokensRepository';
 
@@ -7,6 +5,7 @@ import SendForgotPasswordEmailService from './SendForgotPasswordEmailService';
 
 import FakeMailProvider from '@shared/container/providers/MailProvider/fakes/FakeStorageProvider';
 import AppError from '@shared/errors/AppError';
+import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeMailProvider: FakeMailProvider;

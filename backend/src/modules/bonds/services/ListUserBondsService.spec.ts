@@ -1,22 +1,25 @@
-import { initCreateUser, createUser } from '@tests/users/createUser';
+import 'reflect-metadata';
 
-import FakeBondsRepository from '../repositories/fakes/FakeBondsRepository';
-
-import CreateUserBondService from './CreateUserBondService';
 import ListUserBondsService from './ListUserBondsService';
 
-let fakeBondsRepository: FakeBondsRepository;
+import {
+  createBondRepository,
+  initCreateUserBonds,
+  createUserBonds,
+} from '@shared/infra/typeorm/tests/bonds';
+import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
 
-let createUserBond: CreateUserBondService;
+let fakeBondsRepository;
+
 let listUserBonds: ListUserBondsService;
 
 describe('ListUserBonds', () => {
   beforeEach(() => {
     initCreateUser();
 
-    fakeBondsRepository = new FakeBondsRepository();
+    fakeBondsRepository = createBondRepository();
 
-    createUserBond = new CreateUserBondService(fakeBondsRepository);
+    initCreateUserBonds();
 
     listUserBonds = new ListUserBondsService(fakeBondsRepository);
   });
@@ -24,21 +27,7 @@ describe('ListUserBonds', () => {
   it('should be able to list user bonds', async () => {
     const { id } = await createUser();
 
-    const userBond1 = await createUserBond.execute({
-      user_id: id,
-      name: 'Bond test 1',
-      due_date: new Date(),
-      buy_price: 1000.0,
-      now_price: 1300.0,
-    });
-
-    const userBond2 = await createUserBond.execute({
-      user_id: id,
-      name: 'Bond test 2',
-      due_date: new Date(),
-      buy_price: 5000.0,
-      now_price: 6100.0,
-    });
+    const { userBond1, userBond2 } = await createUserBonds(id);
 
     const userBonds = await listUserBonds.execute(id);
 
