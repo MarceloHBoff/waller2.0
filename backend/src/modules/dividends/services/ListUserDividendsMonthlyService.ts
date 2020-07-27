@@ -11,8 +11,15 @@ interface IDividendResponse extends Dividend {
   quantity: number;
 }
 
+interface IMonthlyDividends {
+  month: number;
+  year: number;
+  total: number;
+  dividends: Omit<IDividendResponse[], 'active_id'>;
+}
+
 @injectable()
-export default class ListUserDividendsService {
+export default class ListUserDividendsMonthlyService {
   constructor(
     @inject('DividendsRepository')
     private dividendsRepository: IDividendRepository,
@@ -23,12 +30,13 @@ export default class ListUserDividendsService {
 
   public async execute(
     user_id: string,
-  ): Promise<{ dividends: IDividendResponse[]; total: number }> {
+  ): Promise<{ dividends: IMonthlyDividends[]; total: number }> {
     const actives = await this.userActivesRepository.findDataByDividendsList(
       user_id,
     );
 
     let dividends: IDividendResponse[] = [];
+    const dividendsByMonth: IMonthlyDividends[] = [];
     const unifiedDividends: IDividendResponse[] = [];
 
     for (let i = 0; i < actives.length; i++) {
@@ -63,11 +71,48 @@ export default class ListUserDividendsService {
       }
     });
 
-    const total = unifiedDividends.reduce(
-      (acc, current) => acc + current.quantity * current.value,
+    unifiedDividends.forEach(dividend => {
+      const month = this.getDate(String(dividend.pay_date)).getMonth() + 1;
+      const year = this.getDate(String(dividend.pay_date)).getFullYear();
+
+      const findIndex = dividendsByMonth.findIndex(
+        dividendMonth =>
+          dividendMonth.month === month && dividendMonth.year === year,
+      );
+
+      delete dividend.active_id;
+
+      if (findIndex >= 0) {
+        dividendsByMonth[findIndex].dividends.push(dividend);
+        dividendsByMonth[findIndex].total += dividend.quantity * dividend.value;
+      } else {
+        dividendsByMonth.push({
+          month,
+          year,
+          total: dividend.quantity * dividend.value,
+          dividends: [dividend],
+        });
+      }
+    });
+
+    dividendsByMonth.sort((a, b) => {
+      if (a.year > b.year || (a.year === b.year && a.month > b.month)) return 1;
+      return -1;
+    });
+
+    const total = dividendsByMonth.reduce(
+      (acc, current) => acc + current.total,
       0,
     );
 
-    return { dividends: unifiedDividends, total };
+    return { dividends: dividendsByMonth, total };
+  }
+
+  private getDate(date: string): Date {
+    return new Date(
+      Number(date.substr(6, 9)),
+      Number(date.substr(3, 2)) - 1,
+      Number(date.substr(0, 2)),
+    );
   }
 }

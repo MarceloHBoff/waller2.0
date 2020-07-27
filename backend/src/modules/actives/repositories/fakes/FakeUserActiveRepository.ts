@@ -6,6 +6,7 @@ import IActivesRepository from '../IActivesRepository';
 import IUserActiveRepository from '../IUserActivesRepository';
 
 import ICreateUserActiveDTO from '@modules/actives/dtos/ICreateUserActiveDTO';
+import IDataDividendsDTO from '@modules/actives/dtos/IDataDividendsDTO';
 import IRefreshProvider from '@modules/actives/providers/RefreshProvider/models/IRefreshProvider';
 
 @injectable()
@@ -51,7 +52,7 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
       active: findActive,
       user_id,
       buy_price,
-      buy_date: new Date(),
+      buy_date: new Date(Date.now()),
       quantity,
     });
 
@@ -68,12 +69,18 @@ export default class FakeUserActiveRepository implements IUserActiveRepository {
     return userActives;
   }
 
-  public async findAllByUserId(user_id: string): Promise<UserActive[]> {
+  public async findDataByDividendsList(
+    user_id: string,
+  ): Promise<IDataDividendsDTO[]> {
     const userActives = this.userActives.filter(
       userActive => userActive.user_id === user_id,
     );
 
-    return userActives;
+    return userActives.map(userActive => ({
+      active_id: userActive.active_id,
+      quantity: userActive.quantity,
+      buy_date: userActive.buy_date,
+    }));
   }
 
   public async updateUserActives(data: UserActive[]): Promise<UserActive[]> {

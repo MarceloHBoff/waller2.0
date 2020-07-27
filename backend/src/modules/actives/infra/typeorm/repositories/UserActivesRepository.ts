@@ -6,6 +6,7 @@ import UserActive from '../entities/UserActive';
 
 import ICEIActiveDTO from '@modules/actives/dtos/ICEIActiveDTO';
 import ICreateUserActiveDTO from '@modules/actives/dtos/ICreateUserActiveDTO';
+import IDataDividendsDTO from '@modules/actives/dtos/IDataDividendsDTO';
 import IRefreshProvider from '@modules/actives/providers/RefreshProvider/models/IRefreshProvider';
 import IActivesRepository from '@modules/actives/repositories/IActivesRepository';
 
@@ -93,13 +94,19 @@ export default class UserActivesRepository implements IUserActiveRepository {
     return unifiedUserActives;
   }
 
-  public async findAllByUserId(user_id: string): Promise<UserActive[]> {
+  public async findDataByDividendsList(
+    user_id: string,
+  ): Promise<IDataDividendsDTO[]> {
     const userActives = await this.ormRepository.find({
       where: { user_id },
       relations: ['active'],
     });
 
-    return userActives;
+    return userActives.map(userActive => ({
+      active_id: userActive.active_id,
+      quantity: userActive.quantity,
+      buy_date: userActive.buy_date,
+    }));
   }
 
   public async updateUserActives(data: UserActive[]): Promise<UserActive[]> {
@@ -156,7 +163,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
     if (!active) active = await this.activesRepository.create(code, '');
 
-    let userActive = await this.findByBuy_date(user_id, active.id, buy_date);
+    let userActive = await this.findByBuyDate(user_id, active.id, buy_date);
 
     if (userActive) {
       userActive = this.convertDecimalInNumber(userActive);
@@ -189,7 +196,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
     }
   }
 
-  private async findByBuy_date(
+  private async findByBuyDate(
     user_id: string,
     active_id: string,
     buy_date: Date,

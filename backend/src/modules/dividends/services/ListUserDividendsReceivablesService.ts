@@ -24,15 +24,9 @@ export default class ListUserDividendsReceivablesService {
   public async execute(
     user_id: string,
   ): Promise<{ dividends: IDividendResponse[]; total: number }> {
-    const userActives = await this.userActivesRepository.findAllByUserId(
+    const actives = await this.userActivesRepository.findDataByDividendsList(
       user_id,
     );
-
-    const actives = userActives.map(userActive => ({
-      active_id: userActive.active_id,
-      quantity: userActive.quantity,
-      buy_date: userActive.buy_date,
-    }));
 
     let dividends: IDividendResponse[] = [];
 
