@@ -1,37 +1,32 @@
 import 'reflect-metadata';
 
-import FakeActivesRepository from '../repositories/fakes/FakeActivesRepository';
+import {
+  initCreateUserActive,
+  initCreateActiveService,
+  createActiveRepository,
+} from '@tests/actives/createUserActive';
+import { initCreateUser, createUser } from '@tests/users/createUser';
+
 import FakeUserActiveRepository from '../repositories/fakes/FakeUserActiveRepository';
 
 import CreateActiveService from './CreateActiveService';
 import CreateUserActiveService from './CreateUserActiveService';
 import UpdateUserActivesService from './UpdateUserActivesService';
 
-import FakeRefreshProvider from '@modules/actives/providers/RefreshProvider/fakes/FakeRefreshProvider';
-import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
-
-let fakeActivesRepository: FakeActivesRepository;
-let fakeUsersRepository: FakeUsersRepository;
 let fakeUserActiveRepository: FakeUserActiveRepository;
-let fakeRefreshProvider: FakeRefreshProvider;
 let createActive: CreateActiveService;
 let createUserActive: CreateUserActiveService;
 let updateUserActives: UpdateUserActivesService;
 
 describe('ListUserActives', () => {
   beforeEach(() => {
-    fakeActivesRepository = new FakeActivesRepository();
+    initCreateUser();
 
-    fakeUsersRepository = new FakeUsersRepository();
+    createActiveRepository();
 
-    fakeRefreshProvider = new FakeRefreshProvider();
+    fakeUserActiveRepository = initCreateUserActive();
 
-    fakeUserActiveRepository = new FakeUserActiveRepository(
-      fakeActivesRepository,
-      fakeRefreshProvider,
-    );
-
-    createActive = new CreateActiveService(fakeActivesRepository);
+    createActive = initCreateActiveService();
 
     createUserActive = new CreateUserActiveService(fakeUserActiveRepository);
 
@@ -39,11 +34,7 @@ describe('ListUserActives', () => {
   });
 
   it('should be able to update user actives', async () => {
-    const { id } = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const { id } = await createUser();
 
     await createActive.execute('PETR3', 'Acao');
     await createActive.execute('ITUB3', 'Acao');

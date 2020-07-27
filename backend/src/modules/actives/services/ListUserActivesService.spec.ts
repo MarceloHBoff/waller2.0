@@ -1,23 +1,25 @@
 import 'reflect-metadata';
 
+import {
+  initCreateUserActive,
+  initCreateActiveService,
+  createActiveRepository,
+  createActives,
+} from '@tests/actives/createUserActive';
+import { initCreateUser, createUser } from '@tests/users/createUser';
+
 import FakeUserBondRepository from '../../bonds/repositories/fakes/FakeBondsRepository';
 import CreateUserBondService from '../../bonds/services/CreateUserBondService';
-import FakeActivesRepository from '../repositories/fakes/FakeActivesRepository';
 import FakeUserActiveRepository from '../repositories/fakes/FakeUserActiveRepository';
 
 import CreateActiveService from './CreateActiveService';
 import CreateUserActiveService from './CreateUserActiveService';
 import ListUserActivesService from './ListUserActivesService';
 
-import FakeRefreshProvider from '@modules/actives/providers/RefreshProvider/fakes/FakeRefreshProvider';
 import FakeUSDProvider from '@modules/actives/providers/USDProvider/fakes/FakeUSDProvider';
-import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 
-let fakeActivesRepository: FakeActivesRepository;
-let fakeUsersRepository: FakeUsersRepository;
 let fakeUserActiveRepository: FakeUserActiveRepository;
 let fakeUserBondRepository: FakeUserBondRepository;
-let fakeRefreshProvider: FakeRefreshProvider;
 let fakeUSDProvider: FakeUSDProvider;
 let createActive: CreateActiveService;
 let createUserActive: CreateUserActiveService;
@@ -26,22 +28,17 @@ let listUserActives: ListUserActivesService;
 
 describe('ListUserActives', () => {
   beforeEach(() => {
-    fakeActivesRepository = new FakeActivesRepository();
+    initCreateUser();
 
-    fakeUsersRepository = new FakeUsersRepository();
+    createActiveRepository();
 
     fakeUserBondRepository = new FakeUserBondRepository();
 
-    fakeRefreshProvider = new FakeRefreshProvider();
-
     fakeUSDProvider = new FakeUSDProvider();
 
-    fakeUserActiveRepository = new FakeUserActiveRepository(
-      fakeActivesRepository,
-      fakeRefreshProvider,
-    );
+    fakeUserActiveRepository = initCreateUserActive();
 
-    createActive = new CreateActiveService(fakeActivesRepository);
+    createActive = initCreateActiveService();
 
     createUserActive = new CreateUserActiveService(fakeUserActiveRepository);
 
@@ -55,15 +52,10 @@ describe('ListUserActives', () => {
   });
 
   it('should be able to list user actives', async () => {
-    const { id } = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const { id } = await createUser();
 
-    await createActive.execute('PETR3', 'Acao');
+    createActives();
     await createActive.execute('TEST', 'Invalid');
-    await createActive.execute('ITUB3', 'Acao');
     await createActive.execute('MSFT', 'Stock');
     await createActive.execute('BOVA11', 'ETF');
     await createActive.execute('KNRI11', 'FII');

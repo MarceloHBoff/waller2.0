@@ -1,15 +1,17 @@
-import FakeActivesRepository from '../repositories/fakes/FakeActivesRepository';
+import {
+  initCreateActiveService,
+  createActiveRepository,
+} from '@tests/actives/createUserActive';
 
 import CreateActiveService from './CreateActiveService';
 
-let fakeActivesRepository: FakeActivesRepository;
 let createActive: CreateActiveService;
 
 describe('CreateActive', () => {
   beforeEach(() => {
-    fakeActivesRepository = new FakeActivesRepository();
+    createActiveRepository();
 
-    createActive = new CreateActiveService(fakeActivesRepository);
+    createActive = initCreateActiveService();
   });
 
   it('should be able to create a active in database', async () => {

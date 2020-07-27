@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 
+import { initCreateUser, createUser } from '@tests/users/createUser';
+
 import SearchDividendsService from './SearchDividendsService';
 
 import FakeRefreshProvider from '@modules/actives/providers/RefreshProvider/fakes/FakeRefreshProvider';
@@ -9,14 +11,12 @@ import CreateActiveService from '@modules/actives/services/CreateActiveService';
 import CreateUserActiveService from '@modules/actives/services/CreateUserActiveService';
 import FakeGetDividendsProvider from '@modules/dividends/providers/GetDividendsProvider/fakes/FakeGetDividendsProvider';
 import FakeDividendsRepository from '@modules/dividends/repositories/fakes/FakeDividendsRepository';
-import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 
 let fakeRefreshProvider: FakeRefreshProvider;
 let fakeActivesRepository: FakeActivesRepository;
 let fakeUserActiveRepository: FakeUserActiveRepository;
 let fakeGetDividendsProvider: FakeGetDividendsProvider;
 let fakeDividendsRepository: FakeDividendsRepository;
-let fakeUsersRepository: FakeUsersRepository;
 let createActive: CreateActiveService;
 let createUserActive: CreateUserActiveService;
 
@@ -24,6 +24,8 @@ let searchDividends: SearchDividendsService;
 
 describe('SearchDividends', () => {
   beforeEach(() => {
+    initCreateUser();
+
     fakeRefreshProvider = new FakeRefreshProvider();
     fakeActivesRepository = new FakeActivesRepository();
     fakeUserActiveRepository = new FakeUserActiveRepository(
@@ -32,7 +34,6 @@ describe('SearchDividends', () => {
     );
     fakeGetDividendsProvider = new FakeGetDividendsProvider();
     fakeDividendsRepository = new FakeDividendsRepository();
-    fakeUsersRepository = new FakeUsersRepository();
 
     searchDividends = new SearchDividendsService(
       fakeGetDividendsProvider,
@@ -46,11 +47,7 @@ describe('SearchDividends', () => {
   });
 
   it('should be able to search active dividends', async () => {
-    const { id } = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const { id } = await createUser();
 
     const active1 = await createActive.execute('PETR3', 'Acao');
     const active2 = await createActive.execute('ITUB3', 'Acao');

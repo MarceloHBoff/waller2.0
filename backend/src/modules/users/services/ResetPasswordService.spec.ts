@@ -1,3 +1,5 @@
+import { initCreateUser, createUser } from '@tests/users/createUser';
+
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeUserTokensRepository from '../repositories/fakes/FakeUserTokensRepository';
@@ -13,7 +15,7 @@ let resetPasswordService: ResetPasswordService;
 
 describe('ResetPassword', () => {
   beforeEach(() => {
-    fakeUsersRepository = new FakeUsersRepository();
+    fakeUsersRepository = initCreateUser();
     fakeUserTokenRepository = new FakeUserTokensRepository();
     fakeHashProvider = new FakeHashProvider();
 
@@ -25,19 +27,15 @@ describe('ResetPassword', () => {
   });
 
   it('should be able to reset password', async () => {
-    const user = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const { id } = await createUser();
 
-    const { token } = await fakeUserTokenRepository.generate(user.id);
+    const { token } = await fakeUserTokenRepository.generate(id);
 
     const generateHash = jest.spyOn(fakeHashProvider, 'generateHash');
 
     await resetPasswordService.execute({ password: '123123', token });
 
-    const updatedUser = await fakeUsersRepository.findById(user.id);
+    const updatedUser = await fakeUsersRepository.findById(id);
 
     expect(updatedUser?.password).toBe('123123');
     expect(generateHash).toHaveBeenCalledWith('123123');
@@ -66,13 +64,9 @@ describe('ResetPassword', () => {
   });
 
   it('should not be able to reset password if passed more than 2 hours', async () => {
-    const user = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const { id } = await createUser();
 
-    const { token } = await fakeUserTokenRepository.generate(user.id);
+    const { token } = await fakeUserTokenRepository.generate(id);
 
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
       const customDate = new Date();

@@ -1,21 +1,20 @@
+import { initCreateUser, createUser } from '@tests/users/createUser';
+
 import FakeBondsRepository from '../repositories/fakes/FakeBondsRepository';
 
 import CreateUserBondService from './CreateUserBondService';
 import ListUserBondsService from './ListUserBondsService';
 
-import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
-
 let fakeBondsRepository: FakeBondsRepository;
-let fakeUsersRepository: FakeUsersRepository;
 
 let createUserBond: CreateUserBondService;
 let listUserBonds: ListUserBondsService;
 
 describe('ListUserBonds', () => {
   beforeEach(() => {
-    fakeBondsRepository = new FakeBondsRepository();
+    initCreateUser();
 
-    fakeUsersRepository = new FakeUsersRepository();
+    fakeBondsRepository = new FakeBondsRepository();
 
     createUserBond = new CreateUserBondService(fakeBondsRepository);
 
@@ -23,11 +22,7 @@ describe('ListUserBonds', () => {
   });
 
   it('should be able to list user bonds', async () => {
-    const { id } = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const { id } = await createUser();
 
     const userBond1 = await createUserBond.execute({
       user_id: id,

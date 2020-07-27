@@ -1,47 +1,37 @@
 import 'reflect-metadata';
 
-import FakeActivesRepository from '../repositories/fakes/FakeActivesRepository';
+import {
+  initCreateUserActive,
+  initCreateActiveService,
+  createActiveRepository,
+  createActives,
+} from '@tests/actives/createUserActive';
+import { initCreateUser, createUser } from '@tests/users/createUser';
+
 import FakeUserActiveRepository from '../repositories/fakes/FakeUserActiveRepository';
 
-import CreateActiveService from './CreateActiveService';
 import CreateUserActiveService from './CreateUserActiveService';
 
-import FakeRefreshProvider from '@modules/actives/providers/RefreshProvider/fakes/FakeRefreshProvider';
-import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
-
-let fakeActivesRepository: FakeActivesRepository;
-let fakeUsersRepository: FakeUsersRepository;
 let fakeUserActiveRepository: FakeUserActiveRepository;
-let fakeRefreshProvider: FakeRefreshProvider;
-let createActive: CreateActiveService;
 let createUserActive: CreateUserActiveService;
 
 describe('CreateUserActive', () => {
   beforeEach(() => {
-    fakeActivesRepository = new FakeActivesRepository();
+    initCreateUser();
 
-    fakeUsersRepository = new FakeUsersRepository();
+    createActiveRepository();
 
-    fakeRefreshProvider = new FakeRefreshProvider();
+    fakeUserActiveRepository = initCreateUserActive();
 
-    fakeUserActiveRepository = new FakeUserActiveRepository(
-      fakeActivesRepository,
-      fakeRefreshProvider,
-    );
-
-    createActive = new CreateActiveService(fakeActivesRepository);
+    initCreateActiveService();
 
     createUserActive = new CreateUserActiveService(fakeUserActiveRepository);
   });
 
   it('should be able to create a user active in database', async () => {
-    const { id } = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const { id } = await createUser();
 
-    await createActive.execute('PETR3', 'Acao');
+    createActives();
 
     const userActive = await createUserActive.execute({
       user_id: id,

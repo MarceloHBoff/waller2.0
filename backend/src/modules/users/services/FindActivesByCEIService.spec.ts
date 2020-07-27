@@ -1,27 +1,24 @@
+import { initCreateUser, createUser } from '@tests/users/createUser';
+
 import FakeCEICrawlerProvider from '../providers/CEICrawlerProvider/fakes/FakeCEICrawlerProvider';
-import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 
 import FindActivesByCEIService from './FindActivesByCEIService';
 
-let fakeUsersRepository: FakeUsersRepository;
 let fakeCEICrawler: FakeCEICrawlerProvider;
 
 let findActivesByCEI: FindActivesByCEIService;
 
 describe('FindActivesByCEI', () => {
   beforeEach(() => {
-    fakeUsersRepository = new FakeUsersRepository();
+    initCreateUser();
+
     fakeCEICrawler = new FakeCEICrawlerProvider();
 
     findActivesByCEI = new FindActivesByCEIService(fakeCEICrawler);
   });
 
   it('should be able to find user actives by CEI', async () => {
-    const { id } = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const { id } = await createUser();
 
     expect(findActivesByCEI.execute(id));
   });

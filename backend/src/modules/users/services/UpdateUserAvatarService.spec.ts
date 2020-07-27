@@ -1,3 +1,5 @@
+import { initCreateUser, createUser } from '@tests/users/createUser';
+
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
@@ -11,7 +13,7 @@ let updateUserAvatar: UpdateUserAvatarService;
 
 describe('UpdateUserAvatar', () => {
   beforeEach(() => {
-    fakeUsersRepository = new FakeUsersRepository();
+    fakeUsersRepository = initCreateUser();
     fakeStorageProvider = new FakeStorageProvider();
 
     updateUserAvatar = new UpdateUserAvatarService(
@@ -21,11 +23,7 @@ describe('UpdateUserAvatar', () => {
   });
 
   it('should be able to update user avatar', async () => {
-    const user = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const user = await createUser();
 
     await updateUserAvatar.execute({
       user_id: user.id,
@@ -47,19 +45,15 @@ describe('UpdateUserAvatar', () => {
   it('should be delete old avatar when updating new one', async () => {
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
 
-    const user = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-    });
+    const { id } = await createUser();
 
     await updateUserAvatar.execute({
-      user_id: user.id,
+      user_id: id,
       avatarFilename: 'avatar.jpg',
     });
 
     await updateUserAvatar.execute({
-      user_id: user.id,
+      user_id: id,
       avatarFilename: 'avatar2.jpg',
     });
 
