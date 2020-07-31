@@ -29,7 +29,6 @@ interface SignInCredentials {
 interface AuthContextData {
   user: User;
   loading: boolean;
-  touchId: boolean;
   signed: boolean;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
@@ -41,29 +40,24 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>({} as AuthState);
   const [loading, setLoading] = useState(true);
-  const [touchId, setTouchId] = useState(false);
   const [signed, setSigned] = useState(false);
 
   useEffect(() => {
     async function loadStorageData(): Promise<void> {
-      const [
-        [, token],
-        [, user],
-        [, touchStorage],
-        [, signedStorage],
-      ] = await AsyncStorage.multiGet([
+      const [[, token], [, user]] = await AsyncStorage.multiGet([
         '@Waller:token',
         '@Waller:user',
-        '@Waller:touchId',
-        '@Waller:signed',
       ]);
+
+      await AsyncStorage.getItem('@Waller:signed', (_, value) => {
+        if (value) {
+          setSigned(JSON.parse(value));
+        }
+      });
 
       api.defaults.headers.authorization = `Bearer ${token}`;
 
       if (token && user) setData({ token, user: JSON.parse(user) });
-
-      if (touchStorage) setTouchId(JSON.parse(touchStorage));
-      if (signedStorage) setSigned(JSON.parse(signedStorage));
 
       setLoading(false);
     }
@@ -82,7 +76,6 @@ const AuthProvider: React.FC = ({ children }) => {
     await AsyncStorage.multiSet([
       ['@Waller:token', token],
       ['@Waller:user', JSON.stringify(user)],
-      ['@Waller:touchId', JSON.stringify(true)],
       ['@Waller:signed', JSON.stringify(true)],
     ]);
 
@@ -91,7 +84,6 @@ const AuthProvider: React.FC = ({ children }) => {
     setData({ token, user });
 
     setSigned(true);
-    setTouchId(true);
   }, []);
 
   const signInByTouchId = useCallback(async () => {
@@ -112,7 +104,6 @@ const AuthProvider: React.FC = ({ children }) => {
         signIn,
         signInByTouchId,
         signOut,
-        touchId,
         signed,
       }}
     >

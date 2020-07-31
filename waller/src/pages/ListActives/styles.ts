@@ -50,7 +50,7 @@ interface IVariation {
 
 export const Variation = styled(DefaultText)<IVariation>`
   color: ${props =>
-    props.signal > 0 ? Colors.greenLight : Colors.dangerSuperDark};
+    Number(props.signal) > 0 ? Colors.greenLight : Colors.dangerSuperDark};
 `;
 
 export const Price = styled(DefaultText)``;

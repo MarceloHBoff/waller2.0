@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useConfig } from '#hooks/config';
+
 import { Container, ValueText } from './styles';
 
 interface IValueFieldProps {
@@ -12,9 +14,11 @@ const ValueField: React.FC<IValueFieldProps> = ({
   color = '#fff',
   size = 18,
 }) => {
+  const { seeValues } = useConfig();
+
   return (
     <Container>
-      <ValueText color={color} size={size}>
+      <ValueText color={color} size={size} blinded={!seeValues}>
         {children}
       </ValueText>
     </Container>

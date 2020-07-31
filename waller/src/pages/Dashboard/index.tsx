@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
-import { TouchableOpacity } from 'react-native';
-import { PieChart } from 'react-native-svg-charts';
+import { TouchableOpacity, Dimensions } from 'react-native';
+import { PieChart } from 'react-native-chart-kit';
+// import { PieChart } from 'react-native-svg-charts';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { useNavigation } from '@react-navigation/native';
@@ -15,6 +16,19 @@ import { formatPrice, round10 } from '#utils/format';
 
 import PieChartLabels from './PieChartLabels';
 import { Container, Cards, Card, CardText } from './styles';
+
+const chartConfig = {
+  backgroundGradientFrom: '#1E2923',
+  backgroundGradientFromOpacity: 0,
+  backgroundGradientTo: '#08130D',
+  backgroundGradientToOpacity: 0.5,
+  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+  strokeWidth: 2, // optional, default 3
+  barPercentage: 0.5,
+  useShadowColorFromDataset: false, // optional
+};
+
+const screenWidth = Dimensions.get('window').width;
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -72,9 +86,11 @@ const Dashboard: React.FC = () => {
     return Object.keys(types)
       .filter((type: string) => types[type] !== 0)
       .map((type: string, index: number) => ({
-        value: (types[type] / totals?.currentValue) * 100,
-        svg: { fill: ChartColors[index] },
-        key: type,
+        name: type,
+        value: types[type],
+        color: ChartColors[index],
+        legendFontColor: '#7F7F7F',
+        legendFontSize: 15,
       }));
   }, [types, totals]);
 
@@ -117,11 +133,25 @@ const Dashboard: React.FC = () => {
         </Card>
       </Cards>
 
-      {pieData.length !== 0 && (
+      <PieChart
+        data={pieData}
+        width={screenWidth}
+        height={220}
+        chartConfig={{ ...chartConfig, barRadius: 10, stackedBar: true }}
+        accessor="value"
+        backgroundColor="transparent"
+        paddingLeft="16"
+        fromZero
+        hasLegend
+        xLabelsOffset={10}
+        center={[0.3, 1, 3, 2]}
+      />
+
+      {/* {pieData.length !== 0 && (
         <PieChart style={{ height: 200 }} data={pieData} padAngle={0.02}>
           <PieChartLabels />
         </PieChart>
-      )}
+      )} */}
     </Container>
   );
 };

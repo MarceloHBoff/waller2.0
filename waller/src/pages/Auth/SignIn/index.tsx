@@ -17,6 +17,7 @@ import * as Yup from 'yup';
 import signInImage from '#assets/signInImage.png';
 import Input from '#components/Input';
 import { useAuth } from '#hooks/auth';
+import { useConfig } from '#hooks/config';
 import getValidationErrors from '#utils/getValidationErrors';
 
 import {
@@ -48,7 +49,8 @@ const SignIn: React.FC = () => {
   const scrollViewRef = useRef<ScrollView>(null);
 
   const { goBack } = useNavigation();
-  const { signIn, signInByTouchId, touchId } = useAuth();
+  const { signIn, signInByTouchId } = useAuth();
+  const { fingerPrint } = useConfig();
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () =>
@@ -79,15 +81,13 @@ const SignIn: React.FC = () => {
   useEffect(() => {
     timeout = setTimeout(() => {
       TouchID.isSupported().then(() => {
-        if (touchId)
-          TouchID.authenticate('dale', { title: 'dale' })
+        if (fingerPrint)
+          TouchID.authenticate('Sign In with Touch ID', { title: '' })
             .then(() => signInByTouchId())
-            .catch(error => {
-              console.log('cancel');
-            });
+            .catch();
       });
     }, 2000);
-  }, [touchId, signInByTouchId]);
+  }, [fingerPrint, signInByTouchId]);
 
   const handleGoBack = useCallback(() => {
     clearTimeout(timeout);
