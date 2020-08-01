@@ -1,6 +1,7 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
+import Header, { HeaderText } from '#components/Header';
 import { useAuth } from '#hooks/auth';
 import { useConfig } from '#hooks/config';
 import { Colors } from '#styles';
@@ -14,6 +15,10 @@ const Config: React.FC = () => {
 
   return (
     <Container>
+      <Header>
+        <HeaderText>Configurations</HeaderText>
+      </Header>
+
       <Wrapper>
         <CheckBox selected={seeValues} onChange={setSeeValues} />
         {seeValues ? (

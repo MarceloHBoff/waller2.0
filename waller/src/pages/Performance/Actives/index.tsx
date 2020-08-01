@@ -6,13 +6,20 @@ import {
   OrderTableHeader,
   IOrderTableContext,
 } from '#components/OrderTableHeader';
+import { useConfig } from '#hooks/config';
 import { useFetch } from '#hooks/swr';
 import { IUserActivesResponse } from '#types/UserActive';
-import { round10 } from '#utils/format';
+import { roundTo2 } from '#utils/format';
 import { SortArray, Sorting } from '#utils/sorting';
 
 import Nothing from '../Nothing';
-import { ListContainer, ActiveList, List, ListText } from '../styles';
+import {
+  ListContainer,
+  ActiveList,
+  List,
+  ListText,
+  ValueField,
+} from '../styles';
 
 export interface IUserActiveList {
   id: string;
@@ -30,6 +37,7 @@ const Actives: React.FC = () => {
   const { data } = useFetch<IUserActivesResponse>('userActives');
 
   const { name } = useRoute();
+  const { seeValues } = useConfig();
 
   const Context = createContext({} as IOrderTableContext);
 
@@ -70,9 +78,9 @@ const Actives: React.FC = () => {
 
     return userActivesEdited.map(userActive => ({
       ...userActive,
-      buy_price: round10(userActive.buy_price).toFixed(2),
-      now_price: round10(userActive.now_price).toFixed(2),
-      totalValue: round10(userActive.totalValue).toFixed(2),
+      buy_price: roundTo2(userActive.buy_price),
+      now_price: roundTo2(userActive.now_price),
+      totalValue: roundTo2(userActive.totalValue),
     }));
   }, [data, name, orderBy, order]);
 
@@ -94,12 +102,14 @@ const Actives: React.FC = () => {
                 <ListText style={{ width: '15%', textAlign: 'left' }}>
                   {active.code}
                 </ListText>
-                <ListText style={{ width: '18%' }}>{active.quantity}</ListText>
+                <ValueField blinded={seeValues} style={{ width: '18%' }}>
+                  {active.quantity}
+                </ValueField>
                 <ListText style={{ width: '23%' }}>{active.buy_price}</ListText>
                 <ListText style={{ width: '20%' }}>{active.now_price}</ListText>
-                <ListText style={{ width: '25%' }}>
+                <ValueField blinded={seeValues} style={{ width: '25%' }}>
                   {active.totalValue}
-                </ListText>
+                </ValueField>
               </List>
             )}
           />

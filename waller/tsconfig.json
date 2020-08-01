@@ -38,6 +38,7 @@
     "baseUrl": "./src",
     "paths": {
       "#types/*": ["@types/*"],
+      "#animations": ["animations"],
       "#assets/*": ["assets/*"],
       "#components/*": ["components/*"],
       "#pages/*": ["pages/*"],

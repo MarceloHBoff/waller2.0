@@ -51,3 +51,19 @@ export const ListText = styled.Text`
   font-family: ${Fonts.poppinsMedium};
   text-align: right;
 `;
+
+interface IValueFieldProps {
+  blinded: boolean;
+}
+
+export const ValueField = styled(ListText)<IValueFieldProps>`
+  background: ${props => (!props.blinded ? Colors.white : 'transparent')};
+  border-radius: ${Metrics.radius}px;
+
+  ${props =>
+    !props.blinded &&
+    css`
+      font-size: 0px;
+      margin: ${Metrics.base / 2}px;
+    `}
+`;

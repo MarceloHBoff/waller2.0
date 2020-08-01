@@ -8,6 +8,7 @@ export const Container = styled.View`
 
 interface IValueText {
   color: string;
+  align: string;
   size: number;
   blinded: boolean;
 }
@@ -19,6 +20,6 @@ export const ValueText = styled.Text<IValueText>`
   font-size: ${props => props.size}px;
   line-height: ${props => props.size + 8}px;
   font-family: ${Fonts.poppinsMedium};
-  text-align: center;
+  text-align: ${props => props.align};
   width: 100%;
 `;

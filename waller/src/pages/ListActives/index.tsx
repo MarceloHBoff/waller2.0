@@ -1,9 +1,19 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
+
+import {
+  opacity,
+  left,
+  right,
+  handleEnterPage,
+  handleLeavePage,
+} from '#animations';
 import Header, { HeaderText } from '#components/Header';
 import { useFetch } from '#hooks/swr';
+import { Fonts } from '#styles';
 import { IUserActivesResponse } from '#types/UserActive';
-import { formatPrice, round10 } from '#utils/format';
+import { formatPrice, roundTo2 } from '#utils/format';
 
 import api from '../../services/api';
 
@@ -33,6 +43,8 @@ const ListActives: React.FC = () => {
 
   const { data, mutate } = useFetch<IUserActivesResponse>('userActives');
 
+  const { addListener, removeListener } = useNavigation();
+
   const userActives = useMemo(() => {
     if (!data?.actives) return [];
 
@@ -41,9 +53,9 @@ const ListActives: React.FC = () => {
       code: userActive.active.code,
       name: userActive.active.name,
       quantity: userActive.quantity,
-      variation: round10(
+      variation: roundTo2(
         (userActive.active.price / userActive.active.last_price - 1) * 100,
-      ).toFixed(2),
+      ),
       price: formatPrice(userActive.active.price),
     }));
   }, [data]);
@@ -60,6 +72,21 @@ const ListActives: React.FC = () => {
     setLoading(false);
   }, [mutate]);
 
+  useEffect(() => {
+    addListener('focus', () => {
+      handleEnterPage();
+    });
+
+    addListener('blur', () => {
+      handleLeavePage();
+    });
+
+    return () => {
+      removeListener('focus', () => {});
+      removeListener('blur', () => {});
+    };
+  }, [addListener, removeListener]);
+
   return (
     <Container>
       <Header>
@@ -73,11 +100,18 @@ const ListActives: React.FC = () => {
         contentContainerStyle={{ alignItems: 'center' }}
         onRefresh={updateActivesPrice}
         refreshing={loading}
-        renderItem={({ item }) => (
-          <Card>
+        renderItem={({ item, index }) => (
+          <Card
+            style={{
+              opacity,
+              transform: [{ translateX: index % 2 ? right.x : left.x }],
+            }}
+          >
             <Code>{item.code}</Code>
             <Name numberOfLines={1}>{item.name}</Name>
-            <Quantity>{item.quantity}</Quantity>
+            <Quantity align="left" size={Fonts.superSmall}>
+              {item.quantity}
+            </Quantity>
             <Footer>
               <Variation signal={item.variation}>{item.variation}%</Variation>
               <Price>{item.price}</Price>

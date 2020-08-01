@@ -1,11 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import {
-  Animated,
-  ScrollView,
-  Keyboard,
-  Alert,
-  Dimensions,
-} from 'react-native';
+import { ScrollView, Keyboard, Alert } from 'react-native';
 import TouchID from 'react-native-touch-id';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -14,6 +8,13 @@ import { FormHandles, Form } from '@unform/core';
 
 import * as Yup from 'yup';
 
+import {
+  opacity,
+  left,
+  right,
+  handleEnterPage,
+  handleLeavePage,
+} from '#animations';
 import signInImage from '#assets/signInImage.png';
 import Input from '#components/Input';
 import { useAuth } from '#hooks/auth';
@@ -36,19 +37,13 @@ interface SignInFormData {
   password: string;
 }
 
-const { width } = Dimensions.get('window');
-
 let timeout = 0;
 
 const SignIn: React.FC = () => {
-  const offsetLeft = new Animated.ValueXY({ x: -800, y: 0 });
-  const offsetRight = new Animated.ValueXY({ x: 800, y: 0 });
-  const opacity = new Animated.Value(0);
-
   const formRef = useRef<FormHandles>(null);
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const { goBack } = useNavigation();
+  const { goBack, addListener, removeListener } = useNavigation();
   const { signIn, signInByTouchId } = useAuth();
   const { fingerPrint } = useConfig();
 
@@ -56,27 +51,7 @@ const SignIn: React.FC = () => {
     Keyboard.addListener('keyboardDidShow', () =>
       scrollViewRef.current?.scrollToEnd({ animated: true }),
     );
-
-    Animated.parallel([
-      Animated.spring(offsetLeft.x, {
-        toValue: 0,
-        speed: 0.1,
-        bounciness: 200,
-        useNativeDriver: true,
-      }),
-      Animated.spring(offsetRight.x, {
-        toValue: 0,
-        speed: 0.1,
-        bounciness: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [opacity, offsetLeft, offsetRight]);
+  }, []);
 
   useEffect(() => {
     timeout = setTimeout(() => {
@@ -92,26 +67,25 @@ const SignIn: React.FC = () => {
   const handleGoBack = useCallback(() => {
     clearTimeout(timeout);
 
-    Animated.parallel([
-      Animated.spring(offsetLeft.x, {
-        toValue: width * -1,
-        speed: 0.1,
-        useNativeDriver: true,
-      }),
-      Animated.spring(offsetRight.x, {
-        toValue: width,
-        speed: 0.1,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }),
-    ]).start();
-
     goBack();
-  }, [goBack, opacity, offsetRight, offsetLeft]);
+  }, [goBack]);
+
+  useEffect(() => {
+    addListener('focus', () => {
+      handleEnterPage();
+    });
+
+    addListener('blur', () => {
+      clearTimeout(timeout);
+
+      handleLeavePage();
+    });
+
+    return () => {
+      removeListener('focus', () => {});
+      removeListener('blur', () => {});
+    };
+  }, [addListener, removeListener]);
 
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
@@ -146,11 +120,7 @@ const SignIn: React.FC = () => {
   return (
     <ScrollView ref={scrollViewRef}>
       <Container style={{ opacity }}>
-        <Content
-          style={{
-            transform: [{ translateX: offsetLeft.x }],
-          }}
-        >
+        <Content style={{ transform: [{ translateX: left.x }] }}>
           <BackButton onPress={handleGoBack}>
             <Icon name="arrow-circle-left" size={30} color="#fff" />
           </BackButton>
@@ -180,13 +150,10 @@ const SignIn: React.FC = () => {
           </Form>
         </Content>
 
-        <SubmitButtonContainer
-          style={{
-            transform: [{ translateX: offsetRight.x }],
-          }}
-        >
+        <SubmitButtonContainer style={{ transform: [{ translateX: right.x }] }}>
           <SubmitButton onPress={() => formRef.current?.submitForm()}>
             <SubmitButtonText>SignIn</SubmitButtonText>
+
             <Icon name="sign-in-alt" size={30} color="#fff" />
           </SubmitButton>
         </SubmitButtonContainer>

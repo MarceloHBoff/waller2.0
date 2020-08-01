@@ -1,7 +1,8 @@
-import { FlatList } from 'react-native';
+import { FlatList, Animated } from 'react-native';
 
 import styled from 'styled-components/native';
 
+import ValueField from '#components/ValueField';
 import { Colors, Metrics, Fonts } from '#styles';
 
 import { IListActives } from '.';
@@ -13,7 +14,7 @@ export const Container = styled.View`
 
 export const Cards = styled(FlatList as new () => FlatList<IListActives>)``;
 
-export const Card = styled.View`
+export const Card = styled(Animated.View)`
   height: 100px;
   width: 180px;
 
@@ -35,9 +36,7 @@ export const Name = styled(DefaultText)`
   font-size: ${Fonts.superSmall}px;
 `;
 
-export const Quantity = styled(DefaultText)`
-  font-size: ${Fonts.superSmall}px;
-`;
+export const Quantity = styled(ValueField)``;
 
 export const Footer = styled.View`
   flex-direction: row;

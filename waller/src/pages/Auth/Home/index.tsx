@@ -1,8 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
-import { Animated, Dimensions } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
+import {
+  opacity,
+  left,
+  right,
+  handleEnterPage,
+  handleLeavePage,
+} from '#animations';
 import homeImage from '#assets/homeImage.png';
 
 import {
@@ -17,76 +23,35 @@ import {
   SignUpButtonText,
 } from './styles';
 
-const { width } = Dimensions.get('window');
-
 const Home: React.FC = () => {
-  const offsetLeft = new Animated.ValueXY({ x: -800, y: 0 });
-  const offsetRight = new Animated.ValueXY({ x: 800, y: 0 });
-  const opacity = new Animated.Value(0);
-
-  const { navigate, addListener } = useNavigation();
-
-  const handleEnterPage = useCallback(() => {
-    Animated.parallel([
-      Animated.spring(offsetLeft.x, {
-        toValue: 0,
-        speed: 0.1,
-        bounciness: 1000,
-        useNativeDriver: true,
-      }),
-      Animated.spring(offsetRight.x, {
-        toValue: 0,
-        speed: 0.1,
-        bounciness: 1000,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [opacity, offsetLeft, offsetRight]);
-
-  const handleLeavePage = useCallback(() => {
-    Animated.parallel([
-      Animated.spring(offsetLeft.x, {
-        toValue: width * -1,
-        speed: 0.1,
-        useNativeDriver: true,
-      }),
-      Animated.spring(offsetRight.x, {
-        toValue: width,
-        speed: 0.1,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [opacity, offsetLeft, offsetRight]);
+  const { navigate, addListener, removeListener } = useNavigation();
 
   const handleNavigateSignIn = useCallback(() => {
     handleLeavePage();
 
     navigate('SignIn');
-  }, [handleLeavePage, navigate]);
+  }, [navigate]);
 
   const handleNavigateSignUp = useCallback(() => {
     handleLeavePage();
 
     navigate('SignUp');
-  }, [handleLeavePage, navigate]);
+  }, [navigate]);
 
   useEffect(() => {
-    const unsubscribe = addListener('focus', () => {
+    addListener('focus', () => {
       handleEnterPage();
     });
 
-    return unsubscribe;
-  }, [addListener, handleEnterPage]);
+    addListener('blur', () => {
+      handleLeavePage();
+    });
+
+    return () => {
+      removeListener('focus', () => {});
+      removeListener('blur', () => {});
+    };
+  }, [addListener, removeListener]);
 
   return (
     <Container>
@@ -94,7 +59,7 @@ const Home: React.FC = () => {
         source={homeImage}
         style={{
           opacity,
-          transform: [{ translateX: offsetLeft.x }],
+          transform: [{ translateX: left.x }],
         }}
       />
 
@@ -102,7 +67,7 @@ const Home: React.FC = () => {
         <SignInButtonContainer
           style={{
             opacity,
-            transform: [{ translateX: offsetRight.x }],
+            transform: [{ translateX: right.x }],
           }}
         >
           <SignInButton onPress={handleNavigateSignIn}>
@@ -113,7 +78,7 @@ const Home: React.FC = () => {
         <SignUpButtonContainer
           style={{
             opacity,
-            transform: [{ translateX: offsetLeft.x }],
+            transform: [{ translateX: left.x }],
           }}
         >
           <SignUpButton onPress={handleNavigateSignUp}>

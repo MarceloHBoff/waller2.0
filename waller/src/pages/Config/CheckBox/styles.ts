@@ -4,11 +4,11 @@ import styled from 'styled-components/native';
 
 import { Colors } from '#styles';
 
-interface I {
+interface ICheckBoxProps {
   selected?: boolean;
 }
 
-export const Container = styled.View<I>`
+export const Container = styled.View<ICheckBoxProps>`
   width: 60px;
   height: 30px;
 
@@ -23,7 +23,7 @@ export const Container = styled.View<I>`
   align-items: flex-start;
 `;
 
-export const Pointer = styled(Animated.View)<I>`
+export const Pointer = styled(Animated.View)<ICheckBoxProps>`
   width: 22px;
   height: 22px;
 

@@ -4,12 +4,13 @@ import {
   OrderTableHeader,
   IOrderTableContext,
 } from '#components/OrderTableHeader';
+import { useConfig } from '#hooks/config';
 import { useFetch } from '#hooks/swr';
-import { round10 } from '#utils/format';
+import { roundTo2 } from '#utils/format';
 import { SortArray, Sorting } from '#utils/sorting';
 
 import Nothing from '../Nothing';
-import { ListContainer, BondList, List, ListText } from '../styles';
+import { ListContainer, BondList, List, ListText, ValueField } from '../styles';
 
 export interface UserBond {
   name: string;
@@ -30,6 +31,7 @@ const Bonds: React.FC = () => {
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
 
   const { data } = useFetch<UserBond[]>('userBonds');
+  const { seeValues } = useConfig();
 
   const Context = createContext({} as IOrderTableContext);
 
@@ -38,8 +40,8 @@ const Bonds: React.FC = () => {
 
     const userBondsUnsorted = data.map(userBond => ({
       name: userBond.name,
-      buy_price: round10(userBond.buy_price).toFixed(2),
-      now_price: round10(userBond.now_price).toFixed(2),
+      buy_price: roundTo2(userBond.buy_price),
+      now_price: roundTo2(userBond.now_price),
       due_date: userBond.due_date,
     }));
 
@@ -67,8 +69,12 @@ const Bonds: React.FC = () => {
                 <ListText style={{ width: '40%', textAlign: 'left' }}>
                   {bond.name}
                 </ListText>
-                <ListText style={{ width: '20%' }}>{bond.buy_price}</ListText>
-                <ListText style={{ width: '20%' }}>{bond.now_price}</ListText>
+                <ValueField blinded={seeValues} style={{ width: '20%' }}>
+                  {bond.buy_price}
+                </ValueField>
+                <ValueField blinded={seeValues} style={{ width: '20%' }}>
+                  {bond.now_price}
+                </ValueField>
                 <ListText style={{ width: '22%' }}>{bond.due_date}</ListText>
               </List>
             )}
