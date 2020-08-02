@@ -121,7 +121,7 @@ const SignIn: React.FC = () => {
     <ScrollView ref={scrollViewRef}>
       <Container style={{ opacity }}>
         <Content style={{ transform: [{ translateX: left.x }] }}>
-          <BackButton onPress={handleGoBack}>
+          <BackButton testID="go-back" onPress={handleGoBack}>
             <Icon name="arrow-circle-left" size={30} color="#fff" />
           </BackButton>
 
@@ -151,7 +151,10 @@ const SignIn: React.FC = () => {
         </Content>
 
         <SubmitButtonContainer style={{ transform: [{ translateX: right.x }] }}>
-          <SubmitButton onPress={() => formRef.current?.submitForm()}>
+          <SubmitButton
+            testID="submit-button"
+            onPress={() => formRef.current?.submitForm()}
+          >
             <SubmitButtonText>SignIn</SubmitButtonText>
 
             <Icon name="sign-in-alt" size={30} color="#fff" />

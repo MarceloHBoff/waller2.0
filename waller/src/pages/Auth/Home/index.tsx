@@ -70,7 +70,7 @@ const Home: React.FC = () => {
             transform: [{ translateX: right.x }],
           }}
         >
-          <SignInButton onPress={handleNavigateSignIn}>
+          <SignInButton testID="signin-button" onPress={handleNavigateSignIn}>
             <SignInButtonText>SignIn</SignInButtonText>
           </SignInButton>
         </SignInButtonContainer>
@@ -81,7 +81,7 @@ const Home: React.FC = () => {
             transform: [{ translateX: left.x }],
           }}
         >
-          <SignUpButton onPress={handleNavigateSignUp}>
+          <SignUpButton testID="signup-button" onPress={handleNavigateSignUp}>
             <SignUpButtonText>SignUp</SignUpButtonText>
           </SignUpButton>
         </SignUpButtonContainer>

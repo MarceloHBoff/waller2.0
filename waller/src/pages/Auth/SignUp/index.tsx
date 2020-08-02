@@ -18,6 +18,7 @@ import signUpImage from '#assets/signUpImage.png';
 import Input from '#components/Input';
 import getValidationErrors from '#utils/getValidationErrors';
 
+import api from '../../../services/api';
 import {
   Container,
   Content,
@@ -39,7 +40,7 @@ const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const { goBack, addListener, removeListener } = useNavigation();
+  const { goBack, navigate, addListener, removeListener } = useNavigation();
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () =>
@@ -62,39 +63,48 @@ const SignUp: React.FC = () => {
     };
   }, [addListener, removeListener]);
 
-  const handleSubmit = useCallback(async (data: SignUpFormData) => {
-    try {
-      formRef.current?.setErrors({});
+  const handleSubmit = useCallback(
+    async (data: SignUpFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        email: Yup.string()
-          .required('E-mail is required')
-          .email('Type a valid e-mail'),
-        password: Yup.string()
-          .required('E-mail is required')
-          .min(6, 'Need at least 6 characters'),
-      });
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Name is required'),
+          email: Yup.string()
+            .required('E-mail is required')
+            .email('Type a valid e-mail'),
+          password: Yup.string()
+            .required('E-mail is required')
+            .min(6, 'Need at least 6 characters'),
+        });
 
-      await schema.validate(data, { abortEarly: false });
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+        await schema.validate(data, { abortEarly: false });
 
-        formRef.current?.setErrors(errors);
+        await api.post('users', data);
 
-        return;
+        Alert.alert('SignUp Success', 'SignIn to enjoy the GoBarber');
+
+        navigate('SignIn');
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        Alert.alert('Error in SignUp', 'Credentials is invalid!');
       }
-
-      Alert.alert('Error in SignIn', 'Email or password is invalid!');
-    }
-  }, []);
+    },
+    [navigate],
+  );
 
   return (
     <ScrollView ref={scrollViewRef}>
       <Container style={{ opacity }}>
         <Content style={{ transform: [{ translateX: left.x }] }}>
-          <BackButton onPress={() => goBack()}>
+          <BackButton testID="go-back" onPress={() => goBack()}>
             <Icon name="arrow-circle-left" size={30} color="#fff" />
           </BackButton>
 
@@ -132,7 +142,10 @@ const SignUp: React.FC = () => {
         </Content>
 
         <SubmitButtonContainer style={{ transform: [{ translateX: right.x }] }}>
-          <SubmitButton onPress={() => formRef.current?.submitForm()}>
+          <SubmitButton
+            testID="submit-button"
+            onPress={() => formRef.current?.submitForm()}
+          >
             <SubmitButtonText>SignUp</SubmitButtonText>
 
             <Icon name="plus-circle" size={30} color="#fff" />
