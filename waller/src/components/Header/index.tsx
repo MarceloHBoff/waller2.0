@@ -10,7 +10,7 @@ import { Container, HeaderText } from './styles';
 export { HeaderText };
 
 const Header: React.FC = ({ children }) => {
-  const opacity = new Animated.Value(50);
+  const opacity = new Animated.Value(0.5);
   const offsetTop = new Animated.ValueXY({ x: 0, y: -80 });
 
   const { addListener, removeListener } = useNavigation();
@@ -41,7 +41,7 @@ const Header: React.FC = ({ children }) => {
         useNativeDriver: true,
       }),
       Animated.timing(opacity, {
-        toValue: 50,
+        toValue: 0.5,
         duration: 1000,
         useNativeDriver: true,
       }),

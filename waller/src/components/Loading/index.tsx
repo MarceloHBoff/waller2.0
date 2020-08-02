@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Animated, Easing } from 'react-native';
+import { Animated } from 'react-native';
 
 import logo from '#assets/logo.png';
 
@@ -20,14 +20,13 @@ const Loading: React.FC = () => {
       Animated.timing(rotate, {
         toValue: 1,
         duration: 2500,
-        easing: Easing.linear,
         useNativeDriver: true,
       }),
     ).start();
   }, [opacity, rotate]);
 
   return (
-    <Container>
+    <Container testID="loading">
       <Image
         source={logo}
         style={{
