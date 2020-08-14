@@ -24,6 +24,6 @@ export const round10 = (num, places = 2) => {
   return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + places}`)}e-${places}`;
 };
 
-export const roundTo2 = (num: number): string => {
-  return round10(num).toFixed(2);
+export const roundTo2 = (num: number | string): string => {
+  return round10(Number(num)).toFixed(2);
 };

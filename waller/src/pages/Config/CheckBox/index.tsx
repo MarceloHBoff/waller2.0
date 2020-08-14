@@ -40,7 +40,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ selected, onChange }) => {
   }, [animate, selectedState, onChange]);
 
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
+    <TouchableWithoutFeedback onPress={onPress} testID="checkbox">
       <Container selected={selectedState}>
         <Pointer
           selected={selectedState}

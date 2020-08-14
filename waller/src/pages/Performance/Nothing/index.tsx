@@ -7,7 +7,7 @@ import { Container, NothingText } from './styles';
 
 const Nothing: React.FC = () => {
   return (
-    <Container>
+    <Container testID="nothing">
       <NothingText>Nothing actives for this type</NothingText>
       <Icon name="frown" size={30} color={Colors.white} />
     </Container>

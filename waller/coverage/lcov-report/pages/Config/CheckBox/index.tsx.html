@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -122,38 +122,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -178,20 +178,20 @@ interface CheckBoxProps {
   onChange: (data: boolean) =&gt; void;
 }
 &nbsp;
-const CheckBox: React.FC&lt;CheckBoxProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> selected, onChange }) =&gt; {</span>
-  const [selectedState, setSelectedState] = <span class="cstat-no" title="statement not covered" >useState(selected);</span>
+const CheckBox: React.FC&lt;CheckBoxProps&gt; = ({ selected, onChange }) =&gt; {
+  const [selectedState, setSelectedState] = useState(selected);
 &nbsp;
-  const [position] = <span class="cstat-no" title="statement not covered" >useState(new Animated.Value(0));</span>
+  const [position] = useState(new Animated.Value(0));
 &nbsp;
-  const animate = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedState) {</span>
-<span class="cstat-no" title="statement not covered" >      Animated.timing(position, {</span>
+  const animate = useCallback(() =&gt; {
+    if (selectedState) {
+      Animated.timing(position, {
         toValue: 25,
         duration: 500,
         useNativeDriver: true,
       }).start();
     } else {
-<span class="cstat-no" title="statement not covered" >      Animated.timing(position, {</span>
+      Animated.timing(position, {
         toValue: -6,
         duration: 500,
         useNativeDriver: true,
@@ -199,18 +199,18 @@ const CheckBox: React.FC&lt;CheckBoxProps&gt; = <span class="cstat-no" title="st
     }
   }, [position, selectedState]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >animate(),</span> [animate]);</span>
+  useEffect(() =&gt; animate(), [animate]);
 &nbsp;
-  const onPress = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    animate();</span>
+  const onPress = useCallback(() =&gt; {
+    animate();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    onChange(!selectedState);</span>
+    onChange(!selectedState);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    setSelectedState(!selectedState);</span>
+    setSelectedState(!selectedState);
   }, [animate, selectedState, onChange]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;TouchableWithoutFeedback onPress={onPress}&gt;
+  return (
+    &lt;TouchableWithoutFeedback onPress={onPress} testID="checkbox"&gt;
       &lt;Container selected={selectedState}&gt;
         &lt;Pointer
           selected={selectedState}
@@ -231,7 +231,7 @@ export default CheckBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Aug 02 2020 19:20:23 GMT-0300 (Brasilia Standard Time)
+                at Thu Aug 13 2020 22:49:30 GMT-0300 (Brasilia Standard Time)
             </div>
         </div>
         <script src="..\..\..\prettify.js"></script>

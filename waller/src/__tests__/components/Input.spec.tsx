@@ -5,8 +5,8 @@ import { Form } from '@unform/core';
 
 import Input from '#components/Input';
 
-describe('Loading component', () => {
-  it('should be able to render Loading', async () => {
+describe('Input component', () => {
+  it('should be able to render Input', async () => {
     const { getByTestId } = render(
       <Form onSubmit={() => {}}>
         <Input testID="test" name="test" />

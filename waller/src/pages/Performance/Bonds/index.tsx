@@ -65,7 +65,7 @@ const Bonds: React.FC = () => {
             data={userBonds}
             keyExtractor={bond => bond.name}
             renderItem={({ item: bond, index }) => (
-              <List index={index}>
+              <List index={index} testID="bonds-list">
                 <ListText style={{ width: '40%', textAlign: 'left' }}>
                   {bond.name}
                 </ListText>

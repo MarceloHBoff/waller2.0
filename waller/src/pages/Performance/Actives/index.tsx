@@ -98,7 +98,7 @@ const Actives: React.FC = () => {
             data={userActives}
             keyExtractor={active => active.id}
             renderItem={({ item: active, index }) => (
-              <List index={index}>
+              <List index={index} testID="actives-list">
                 <ListText style={{ width: '15%', textAlign: 'left' }}>
                   {active.code}
                 </ListText>
