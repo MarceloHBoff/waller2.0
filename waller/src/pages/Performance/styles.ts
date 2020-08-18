@@ -54,15 +54,19 @@ export const ListText = styled.Text`
 
 interface IValueFieldProps {
   blinded: boolean;
+  width: number;
 }
 
 export const ValueField = styled(ListText)<IValueFieldProps>`
-  background: ${props => (!props.blinded ? Colors.white : 'transparent')};
+  background: ${props =>
+    !props.blinded ? Colors.graySuperLight : 'transparent'};
   border-radius: ${Metrics.radius}px;
+  width: ${props => props.width}%;
 
   ${props =>
     !props.blinded &&
     css`
+      width: ${props.width - 4}%;
       font-size: 0px;
       margin: ${Metrics.base / 2}px;
     `}

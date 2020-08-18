@@ -15,7 +15,7 @@ export const Container = styled.View`
 export const Cards = styled(FlatList as new () => FlatList<IListActives>)``;
 
 export const Card = styled(Animated.View)`
-  height: 100px;
+  height: 110px;
   width: 180px;
 
   border-radius: ${Metrics.radius}px;
@@ -34,11 +34,15 @@ export const Code = styled(DefaultText)``;
 
 export const Name = styled(DefaultText)`
   font-size: ${Fonts.superSmall}px;
+  margin-bottom: 4px;
 `;
 
-export const Quantity = styled(ValueField)``;
+export const Quantity = styled(ValueField)`
+  color: #fff;
+`;
 
 export const Footer = styled.View`
+  margin-top: 4px;
   flex-direction: row;
   justify-content: space-between;
 `;

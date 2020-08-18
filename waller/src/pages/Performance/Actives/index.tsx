@@ -102,12 +102,12 @@ const Actives: React.FC = () => {
                 <ListText style={{ width: '15%', textAlign: 'left' }}>
                   {active.code}
                 </ListText>
-                <ValueField blinded={seeValues} style={{ width: '18%' }}>
+                <ValueField blinded={seeValues} width={18}>
                   {active.quantity}
                 </ValueField>
                 <ListText style={{ width: '23%' }}>{active.buy_price}</ListText>
                 <ListText style={{ width: '20%' }}>{active.now_price}</ListText>
-                <ValueField blinded={seeValues} style={{ width: '25%' }}>
+                <ValueField blinded={seeValues} width={25}>
                   {active.totalValue}
                 </ValueField>
               </List>

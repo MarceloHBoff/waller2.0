@@ -114,22 +114,22 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardText color={Colors.orange}>Investment</CardText>
           <Icon name="wallet" size={50} color={Colors.orange} />
-          <ValueField color={Colors.orange}>{investment}</ValueField>
+          <ValueField colorBase={Colors.orange}>{investment}</ValueField>
         </Card>
         <Card>
           <CardText color={Colors.orange}>Current Value</CardText>
           <Icon name="money-bill-wave" size={50} color={Colors.orange} />
-          <ValueField color={Colors.orange}>{currentValue}</ValueField>
+          <ValueField colorBase={Colors.orange}>{currentValue}</ValueField>
         </Card>
         <Card>
           <CardText color={profitColor}>Profit</CardText>
           <Icon name="hand-holding-usd" size={50} color={profitColor} />
-          <ValueField color={profitColor}>{profit}</ValueField>
+          <ValueField colorBase={profitColor}>{profit}</ValueField>
         </Card>
         <Card>
           <CardText color={percentColor}>Profit percent</CardText>
           <Icon name="percentage" size={50} color={percentColor} />
-          <ValueField color={percentColor}>{percent} %</ValueField>
+          <ValueField colorBase={percentColor}>{percent} %</ValueField>
         </Card>
       </Cards>
 

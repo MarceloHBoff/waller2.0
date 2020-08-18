@@ -5,14 +5,16 @@ import { useConfig } from '#hooks/config';
 import { Container, ValueText } from './styles';
 
 interface IValueFieldProps {
-  color?: string;
+  colorBase?: string;
+  colorBlinded?: string;
   align?: string;
   size?: number;
 }
 
 const ValueField: React.FC<IValueFieldProps> = ({
   children,
-  color = '#fff',
+  colorBase = '#fff',
+  colorBlinded = '',
   align = 'center',
   size = 18,
 }) => {
@@ -20,7 +22,13 @@ const ValueField: React.FC<IValueFieldProps> = ({
 
   return (
     <Container>
-      <ValueText color={color} size={size} blinded={!seeValues} align={align}>
+      <ValueText
+        colorBase={colorBase}
+        colorBlinded={colorBlinded || colorBase}
+        size={size}
+        blinded={!seeValues}
+        align={align}
+      >
         {children}
       </ValueText>
     </Container>

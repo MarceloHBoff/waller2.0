@@ -29,12 +29,14 @@ const Routes: React.FC = () => {
         {loading && <Stack.Screen name="Loading" component={Loading} />}
 
         {signed ? (
-          <Stack.Screen name="App" component={AppRoutes} />
+          <>
+            <Stack.Screen name="App" component={AppRoutes} />
+
+            <Stack.Screen name="Config" component={Config} />
+          </>
         ) : (
           <Stack.Screen name="Auth" component={AuthRoutes} />
         )}
-
-        <Stack.Screen name="Config" component={Config} />
       </Stack.Navigator>
     </>
   );

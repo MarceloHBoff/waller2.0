@@ -11,7 +11,7 @@ import {
 } from '#animations';
 import Header, { HeaderText } from '#components/Header';
 import { useFetch } from '#hooks/swr';
-import { Fonts } from '#styles';
+import { Colors, Fonts } from '#styles';
 import { IUserActivesResponse } from '#types/UserActive';
 import { formatPrice, roundTo2 } from '#utils/format';
 
@@ -66,7 +66,8 @@ const ListActives: React.FC = () => {
     try {
       const responde = await api.put<IUserActivesResponse>('userActives');
 
-      mutate(responde.data);
+      await mutate(responde.data);
+      handleEnterPage();
     } catch {}
 
     setLoading(false);
@@ -109,7 +110,12 @@ const ListActives: React.FC = () => {
           >
             <Code>{item.code}</Code>
             <Name numberOfLines={1}>{item.name}</Name>
-            <Quantity align="left" size={Fonts.superSmall}>
+            <Quantity
+              align="left"
+              size={Fonts.superSmall}
+              colorBase={Colors.white}
+              colorBlinded={Colors.primaryLight}
+            >
               {item.quantity}
             </Quantity>
             <Footer>

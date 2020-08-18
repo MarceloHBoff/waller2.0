@@ -69,10 +69,10 @@ const Bonds: React.FC = () => {
                 <ListText style={{ width: '40%', textAlign: 'left' }}>
                   {bond.name}
                 </ListText>
-                <ValueField blinded={seeValues} style={{ width: '20%' }}>
+                <ValueField blinded={seeValues} width={20}>
                   {bond.buy_price}
                 </ValueField>
-                <ValueField blinded={seeValues} style={{ width: '20%' }}>
+                <ValueField blinded={seeValues} width={20}>
                   {bond.now_price}
                 </ValueField>
                 <ListText style={{ width: '22%' }}>{bond.due_date}</ListText>
