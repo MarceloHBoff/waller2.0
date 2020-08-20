@@ -11,16 +11,13 @@ export interface IUserActives {
   };
 }
 
+export interface IActiveTypes {
+  [key: string]: number;
+}
+
 export interface IUserActivesResponse {
   actives: IUserActives[];
-  types: {
-    Acao: number;
-    Stock: number;
-    ETF: number;
-    FII: number;
-    Reit: number;
-    Bond: number;
-  };
+  types: IActiveTypes;
   totals: {
     investment: number;
     currentValue: number;
