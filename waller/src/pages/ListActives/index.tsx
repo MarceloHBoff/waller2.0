@@ -95,6 +95,7 @@ const ListActives: React.FC = () => {
       </Header>
 
       <Cards
+        testID="cards"
         data={userActives}
         numColumns={2}
         keyExtractor={item => item.id}

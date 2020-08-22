@@ -57,10 +57,17 @@ const data = {
 };
 
 apiMock.onGet('/userActives').reply(200, data);
+apiMock.onPut('/userActives').reply(200, data);
 
 describe('ListActives page', () => {
   it('should be to render ListActives page', async () => {
-    const { getByText } = render(<ListActives />);
+    const { getByText, getByTestId } = render(<ListActives />);
+
+    const refresh = getByTestId('cards').props.onRefresh;
+
+    await waitFor(() => {
+      refresh();
+    });
 
     mockedFocus();
     mockedBlur();

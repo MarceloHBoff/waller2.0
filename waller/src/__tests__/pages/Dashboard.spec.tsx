@@ -3,6 +3,8 @@ import { render, fireEvent, waitFor } from 'react-native-testing-library';
 
 import Dashboard from '#pages/Dashboard';
 
+import apiMock from '../utils/ApiMock';
+
 const mockedNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', () => {
@@ -23,6 +25,24 @@ jest.mock('../../hooks/auth', () => {
   };
 });
 
+const data = {
+  types: {
+    Acao: 1000,
+    Stock: 1000,
+    ETF: 100,
+    FII: 200,
+    Reit: 3000,
+    Bond: 5310,
+  },
+  totals: {
+    investment: 30000,
+    currentValue: 6300,
+    percent: 7410,
+  },
+};
+
+apiMock.onGet('/userActives').reply(200, data);
+
 describe('Dashboard page', () => {
   it('should be to render Dashboard page at morning', async () => {
     jest
@@ -31,7 +51,9 @@ describe('Dashboard page', () => {
 
     const { getByTestId } = render(<Dashboard />);
 
-    expect(getByTestId('header-text').children[0]).toContain('Good morning');
+    await waitFor(() => {
+      expect(getByTestId('header-text').children[0]).toContain('Good morning');
+    });
   });
 
   it('should be to render Dashboard page at afternoon', async () => {
@@ -41,7 +63,11 @@ describe('Dashboard page', () => {
 
     const { getByTestId } = render(<Dashboard />);
 
-    expect(getByTestId('header-text').children[0]).toContain('Good afternoon');
+    await waitFor(() => {
+      expect(getByTestId('header-text').children[0]).toContain(
+        'Good afternoon',
+      );
+    });
   });
 
   it('should be to render Dashboard page at night', async () => {
@@ -51,7 +77,9 @@ describe('Dashboard page', () => {
 
     const { getByTestId } = render(<Dashboard />);
 
-    expect(getByTestId('header-text').children[0]).toContain('Good night');
+    await waitFor(() => {
+      expect(getByTestId('header-text').children[0]).toContain('Good night');
+    });
   });
 
   it('should be to navigate to config', async () => {

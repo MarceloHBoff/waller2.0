@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1598059139134" clover="3.2.0">
-  <project timestamp="1598059139134" name="All files">
-    <metrics statements="307" coveredstatements="271" conditionals="72" coveredconditionals="56" methods="125" coveredmethods="107" elements="504" coveredelements="434" complexity="0" loc="307" ncloc="307" packages="20" files="22" classes="22"/>
+<coverage generated="1598064419542" clover="3.2.0">
+  <project timestamp="1598064419542" name="All files">
+    <metrics statements="307" coveredstatements="290" conditionals="68" coveredconditionals="63" methods="125" coveredmethods="114" elements="500" coveredelements="467" complexity="0" loc="307" ncloc="307" packages="20" files="22" classes="22"/>
     <package name="components.Header">
       <metrics statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="9" coveredmethods="9"/>
       <file name="index.tsx" path="C:\Users\Marcelo\Desktop\waller3.0\waller\src\components\Header\index.tsx">
         <metrics statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="9" coveredmethods="9"/>
         <line num="12" count="5" type="stmt"/>
-        <line num="13" count="10" type="stmt"/>
-        <line num="14" count="10" type="stmt"/>
-        <line num="16" count="10" type="stmt"/>
-        <line num="18" count="10" type="stmt"/>
+        <line num="13" count="13" type="stmt"/>
+        <line num="14" count="13" type="stmt"/>
+        <line num="16" count="13" type="stmt"/>
+        <line num="18" count="13" type="stmt"/>
         <line num="19" count="1" type="stmt"/>
-        <line num="35" count="10" type="stmt"/>
+        <line num="35" count="13" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
-        <line num="51" count="10" type="stmt"/>
-        <line num="52" count="10" type="stmt"/>
+        <line num="51" count="13" type="stmt"/>
+        <line num="52" count="13" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
-        <line num="56" count="10" type="stmt"/>
+        <line num="56" count="13" type="stmt"/>
         <line num="57" count="1" type="stmt"/>
-        <line num="60" count="10" type="stmt"/>
-        <line num="61" count="10" type="stmt"/>
-        <line num="62" count="10" type="stmt"/>
-        <line num="66" count="10" type="stmt"/>
+        <line num="60" count="13" type="stmt"/>
+        <line num="61" count="13" type="stmt"/>
+        <line num="62" count="13" type="stmt"/>
+        <line num="66" count="13" type="stmt"/>
       </file>
     </package>
     <package name="components.Input">
@@ -64,17 +64,17 @@
       </file>
     </package>
     <package name="components.OrderTableHeader">
-      <metrics statements="8" coveredstatements="4" conditionals="8" coveredconditionals="3" methods="4" coveredmethods="2"/>
+      <metrics statements="8" coveredstatements="8" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4"/>
       <file name="index.tsx" path="C:\Users\Marcelo\Desktop\waller3.0\waller\src\components\OrderTableHeader\index.tsx">
-        <metrics statements="8" coveredstatements="4" conditionals="8" coveredconditionals="3" methods="4" coveredmethods="2"/>
-        <line num="32" count="3" type="stmt"/>
-        <line num="36" count="3" type="stmt"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="45" count="3" type="stmt"/>
-        <line num="48" count="14" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
+        <metrics statements="8" coveredstatements="8" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="36" count="5" type="stmt"/>
+        <line num="39" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="45" count="5" type="stmt"/>
+        <line num="48" count="16" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
       </file>
     </package>
     <package name="components.ValueField">
@@ -82,12 +82,12 @@
       <file name="index.tsx" path="C:\Users\Marcelo\Desktop\waller3.0\waller\src\components\ValueField\index.tsx">
         <metrics statements="3" coveredstatements="3" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
         <line num="14" count="3" type="stmt"/>
-        <line num="21" count="19" type="stmt"/>
-        <line num="23" count="19" type="stmt"/>
+        <line num="21" count="27" type="stmt"/>
+        <line num="23" count="27" type="stmt"/>
       </file>
     </package>
     <package name="hooks">
-      <metrics statements="52" coveredstatements="46" conditionals="10" coveredconditionals="8" methods="18" coveredmethods="16"/>
+      <metrics statements="52" coveredstatements="52" conditionals="10" coveredconditionals="8" methods="18" coveredmethods="18"/>
       <file name="auth.tsx" path="C:\Users\Marcelo\Desktop\waller3.0\waller\src\hooks\auth.tsx">
         <metrics statements="28" coveredstatements="28" conditionals="6" coveredconditionals="6" methods="8" coveredmethods="8"/>
         <line num="38" count="2" type="stmt"/>
@@ -120,34 +120,34 @@
         <line num="116" count="16" type="stmt"/>
       </file>
       <file name="config.tsx" path="C:\Users\Marcelo\Desktop\waller3.0\waller\src\hooks\config.tsx">
-        <metrics statements="20" coveredstatements="14" conditionals="4" coveredconditionals="2" methods="8" coveredmethods="6"/>
+        <metrics statements="20" coveredstatements="20" conditionals="4" coveredconditionals="2" methods="8" coveredmethods="8"/>
         <line num="18" count="8" type="stmt"/>
         <line num="20" count="8" type="stmt"/>
-        <line num="21" count="2" type="stmt"/>
-        <line num="22" count="2" type="stmt"/>
-        <line num="24" count="2" type="stmt"/>
-        <line num="26" count="2" type="stmt"/>
-        <line num="27" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="32" count="2" type="stmt"/>
-        <line num="33" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="39" count="2" type="stmt"/>
-        <line num="42" count="2" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="48" count="2" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="54" count="2" type="stmt"/>
-        <line num="64" count="33" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="48" count="4" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="54" count="4" type="stmt"/>
+        <line num="64" count="43" type="stmt"/>
       </file>
       <file name="swr.tsx" path="C:\Users\Marcelo\Desktop\waller3.0\waller\src\hooks\swr.tsx">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="12" count="14" type="stmt"/>
-        <line num="13" count="6" type="stmt"/>
-        <line num="15" count="5" type="stmt"/>
-        <line num="18" count="14" type="stmt"/>
+        <line num="12" count="17" type="stmt"/>
+        <line num="13" count="7" type="stmt"/>
+        <line num="15" count="7" type="stmt"/>
+        <line num="18" count="17" type="stmt"/>
       </file>
     </package>
     <package name="pages.Auth.Home">
@@ -289,30 +289,30 @@
       </file>
     </package>
     <package name="pages.Dashboard">
-      <metrics statements="21" coveredstatements="18" conditionals="14" coveredconditionals="8" methods="9" coveredmethods="7"/>
+      <metrics statements="21" coveredstatements="21" conditionals="10" coveredconditionals="10" methods="9" coveredmethods="9"/>
       <file name="index.tsx" path="C:\Users\Marcelo\Desktop\waller3.0\waller\src\pages\Dashboard\index.tsx">
-        <metrics statements="21" coveredstatements="18" conditionals="14" coveredconditionals="8" methods="9" coveredmethods="7"/>
+        <metrics statements="21" coveredstatements="21" conditionals="10" coveredconditionals="10" methods="9" coveredmethods="9"/>
         <line num="18" count="1" type="stmt"/>
-        <line num="19" count="4" type="stmt"/>
-        <line num="21" count="4" type="stmt"/>
-        <line num="23" count="4" type="stmt"/>
-        <line num="25" count="4" type="stmt"/>
-        <line num="26" count="4" type="stmt"/>
-        <line num="33" count="4" type="stmt"/>
-        <line num="34" count="4" type="stmt"/>
-        <line num="36" count="4" type="cond" truecount="4" falsecount="0"/>
-        <line num="37" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="38" count="1" type="stmt"/>
-        <line num="41" count="4" type="cond" truecount="0" falsecount="4"/>
-        <line num="42" count="4" type="stmt"/>
-        <line num="51" count="4" type="stmt"/>
-        <line num="52" count="4" type="cond" truecount="2" falsecount="2"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="65" count="4" type="stmt"/>
+        <line num="19" count="5" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
+        <line num="23" count="5" type="stmt"/>
+        <line num="25" count="5" type="stmt"/>
+        <line num="26" count="5" type="stmt"/>
+        <line num="33" count="5" type="stmt"/>
+        <line num="34" count="5" type="stmt"/>
+        <line num="36" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="37" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="41" count="5" type="stmt"/>
+        <line num="42" count="5" type="stmt"/>
+        <line num="51" count="5" type="stmt"/>
+        <line num="52" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="54" count="4" type="stmt"/>
+        <line num="55" count="24" type="stmt"/>
+        <line num="56" count="24" type="stmt"/>
+        <line num="65" count="5" type="stmt"/>
         <line num="72" count="1" type="stmt"/>
-        <line num="101" count="4" type="stmt"/>
+        <line num="101" count="5" type="stmt"/>
       </file>
     </package>
     <package name="pages.Dashboard.Card">
@@ -320,7 +320,7 @@
       <file name="index.tsx" path="C:\Users\Marcelo\Desktop\waller3.0\waller\src\pages\Dashboard\Card\index.tsx">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="14" count="1" type="stmt"/>
-        <line num="15" count="16" type="stmt"/>
+        <line num="15" count="20" type="stmt"/>
       </file>
     </package>
     <package name="pages.Dividends">
@@ -340,34 +340,34 @@
       </file>
     </package>
     <package name="pages.ListActives">
-      <metrics statements="25" coveredstatements="19" conditionals="4" coveredconditionals="4" methods="12" coveredmethods="11"/>
+      <metrics statements="25" coveredstatements="25" conditionals="4" coveredconditionals="4" methods="12" coveredmethods="12"/>
       <file name="index.tsx" path="C:\Users\Marcelo\Desktop\waller3.0\waller\src\pages\ListActives\index.tsx">
-        <metrics statements="25" coveredstatements="19" conditionals="4" coveredconditionals="4" methods="12" coveredmethods="11"/>
+        <metrics statements="25" coveredstatements="25" conditionals="4" coveredconditionals="4" methods="12" coveredmethods="12"/>
         <line num="41" count="1" type="stmt"/>
-        <line num="42" count="2" type="stmt"/>
-        <line num="44" count="2" type="stmt"/>
-        <line num="46" count="2" type="stmt"/>
-        <line num="48" count="2" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="44" count="4" type="stmt"/>
+        <line num="46" count="4" type="stmt"/>
+        <line num="48" count="4" type="stmt"/>
         <line num="49" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="51" count="2" type="stmt"/>
-        <line num="63" count="2" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="76" count="2" type="stmt"/>
-        <line num="77" count="2" type="stmt"/>
+        <line num="63" count="4" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="76" count="4" type="stmt"/>
+        <line num="77" count="4" type="stmt"/>
         <line num="78" count="1" type="stmt"/>
-        <line num="81" count="2" type="stmt"/>
+        <line num="81" count="4" type="stmt"/>
         <line num="82" count="1" type="stmt"/>
-        <line num="85" count="2" type="stmt"/>
-        <line num="86" count="2" type="stmt"/>
-        <line num="87" count="2" type="stmt"/>
-        <line num="91" count="2" type="stmt"/>
-        <line num="100" count="2" type="stmt"/>
-        <line num="105" count="2" type="stmt"/>
+        <line num="85" count="4" type="stmt"/>
+        <line num="86" count="4" type="stmt"/>
+        <line num="87" count="4" type="stmt"/>
+        <line num="91" count="4" type="stmt"/>
+        <line num="101" count="6" type="stmt"/>
+        <line num="106" count="6" type="stmt"/>
       </file>
     </package>
     <package name="pages.Performance">

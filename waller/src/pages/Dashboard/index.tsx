@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
     return 'Good morning';
   }, []);
 
-  const { investment = 0, currentValue = 0, profit = 0, percent = 0 } = useMemo(
+  const { investment, currentValue, profit, percent } = useMemo(
     () => ({
       investment: formatPrice(totals?.investment),
       currentValue: formatPrice(totals?.currentValue),

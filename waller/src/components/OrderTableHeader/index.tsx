@@ -47,6 +47,7 @@ const OrderTableHeader: React.FC<IOrderTableHeaderProps> = ({
       {headers.map(header => (
         <Container width={header.width} key={header.id}>
           <TableHeaderButton
+            testID="order-table"
             align={header.align}
             onPress={() => handleClick(header.id)}
           >
