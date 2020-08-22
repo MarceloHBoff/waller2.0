@@ -1,23 +1,30 @@
 import React from 'react';
-import { render } from 'react-native-testing-library';
+import { render, fireEvent } from 'react-native-testing-library';
 
 import Config from '#pages/Config';
-
-let mockedFocus: () => void;
-let mockedBlur: () => void;
-let mockedRemoveFocus: () => void;
-let mockedRemoveBlur: () => void;
 
 jest.mock('@react-navigation/native', () => {
   return {
     useNavigation: () => ({
-      addListener: (e: string, func: () => void) => {
-        if (e === 'focus') mockedFocus = func;
-        if (e === 'blur') mockedBlur = func;
+      addListener: () => {},
+      removeListener: () => {},
+    }),
+  };
+});
+
+jest.mock('../../hooks/config', () => {
+  let seeValues = true;
+  let fingerPrint = false;
+
+  return {
+    useConfig: () => ({
+      seeValues,
+      fingerPrint,
+      setSeeValues: () => {
+        seeValues = !seeValues;
       },
-      removeListener: (e: string, func: () => void) => {
-        if (e === 'focus') mockedRemoveFocus = func;
-        if (e === 'blur') mockedRemoveBlur = func;
+      setFingerPrint: () => {
+        fingerPrint = !fingerPrint;
       },
     }),
   };
@@ -25,6 +32,20 @@ jest.mock('@react-navigation/native', () => {
 
 describe('Config page', () => {
   it('should be to render Config page', async () => {
-    render(<Config />);
+    const { getByTestId, rerender } = render(<Config />);
+
+    const seeValues = getByTestId('see-values');
+    const fingerPrint = getByTestId('finger-print');
+
+    fireEvent.press(seeValues);
+    fireEvent.press(fingerPrint);
+
+    rerender(<Config />);
+
+    const seeValuesIcon = getByTestId('eye-icon');
+    const fingerPrintIcon = getByTestId('finger-print-icon');
+
+    expect(seeValuesIcon).toBeTruthy();
+    expect(fingerPrintIcon).toBeTruthy();
   });
 });

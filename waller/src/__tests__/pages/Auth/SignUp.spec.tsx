@@ -3,13 +3,9 @@ import { Alert } from 'react-native';
 import { render, fireEvent, waitFor } from 'react-native-testing-library';
 import { ReactTestInstance } from 'react-test-renderer';
 
-import AxiosMock from 'axios-mock-adapter';
-
 import SignUp from '#pages/Auth/SignUp';
 
-import api from '../../../services/api';
-
-const apiMock = new AxiosMock(api);
+import apiMock from '../../utils/ApiMock';
 
 const mockedNavigate = jest.fn();
 const mockedGoBack = jest.fn();

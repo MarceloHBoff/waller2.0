@@ -31,7 +31,7 @@ const Dashboard: React.FC = () => {
   );
 
   const greeting = useCallback(() => {
-    const nowHour = new Date().getHours();
+    const nowHour = new Date(Date.now()).getHours();
 
     if (nowHour > 18 || nowHour < 5) return 'Good night';
     if (nowHour > 12) return 'Good afternoon';
@@ -65,11 +65,11 @@ const Dashboard: React.FC = () => {
   return (
     <Container>
       <Header>
-        <HeaderText>
+        <HeaderText testID="header-text">
           {greeting()}, {'\n'}
           {user.name}
         </HeaderText>
-        <TouchableOpacity onPress={() => navigate('Config')}>
+        <TouchableOpacity testID="config" onPress={() => navigate('Config')}>
           <Icon name="user-cog" size={30} color={Colors.white} />
         </TouchableOpacity>
       </Header>
@@ -98,7 +98,7 @@ const Dashboard: React.FC = () => {
         width={Metrics.width}
         height={220}
         chartConfig={{
-          color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+          color: () => `rgba(26, 255, 146)`,
         }}
         accessor="value"
         backgroundColor="transparent"

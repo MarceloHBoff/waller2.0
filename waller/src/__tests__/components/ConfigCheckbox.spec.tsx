@@ -10,7 +10,7 @@ describe('Config checkbox component', () => {
     const selected = true;
 
     const { getByTestId } = render(
-      <CheckBox selected={selected} onChange={onChange} />,
+      <CheckBox testID="checkbox" selected={selected} onChange={onChange} />,
     );
 
     const checkBox = getByTestId('checkbox');

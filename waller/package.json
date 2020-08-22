@@ -91,6 +91,9 @@
       "json",
       "node"
     ],
+    "testMatch": [
+      "**/*.spec.tsx"
+    ],
     "collectCoverageFrom": [
       "src/pages/**/*.tsx",
       "src/components/**/*.tsx",

@@ -1,14 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { TouchableWithoutFeedback, Animated } from 'react-native';
+import {
+  TouchableWithoutFeedback,
+  Animated,
+  TouchableWithoutFeedbackProps,
+} from 'react-native';
 
 import { Container, Pointer } from './styles';
 
-interface CheckBoxProps {
+interface CheckBoxProps extends TouchableWithoutFeedbackProps {
   selected: boolean;
   onChange: (data: boolean) => void;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = ({ selected, onChange }) => {
+const CheckBox: React.FC<CheckBoxProps> = ({ selected, onChange, ...rest }) => {
   const [selectedState, setSelectedState] = useState(selected);
 
   const [position] = useState(new Animated.Value(0));
@@ -40,7 +44,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ selected, onChange }) => {
   }, [animate, selectedState, onChange]);
 
   return (
-    <TouchableWithoutFeedback onPress={onPress} testID="checkbox">
+    <TouchableWithoutFeedback onPress={onPress} {...rest}>
       <Container selected={selectedState}>
         <Pointer
           selected={selectedState}

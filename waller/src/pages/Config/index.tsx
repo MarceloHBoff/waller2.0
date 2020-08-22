@@ -20,16 +20,30 @@ const Config: React.FC = () => {
       </Header>
 
       <Wrapper>
-        <CheckBox selected={seeValues} onChange={setSeeValues} />
+        <CheckBox
+          testID="see-values"
+          selected={seeValues}
+          onChange={setSeeValues}
+        />
         {seeValues ? (
-          <Icon name="eye" color={Colors.white} size={30} />
+          <Icon testID="eye-icon" name="eye" color={Colors.white} size={30} />
         ) : (
-          <Icon name="eye-slash" color={Colors.graySuperLight} size={30} />
+          <Icon
+            testID="eye-icon"
+            name="eye-slash"
+            color={Colors.graySuperLight}
+            size={30}
+          />
         )}
       </Wrapper>
       <Wrapper>
-        <CheckBox selected={fingerPrint} onChange={setFingerPrint} />
+        <CheckBox
+          testID="finger-print"
+          selected={fingerPrint}
+          onChange={setFingerPrint}
+        />
         <Icon
+          testID="finger-print-icon"
           name="fingerprint"
           color={fingerPrint ? Colors.white : Colors.graySuperLight}
           size={30}

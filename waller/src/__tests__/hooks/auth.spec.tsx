@@ -1,12 +1,9 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 
-import AxiosMock from 'axios-mock-adapter';
 import MockAsyncStorage from 'mock-async-storage';
 
 import { useAuth, AuthProvider } from '../../hooks/auth';
-import api from '../../services/api';
-
-const apiMock = new AxiosMock(api);
+import apiMock from '../utils/ApiMock';
 
 jest.mock(
   '@react-native-community/async-storage',

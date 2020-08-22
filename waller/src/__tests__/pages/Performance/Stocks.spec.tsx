@@ -8,7 +8,7 @@ import apiMock from '../../utils/ApiMock';
 jest.mock('@react-navigation/native', () => {
   return {
     useRoute: () => ({
-      name: 'Acao',
+      name: 'Stock',
     }),
   };
 });
@@ -21,11 +21,11 @@ const data = {
       buy_price: 10,
       active: {
         id: '1',
-        type: 'Acao',
-        code: 'PETR4',
-        name: 'Petrobras',
-        price: 10,
-        last_price: 11,
+        type: 'Stock',
+        code: 'MSFT',
+        name: 'Microsoft',
+        price: 200,
+        last_price: 202,
       },
     },
   ],
@@ -33,8 +33,8 @@ const data = {
 
 apiMock.onGet('/userActives').reply(200, data);
 
-describe('Performance Actives page', () => {
-  it('should be to render Performance Actives page', async () => {
+describe('Performance Stocks page', () => {
+  it('should be to render Performance Stocks page', async () => {
     const { getByTestId } = render(<Actives />);
 
     await waitFor(() => {
