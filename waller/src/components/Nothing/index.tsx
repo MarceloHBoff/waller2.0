@@ -5,10 +5,15 @@ import { Colors } from '#styles';
 
 import { Container, NothingText } from './styles';
 
-const Nothing: React.FC = () => {
+interface NothingProps {
+  text: string;
+}
+
+const Nothing: React.FC<NothingProps> = ({ text }) => {
   return (
     <Container testID="nothing">
-      <NothingText>Nothing actives for this type</NothingText>
+      <NothingText>{text}</NothingText>
+
       <Icon name="frown" size={30} color={Colors.white} />
     </Container>
   );

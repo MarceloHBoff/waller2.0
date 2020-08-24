@@ -10,6 +10,7 @@ import {
   handleLeavePage,
 } from '#animations';
 import Header, { HeaderText } from '#components/Header';
+import Nothing from '#components/Nothing';
 import { useFetch } from '#hooks/swr';
 import { Colors, Fonts } from '#styles';
 import { IUserActivesResponse } from '#types/UserActive';
@@ -94,38 +95,42 @@ const ListActives: React.FC = () => {
         <HeaderText>Today price</HeaderText>
       </Header>
 
-      <Cards
-        testID="cards"
-        data={userActives}
-        numColumns={2}
-        keyExtractor={item => item.id}
-        contentContainerStyle={{ alignItems: 'center' }}
-        onRefresh={updateActivesPrice}
-        refreshing={loading}
-        renderItem={({ item, index }) => (
-          <Card
-            style={{
-              opacity,
-              transform: [{ translateX: index % 2 ? right.x : left.x }],
-            }}
-          >
-            <Code>{item.code}</Code>
-            <Name numberOfLines={1}>{item.name}</Name>
-            <Quantity
-              align="left"
-              size={Fonts.superSmall}
-              colorBase={Colors.white}
-              colorBlinded={Colors.primaryLight}
+      {userActives.length === 0 ? (
+        <Nothing text="None actives yet" />
+      ) : (
+        <Cards
+          testID="cards"
+          data={userActives}
+          numColumns={2}
+          keyExtractor={item => item.id}
+          contentContainerStyle={{ alignItems: 'center' }}
+          onRefresh={updateActivesPrice}
+          refreshing={loading}
+          renderItem={({ item, index }) => (
+            <Card
+              style={{
+                opacity,
+                transform: [{ translateX: index % 2 ? right.x : left.x }],
+              }}
             >
-              {item.quantity}
-            </Quantity>
-            <Footer>
-              <Variation signal={item.variation}>{item.variation}%</Variation>
-              <Price>{item.price}</Price>
-            </Footer>
-          </Card>
-        )}
-      />
+              <Code>{item.code}</Code>
+              <Name numberOfLines={1}>{item.name}</Name>
+              <Quantity
+                align="left"
+                size={Fonts.superSmall}
+                colorBase={Colors.white}
+                colorBlinded={Colors.primaryLight}
+              >
+                {item.quantity}
+              </Quantity>
+              <Footer>
+                <Variation signal={item.variation}>{item.variation}%</Variation>
+                <Price>{item.price}</Price>
+              </Footer>
+            </Card>
+          )}
+        />
+      )}
     </Container>
   );
 };

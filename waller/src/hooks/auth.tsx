@@ -40,7 +40,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>({} as AuthState);
   const [loading, setLoading] = useState(true);
-  const [signed, setSigned] = useState(false);
+  const [signed, setSigned] = useState(true);
 
   useEffect(() => {
     async function loadStorageData(): Promise<void> {

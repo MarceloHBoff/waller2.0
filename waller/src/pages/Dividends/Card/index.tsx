@@ -1,11 +1,32 @@
 import React from 'react';
+import { Text } from 'react-native';
 
-import { Container, Circle } from './styles';
+import {
+  Container,
+  TopCircle,
+  TopSubCircle,
+  BottomCircle,
+  BottomSubCircle,
+  Top,
+  Bottom,
+} from './styles';
 
-const Card: React.FC = () => {
+interface CardProps {
+  value: number | undefined;
+}
+
+const Card: React.FC<CardProps> = ({ value }) => {
   return (
     <Container>
-      <Circle />
+      <Top>
+        <TopCircle />
+        <TopSubCircle />
+      </Top>
+      <Text>{value}</Text>
+      <Bottom>
+        <BottomCircle />
+        <BottomSubCircle />
+      </Bottom>
     </Container>
   );
 };

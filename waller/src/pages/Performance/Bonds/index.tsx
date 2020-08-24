@@ -1,5 +1,6 @@
 import React, { useMemo, createContext, useState } from 'react';
 
+import Nothing from '#components/Nothing';
 import {
   OrderTableHeader,
   IOrderTableContext,
@@ -9,7 +10,6 @@ import { useFetch } from '#hooks/swr';
 import { roundTo2 } from '#utils/format';
 import { SortArray, Sorting } from '#utils/sorting';
 
-import Nothing from '../Nothing';
 import { ListContainer, BondList, List, ListText, ValueField } from '../styles';
 
 export interface UserBond {
@@ -54,7 +54,7 @@ const Bonds: React.FC = () => {
   return (
     <ListContainer>
       {userBonds.length === 0 ? (
-        <Nothing />
+        <Nothing text="None actives for this type" />
       ) : (
         <>
           <Context.Provider value={{ order, orderBy, setOrder, setOrderBy }}>

@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 
 import Header, { HeaderText } from '#components/Header';
+import Nothing from '#components/Nothing';
 import { useAuth } from '#hooks/auth';
 import { useFetch } from '#hooks/swr';
 import { Colors, ChartColors, Metrics } from '#styles';
@@ -40,10 +41,10 @@ const Dashboard: React.FC = () => {
 
   const { investment, currentValue, profit, percent } = useMemo(
     () => ({
-      investment: formatPrice(totals?.investment),
-      currentValue: formatPrice(totals?.currentValue),
-      profit: formatPrice(totals?.profit),
-      percent: round10(totals?.percent),
+      investment: formatPrice(totals?.investment) || 'R$ 0,00',
+      currentValue: formatPrice(totals?.currentValue || 0) || 'R$ 0,00',
+      profit: formatPrice(totals?.profit || 0) || 'R$ 0,00',
+      percent: round10(totals?.percent || 0) || '0,00',
     }),
     [totals],
   );
@@ -93,21 +94,25 @@ const Dashboard: React.FC = () => {
         </Card>
       </Cards>
 
-      <PieChart
-        data={pieData}
-        width={Metrics.width}
-        height={220}
-        chartConfig={{
-          color: () => `rgba(26, 255, 146)`,
-        }}
-        accessor="value"
-        backgroundColor="transparent"
-        paddingLeft="16"
-        fromZero
-        hasLegend
-        xLabelsOffset={10}
-        center={[0.3, 1, 3, 2]}
-      />
+      {totals?.investment === 0 ? (
+        <Nothing text="None actives yet" />
+      ) : (
+        <PieChart
+          data={pieData}
+          width={Metrics.width}
+          height={220}
+          chartConfig={{
+            color: () => `rgba(26, 255, 146)`,
+          }}
+          accessor="value"
+          backgroundColor="transparent"
+          paddingLeft="16"
+          fromZero
+          hasLegend
+          xLabelsOffset={10}
+          center={[0.3, 1, 3, 2]}
+        />
+      )}
     </Container>
   );
 };

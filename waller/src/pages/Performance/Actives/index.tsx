@@ -2,6 +2,7 @@ import React, { useMemo, createContext, useState } from 'react';
 
 import { useRoute } from '@react-navigation/native';
 
+import Nothing from '#components/Nothing';
 import {
   OrderTableHeader,
   IOrderTableContext,
@@ -12,7 +13,6 @@ import { IUserActivesResponse } from '#types/UserActive';
 import { roundTo2 } from '#utils/format';
 import { SortArray, Sorting } from '#utils/sorting';
 
-import Nothing from '../Nothing';
 import {
   ListContainer,
   ActiveList,
@@ -87,7 +87,7 @@ const Actives: React.FC = () => {
   return (
     <ListContainer>
       {userActives.length === 0 ? (
-        <Nothing />
+        <Nothing text="None actives for this type" />
       ) : (
         <>
           <Context.Provider value={{ order, orderBy, setOrder, setOrderBy }}>
