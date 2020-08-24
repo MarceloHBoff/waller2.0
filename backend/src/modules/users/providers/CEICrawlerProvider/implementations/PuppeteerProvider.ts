@@ -1,5 +1,5 @@
 import cheerio from 'cheerio';
-import puppeteer, { Page } from 'puppeteer';
+import puppeteer, { Page, Browser } from 'puppeteer';
 import { injectable, inject } from 'tsyringe';
 import { getConnection } from 'typeorm';
 
@@ -28,38 +28,40 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
     private userBondsRepository: IUserBondsRepository,
   ) {}
 
+  private page: Page;
+
+  private browser: Browser;
+
   public async findUserActivesByCEI(user_id: string): Promise<void> {
     let actives: ICEIActiveDTO[] = [];
     let bonds: ICEIBond[] = [];
 
-    console.time(user_id);
-
     const connection = getConnection().createQueryRunner();
 
-    const browser = await puppeteer.launch({
+    this.browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
-    const page = await browser.newPage();
+    this.page = await this.browser.newPage();
 
-    page.setViewport({ width: 1400, height: 800 });
+    this.page.setViewport({ width: 1400, height: 800 });
 
-    await page.goto(URLs.Login);
-    await page.click(Fields.UsernameSelector);
-    await page.keyboard.type(String(process.env.CEI_CPF));
-    await page.click(Fields.PasswordSelector);
-    await page.keyboard.type(String(process.env.CEI_PASSWORD));
-    await page.click(Fields.SubmitSelector);
+    await this.page.goto(URLs.Login);
+    await this.page.click(Fields.UsernameSelector);
+    await this.page.keyboard.type(String(process.env.CEI_CPF));
+    await this.page.click(Fields.PasswordSelector);
+    await this.page.keyboard.type(String(process.env.CEI_PASSWORD));
+    await this.page.click(Fields.SubmitSelector);
 
     try {
-      await page.waitForNavigation();
+      await this.page.waitForNavigation();
     } catch {
       return;
     }
 
-    await page.goto(URLs.Negociation);
+    await this.page.goto(URLs.Negociation);
 
-    const $ = cheerio.load(await page.content());
+    const $ = cheerio.load(await this.page.content());
 
     const options: string[] = [];
 
@@ -77,73 +79,64 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
         });
     });
 
-    page.setDefaultTimeout(300000);
+    this.page.setDefaultTimeout(300000);
 
     for (let i = 0; i < options.length; i++) {
       try {
-        await page.click(Fields.BrokerSelector);
-        await page.keyboard.type(options[i]);
-        await page.focus(Fields.SubmitSelector);
-        await page.waitFor(100);
-        await page.click(Fields.SubmitSelector);
-        await page.waitFor(500);
+        await this.page.click(Fields.BrokerSelector);
+        await this.page.keyboard.type(options[i]);
+        await this.page.focus(Fields.SubmitSelector);
+        await this.page.waitFor(100);
+        await this.page.click(Fields.SubmitSelector);
+        await this.page.waitFor(500);
 
-        const selectorFound = await this.raceSelectors(page, [
+        const selectorFound = await this.raceSelectors(this.page, [
           Fields.TableSelector,
           Fields.NullQuery,
         ]);
 
-        await page.waitFor(500);
+        await this.page.waitFor(500);
 
         if (selectorFound === Fields.TableSelector) {
-          const brokerActives = await this.getDataByHTML(await page.content());
+          const brokerActives = await this.getDataByHTML(
+            await this.page.content(),
+          );
           actives = [...actives, ...brokerActives];
         }
 
-        await this.resetCEIQuery(page);
+        await this.resetCEIQuery(this.page);
       } catch {
         console.log('retry', options[i]);
-        await page.waitFor(1000);
+        await this.page.waitFor(1000);
 
-        await this.resetCEIQuery(page);
-
-        await page.waitFor(1000);
+        await this.resetCEIQuery(this.page);
         i--;
       }
     }
 
-    await page.goto(URLs.Bond);
+    await this.page.goto(URLs.Bond);
 
-    await page.waitFor(2000);
+    await this.page.waitFor(1000);
 
     for (let i = 0; i < options.length; i++) {
-      await page.focus(Fields.BrokerSelector);
-      await page.keyboard.type(options[i]);
-      await page.waitFor(1000);
-      await page.click(Fields.CountSelector);
-      await page.waitFor(1000);
-      await page.keyboard.press('ArrowDown');
-      await page.keyboard.press('Enter');
-      await page.focus(Fields.SubmitSelector);
-      await page.click(Fields.SubmitSelector);
+      await this.page.focus(Fields.BrokerSelector);
+      await this.page.keyboard.type(options[i]);
+      await this.page.waitFor(500);
+      await this.page.click(Fields.CountSelector);
+      await this.page.waitFor(500);
+      await this.page.keyboard.press('ArrowDown');
+      await this.page.keyboard.press('Enter');
+      await this.page.click(Fields.SubmitSelector);
+      await this.page.waitFor(500);
 
-      try {
-        const selectorFound = await this.raceSelectors(page, [
-          Fields.TitleTableSelector,
-        ]);
+      const brokerBonds = await this.getDataByHTMLBonds(
+        await this.page.content(),
+      );
 
-        if (selectorFound === Fields.TitleTableSelector) {
-          const brokerBonds = await this.getDataByHTMLBonds(
-            await page.content(),
-          );
-          bonds = [...bonds, ...brokerBonds];
-        }
-      } catch {}
+      if (brokerBonds.length > 0) bonds = [...bonds, ...brokerBonds];
 
-      await this.resetCEIQuery(page);
+      await this.resetCEIQuery(this.page);
     }
-
-    await browser.close();
 
     connection.startTransaction();
 
@@ -166,8 +159,10 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
     }
 
     connection.commitTransaction();
+  }
 
-    console.timeEnd(user_id);
+  public async closeCrawler(): Promise<void> {
+    await this.browser.close();
   }
 
   private async getDataByHTML(html: string): Promise<ICEIActiveDTO[]> {

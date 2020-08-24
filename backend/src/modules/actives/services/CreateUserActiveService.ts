@@ -6,6 +6,7 @@ import IUserActiveRepository from '../repositories/IUserActivesRepository';
 interface IRequest {
   user_id: string;
   code: string;
+  type: string;
   buy_price: number;
   quantity: number;
   buy_date?: Date;
@@ -20,6 +21,7 @@ export default class CreateUserActiveService {
 
   public async execute({
     user_id,
+    type,
     code,
     buy_price,
     quantity,
@@ -27,6 +29,7 @@ export default class CreateUserActiveService {
   }: IRequest): Promise<UserActive> {
     const userActive = await this.userActiveRepository.create({
       user_id,
+      type,
       quantity,
       code,
       buy_price,

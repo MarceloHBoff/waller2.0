@@ -25,7 +25,19 @@ export default class DividendRepository implements IDividendRepository {
   }
 
   public async createMany(dividends: ICreateManyDTO[]): Promise<Dividend[]> {
-    const dividendsCreated = this.ormRepository.create(dividends);
+    const newDividends = [];
+
+    for (let i = 0; i < dividends.length; i++) {
+      const existDividend = await this.ormRepository.findOne(dividends[i]);
+
+      if (existDividend) {
+        break;
+      }
+
+      newDividends.push(dividends[i]);
+    }
+
+    const dividendsCreated = this.ormRepository.create(newDividends);
 
     await this.ormRepository.save(dividendsCreated);
 

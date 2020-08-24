@@ -1,5 +1,12 @@
+import { isAfter, subMonths } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
-import { Repository, getRepository, getConnection } from 'typeorm';
+import {
+  Repository,
+  getRepository,
+  getConnection,
+  MoreThan,
+  MoreThanOrEqual,
+} from 'typeorm';
 
 import IUserActiveRepository from '../../../repositories/IUserActivesRepository';
 import UserActive from '../entities/UserActive';
@@ -41,6 +48,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
   public async create({
     user_id,
+    type,
     code,
     quantity,
     buy_price,
@@ -51,6 +59,7 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
     const userActive = this.ormRepository.create({
       user_id,
+      type,
       active_id: active?.id,
       quantity,
       buy_price,
@@ -74,24 +83,34 @@ export default class UserActivesRepository implements IUserActiveRepository {
     userActives.forEach(data => {
       const userActive = this.convertDecimalInNumber(data);
 
-      const { active_id, quantity, buy_price } = userActive;
+      const { active_id, type, quantity, buy_price } = userActive;
 
       const findIndex = unifiedUserActives.findIndex(
         unifiedUserActive => unifiedUserActive.active_id === active_id,
       );
 
       if (findIndex >= 0) {
-        unifiedUserActives[findIndex].quantity =
-          Number(unifiedUserActives[findIndex].quantity) + quantity;
-
-        unifiedUserActives[findIndex].buy_price =
-          (Number(unifiedUserActives[findIndex].buy_price) + buy_price) / 2;
+        if (type === 'C') {
+          unifiedUserActives[findIndex].quantity =
+            Number(unifiedUserActives[findIndex].quantity) + quantity;
+          unifiedUserActives[findIndex].buy_price =
+            (Number(unifiedUserActives[findIndex].buy_price) + buy_price) / 2;
+        } else {
+          unifiedUserActives[findIndex].quantity =
+            Number(unifiedUserActives[findIndex].quantity) - quantity;
+          unifiedUserActives[findIndex].buy_price =
+            (Number(unifiedUserActives[findIndex].buy_price) - buy_price) / 2;
+        }
       } else {
+        if (type === 'V') {
+          userActive.quantity = -quantity;
+        }
+
         unifiedUserActives.push(userActive);
       }
     });
 
-    return unifiedUserActives;
+    return unifiedUserActives.filter(active => active.quantity > 0);
   }
 
   public async findDataByDividendsList(
@@ -135,7 +154,13 @@ export default class UserActivesRepository implements IUserActiveRepository {
   }
 
   public async removeAutomaticByUserId(user_id: string): Promise<void> {
-    this.ormRepository.delete({ user_id, automatic: true });
+    const limitCEIDate = new Date(subMonths(Date.now(), 17).setDate(1));
+    console.log(limitCEIDate);
+    this.ormRepository.delete({
+      user_id,
+      automatic: true,
+      buy_date: MoreThanOrEqual(limitCEIDate),
+    });
   }
 
   public async createOrUpdateByCEI(
@@ -154,7 +179,10 @@ export default class UserActivesRepository implements IUserActiveRepository {
       price /= 4;
     }
 
-    if (code.substr(0, 4) === 'SAPR') {
+    if (
+      code.substr(0, 4) === 'SAPR' &&
+      isAfter(new Date(2020, 2, 27), buy_date)
+    ) {
       quantity *= 3;
       price /= 3;
     }
@@ -183,10 +211,13 @@ export default class UserActivesRepository implements IUserActiveRepository {
 
       userActive.automatic = true;
 
-      await this.ormRepository.save(userActive);
+      if (userActive.quantity > 0) {
+        await this.ormRepository.save(userActive);
+      }
     } else {
       await this.create({
         user_id,
+        type,
         code,
         quantity,
         buy_date,

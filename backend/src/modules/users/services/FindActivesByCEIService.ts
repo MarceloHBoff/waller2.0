@@ -14,8 +14,9 @@ export default class FindActivesByCEIService {
       await this.CEICrawlerProvider.findUserActivesByCEI(user_id);
       console.log('Ok');
     } catch (err) {
-      console.log(err);
-      console.log('Catch');
+      console.log('Catch', err);
     }
+
+    await this.CEICrawlerProvider.closeCrawler();
   }
 }

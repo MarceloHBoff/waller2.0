@@ -36,6 +36,10 @@ export default class UserActive {
   @JoinColumn({ name: 'active_id' })
   active: Active;
 
+  @Column({ enum: ['C', 'V'], default: 'C' })
+  @Exclude()
+  type: string;
+
   @Column('decimal', { precision: 10, scale: 2 })
   @Transform(value => Number(value), { toClassOnly: true })
   quantity: number;
