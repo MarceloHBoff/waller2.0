@@ -102,15 +102,15 @@ const Dashboard: React.FC = () => {
           width={Metrics.width}
           height={220}
           chartConfig={{
-            color: () => `rgba(26, 255, 146)`,
+            color: () => '#fff',
+            barRadius: 10,
+            barPercentage: 10,
           }}
           accessor="value"
           backgroundColor="transparent"
           paddingLeft="16"
           fromZero
           hasLegend
-          xLabelsOffset={10}
-          center={[0.3, 1, 3, 2]}
         />
       )}
     </Container>

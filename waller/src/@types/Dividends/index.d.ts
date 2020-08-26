@@ -1,4 +1,5 @@
 export interface IDividend {
+  id: string;
   type: string;
   value: number;
   EX_date: string;
@@ -11,11 +12,23 @@ export interface IDividend {
     price: number;
     last_price: number;
   };
-  active_id: string;
+  active_id?: string;
   quantity: number;
 }
 
 export interface IDividendsResponse {
   dividends: IDividend[];
+  total: number;
+}
+
+export interface IMonthly {
+  month: number;
+  year: number;
+  total: number;
+  dividends: IDividend[];
+}
+
+export interface IDividendsMonthly {
+  dividends: IMonthly[];
   total: number;
 }

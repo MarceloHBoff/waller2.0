@@ -4,7 +4,7 @@ import { Colors } from '#styles';
 
 export const Container = styled.View`
   flex: 1;
-  max-height: 150px;
+  max-height: 60px;
   margin: 16px 24px;
 
   background: ${Colors.primary};
