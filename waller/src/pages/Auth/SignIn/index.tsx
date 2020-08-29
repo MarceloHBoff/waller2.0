@@ -3,18 +3,12 @@ import { ScrollView, Keyboard, Alert } from 'react-native';
 import TouchID from 'react-native-touch-id';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { FormHandles, Form } from '@unform/core';
 
 import * as Yup from 'yup';
 
-import {
-  opacity,
-  left,
-  right,
-  handleEnterPage,
-  handleLeavePage,
-} from '#animations';
+import { opacity, left, right, onScreenFocus } from '#animations';
 import signInImage from '#assets/signInImage.png';
 import Input from '#components/Input';
 import { useAuth } from '#hooks/auth';
@@ -37,7 +31,7 @@ interface SignInFormData {
   password: string;
 }
 
-let timeout = 0;
+let timeout: NodeJS.Timeout;
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
@@ -46,6 +40,8 @@ const SignIn: React.FC = () => {
   const { goBack, addListener, removeListener } = useNavigation();
   const { signIn, signInByTouchId } = useAuth();
   const { fingerPrint } = useConfig();
+
+  useFocusEffect(onScreenFocus);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () =>
@@ -71,18 +67,11 @@ const SignIn: React.FC = () => {
   }, [goBack]);
 
   useEffect(() => {
-    addListener('focus', () => {
-      handleEnterPage();
-    });
-
     addListener('blur', () => {
       clearTimeout(timeout);
-
-      handleLeavePage();
     });
 
     return () => {
-      removeListener('focus', () => {});
       removeListener('blur', () => {});
     };
   }, [addListener, removeListener]);

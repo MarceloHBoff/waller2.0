@@ -2,18 +2,12 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { ScrollView, Keyboard, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { FormHandles, Form } from '@unform/core';
 
 import * as Yup from 'yup';
 
-import {
-  opacity,
-  left,
-  right,
-  handleEnterPage,
-  handleLeavePage,
-} from '#animations';
+import { opacity, left, right, onScreenFocus } from '#animations';
 import signUpImage from '#assets/signUpImage.png';
 import Input from '#components/Input';
 import getValidationErrors from '#utils/getValidationErrors';
@@ -40,28 +34,15 @@ const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const { goBack, navigate, addListener, removeListener } = useNavigation();
+  const { goBack, navigate } = useNavigation();
+
+  useFocusEffect(onScreenFocus);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () =>
       scrollViewRef.current?.scrollToEnd({ animated: true }),
     );
   }, []);
-
-  useEffect(() => {
-    addListener('focus', () => {
-      handleEnterPage();
-    });
-
-    addListener('blur', () => {
-      handleLeavePage();
-    });
-
-    return () => {
-      removeListener('focus', () => {});
-      removeListener('blur', () => {});
-    };
-  }, [addListener, removeListener]);
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {

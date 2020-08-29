@@ -1,14 +1,8 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
-import {
-  opacity,
-  left,
-  right,
-  handleEnterPage,
-  handleLeavePage,
-} from '#animations';
+import { opacity, left, right, onScreenFocus } from '#animations';
 import homeImage from '#assets/homeImage.png';
 
 import {
@@ -24,34 +18,17 @@ import {
 } from './styles';
 
 const Home: React.FC = () => {
-  const { navigate, addListener, removeListener } = useNavigation();
+  const { navigate } = useNavigation();
 
-  const handleNavigateSignIn = useCallback(() => {
-    handleLeavePage();
+  useFocusEffect(onScreenFocus);
 
-    navigate('SignIn');
-  }, [navigate]);
+  const handleNavigateSignIn = useCallback(() => navigate('SignIn'), [
+    navigate,
+  ]);
 
-  const handleNavigateSignUp = useCallback(() => {
-    handleLeavePage();
-
-    navigate('SignUp');
-  }, [navigate]);
-
-  useEffect(() => {
-    addListener('focus', () => {
-      handleEnterPage();
-    });
-
-    addListener('blur', () => {
-      handleLeavePage();
-    });
-
-    return () => {
-      removeListener('focus', () => {});
-      removeListener('blur', () => {});
-    };
-  }, [addListener, removeListener]);
+  const handleNavigateSignUp = useCallback(() => navigate('SignUp'), [
+    navigate,
+  ]);
 
   return (
     <Container>
