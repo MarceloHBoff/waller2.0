@@ -1,9 +1,16 @@
 import React from 'react';
-import { render, waitFor } from 'react-native-testing-library';
-
-import { NavigationContainer } from '@react-navigation/native';
+import { render } from 'react-native-testing-library';
 
 import Performance from '#pages/Performance';
+
+jest.mock('@react-navigation/material-top-tabs', () => {
+  return {
+    createMaterialTopTabNavigator: () => ({
+      Navigator: () => {},
+      Screen: () => {},
+    }),
+  };
+});
 
 jest.mock('@react-navigation/native', () => {
   return {
@@ -14,6 +21,7 @@ jest.mock('@react-navigation/native', () => {
       addListener: () => {},
       removeListener: () => {},
     }),
+    useFocusEffect: () => {},
   };
 });
 

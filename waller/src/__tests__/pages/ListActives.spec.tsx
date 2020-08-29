@@ -5,23 +5,13 @@ import ListActives from '#pages/ListActives';
 
 import apiMock from '../utils/ApiMock';
 
-let mockedFocus: () => void;
-let mockedBlur: () => void;
-let mockedRemoveFocus: () => void;
-let mockedRemoveBlur: () => void;
-
 jest.mock('@react-navigation/native', () => {
   return {
     useNavigation: () => ({
-      addListener: (e: string, func: () => void) => {
-        if (e === 'focus') mockedFocus = func;
-        if (e === 'blur') mockedBlur = func;
-      },
-      removeListener: (e: string, func: () => void) => {
-        if (e === 'focus') mockedRemoveFocus = func;
-        if (e === 'blur') mockedRemoveBlur = func;
-      },
+      addListener: () => {},
+      removeListener: () => {},
     }),
+    useFocusEffect: () => {},
   };
 });
 
@@ -63,21 +53,15 @@ describe('ListActives page', () => {
   it('should be to render ListActives page', async () => {
     const { getByText, getByTestId } = render(<ListActives />);
 
-    const refresh = getByTestId('cards').props.onRefresh;
-
     await waitFor(() => {
+      const refresh = getByTestId('cards').props.onRefresh;
+
       refresh();
     });
-
-    mockedFocus();
-    mockedBlur();
 
     await waitFor(() => {
       expect(getByText('PETR4')).toBeTruthy();
       expect(getByText('ITUB3')).toBeTruthy();
     });
-
-    mockedRemoveFocus();
-    mockedRemoveBlur();
   });
 });

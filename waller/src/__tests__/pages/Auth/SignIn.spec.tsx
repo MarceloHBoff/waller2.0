@@ -8,9 +8,7 @@ import SignIn from '#pages/Auth/SignIn';
 
 const mockedSignIn = jest.fn();
 const mockedGoBack = jest.fn();
-let mockedFocus: () => void;
 let mockedBlur: () => void;
-let mockedRemoveFocus: () => void;
 let mockedRemoveBlur: () => void;
 
 jest.mock('@react-navigation/native', () => {
@@ -18,14 +16,13 @@ jest.mock('@react-navigation/native', () => {
     useNavigation: () => ({
       goBack: mockedGoBack,
       addListener: (e: string, func: () => void) => {
-        if (e === 'focus') mockedFocus = func;
         if (e === 'blur') mockedBlur = func;
       },
       removeListener: (e: string, func: () => void) => {
-        if (e === 'focus') mockedRemoveFocus = func;
         if (e === 'blur') mockedRemoveBlur = func;
       },
     }),
+    useFocusEffect: () => {},
   };
 });
 
@@ -96,10 +93,7 @@ describe('SignIn page', () => {
 
     fireEvent.press(getByTestId('go-back'));
 
-    mockedFocus();
     mockedBlur();
-
-    mockedRemoveFocus();
     mockedRemoveBlur();
 
     await waitFor(() => {

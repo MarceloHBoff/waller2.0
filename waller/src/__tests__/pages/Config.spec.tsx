@@ -3,12 +3,18 @@ import { render, fireEvent } from 'react-native-testing-library';
 
 import Config from '#pages/Config';
 
+let mockedScreenFocus: () => void;
+
 jest.mock('@react-navigation/native', () => {
   return {
     useNavigation: () => ({
+      goBack: () => {},
       addListener: () => {},
       removeListener: () => {},
     }),
+    useFocusEffect: (func: () => void) => {
+      mockedScreenFocus = func;
+    },
   };
 });
 
@@ -41,6 +47,8 @@ describe('Config page', () => {
     fireEvent.press(fingerPrint);
 
     rerender(<Config />);
+
+    mockedScreenFocus();
 
     const seeValuesIcon = getByTestId('eye-icon');
     const fingerPrintIcon = getByTestId('finger-print-icon');
