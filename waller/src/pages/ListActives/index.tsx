@@ -1,14 +1,8 @@
-import React, { useMemo, useCallback, useState, useEffect } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
-import {
-  opacity,
-  left,
-  right,
-  handleEnterPage,
-  handleLeavePage,
-} from '#animations';
+import { opacity, left, right, onScreenFocus } from '#animations';
 import Header, { HeaderText } from '#components/Header';
 import Nothing from '#components/Nothing';
 import { useFetch } from '#hooks/swr';
@@ -44,7 +38,7 @@ const ListActives: React.FC = () => {
 
   const { data, mutate } = useFetch<IUserActivesResponse>('userActives');
 
-  const { addListener, removeListener } = useNavigation();
+  useFocusEffect(onScreenFocus);
 
   const userActives = useMemo(() => {
     if (!data?.actives) return [];
@@ -68,26 +62,10 @@ const ListActives: React.FC = () => {
       const responde = await api.put<IUserActivesResponse>('userActives');
 
       await mutate(responde.data);
-      handleEnterPage();
     } catch {}
 
     setLoading(false);
   }, [mutate]);
-
-  useEffect(() => {
-    addListener('focus', () => {
-      handleEnterPage();
-    });
-
-    addListener('blur', () => {
-      handleLeavePage();
-    });
-
-    return () => {
-      removeListener('focus', () => {});
-      removeListener('blur', () => {});
-    };
-  }, [addListener, removeListener]);
 
   return (
     <Container>

@@ -24,28 +24,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>27/27</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/25</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
@@ -172,29 +172,7 @@
 <a name='L114'></a><a href='#L114'>114</a>
 <a name='L115'></a><a href='#L115'>115</a>
 <a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a>
-<a name='L120'></a><a href='#L120'>120</a>
-<a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L117'></a><a href='#L117'>117</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,28 +236,15 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -322,18 +287,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo, useCallback, useState, useEffect } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo, useCallback, useState } from 'react';
 &nbsp;
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 &nbsp;
-import {
-  opacity,
-  left,
-  right,
-  handleEnterPage,
-  handleLeavePage,
-} from '#animations';
+import { opacity, left, right, onScreenFocus } from '#animations';
 import Header, { HeaderText } from '#components/Header';
+import Nothing from '#components/Nothing';
 import { useFetch } from '#hooks/swr';
 import { Colors, Fonts } from '#styles';
 import { IUserActivesResponse } from '#types/UserActive';
@@ -367,7 +328,7 @@ const ListActives: React.FC = () =&gt; {
 &nbsp;
   const { data, mutate } = useFetch&lt;IUserActivesResponse&gt;('userActives');
 &nbsp;
-  const { addListener, removeListener } = useNavigation();
+  useFocusEffect(onScreenFocus);
 &nbsp;
   const userActives = useMemo(() =&gt; {
     if (!data?.actives) return [];
@@ -391,26 +352,10 @@ const ListActives: React.FC = () =&gt; {
       const responde = await api.put&lt;IUserActivesResponse&gt;('userActives');
 &nbsp;
       await mutate(responde.data);
-      handleEnterPage();
     } catch {}
 &nbsp;
     setLoading(false);
   }, [mutate]);
-&nbsp;
-  useEffect(() =&gt; {
-    addListener('focus', () =&gt; {
-      handleEnterPage();
-    });
-&nbsp;
-    addListener('blur', () =&gt; {
-      handleLeavePage();
-    });
-&nbsp;
-    return () =&gt; {
-      removeListener('focus', () =&gt; {});
-      removeListener('blur', () =&gt; {});
-    };
-  }, [addListener, removeListener]);
 &nbsp;
   return (
     &lt;Container&gt;
@@ -418,38 +363,42 @@ const ListActives: React.FC = () =&gt; {
         &lt;HeaderText&gt;Today price&lt;/HeaderText&gt;
       &lt;/Header&gt;
 &nbsp;
-      &lt;Cards
-        testID="cards"
-        data={userActives}
-        numColumns={2}
-        keyExtractor={item =&gt; item.id}
-        contentContainerStyle={{ alignItems: 'center' }}
-        onRefresh={updateActivesPrice}
-        refreshing={loading}
-        renderItem={({ item, index }) =&gt; (
-          &lt;Card
-            style={{
-              opacity,
-              transform: [{ translateX: index % 2 ? right.x : left.x }],
-            }}
-          &gt;
-            &lt;Code&gt;{item.code}&lt;/Code&gt;
-            &lt;Name numberOfLines={1}&gt;{item.name}&lt;/Name&gt;
-            &lt;Quantity
-              align="left"
-              size={Fonts.superSmall}
-              colorBase={Colors.white}
-              colorBlinded={Colors.primaryLight}
+      {userActives.length === 0 ? (
+        &lt;Nothing text="None actives yet" /&gt;
+      ) : (
+        &lt;Cards
+          testID="cards"
+          data={userActives}
+          numColumns={2}
+          keyExtractor={item =&gt; item.id}
+          contentContainerStyle={{ alignItems: 'center' }}
+          onRefresh={updateActivesPrice}
+          refreshing={loading}
+          renderItem={({ item, index }) =&gt; (
+            &lt;Card
+              style={{
+                opacity,
+                transform: [{ translateX: index % 2 ? right.x : left.x }],
+              }}
             &gt;
-              {item.quantity}
-            &lt;/Quantity&gt;
-            &lt;Footer&gt;
-              &lt;Variation signal={item.variation}&gt;{item.variation}%&lt;/Variation&gt;
-              &lt;Price&gt;{item.price}&lt;/Price&gt;
-            &lt;/Footer&gt;
-          &lt;/Card&gt;
-        )}
-      /&gt;
+              &lt;Code&gt;{item.code}&lt;/Code&gt;
+              &lt;Name numberOfLines={1}&gt;{item.name}&lt;/Name&gt;
+              &lt;Quantity
+                align="left"
+                size={Fonts.superSmall}
+                colorBase={Colors.white}
+                colorBlinded={Colors.primaryLight}
+              &gt;
+                {item.quantity}
+              &lt;/Quantity&gt;
+              &lt;Footer&gt;
+                &lt;Variation signal={item.variation}&gt;{item.variation}%&lt;/Variation&gt;
+                &lt;Price&gt;{item.price}&lt;/Price&gt;
+              &lt;/Footer&gt;
+            &lt;/Card&gt;
+          )}
+        /&gt;
+      )}
     &lt;/Container&gt;
   );
 };
@@ -462,7 +411,7 @@ export default ListActives;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Aug 21 2020 23:46:59 GMT-0300 (Brasilia Standard Time)
+                at Fri Aug 28 2020 23:47:14 GMT-0300 (Brasilia Standard Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>

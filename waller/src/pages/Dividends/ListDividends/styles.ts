@@ -1,9 +1,6 @@
-import { FlatList } from 'react-native';
-
 import styled from 'styled-components/native';
 
 import { Metrics, Colors } from '#styles';
-import { IDividend } from '#types/Dividends';
 
 export const Container = styled.View`
   flex: 1;
@@ -20,8 +17,6 @@ export const ModalContainer = styled.View`
 
   background: ${Colors.grayDark};
 `;
-
-export const List = styled(FlatList as new () => FlatList<IDividend>)``;
 
 export const Dividend = styled.View`
   flex: 1;

@@ -6,6 +6,12 @@ const left = new Animated.ValueXY({ x: Metrics.width * -1, y: 0 });
 const right = new Animated.ValueXY({ x: Metrics.width, y: 0 });
 const opacity = new Animated.Value(0);
 
+export function handleResetAnimations(): void {
+  left.setValue({ x: Metrics.width * -1, y: 0 });
+  right.setValue({ x: Metrics.width, y: 0 });
+  opacity.setValue(0);
+}
+
 export function handleEnterPage(): void {
   Animated.parallel([
     Animated.spring(left.x, {
@@ -28,24 +34,10 @@ export function handleEnterPage(): void {
   ]).start();
 }
 
-export function handleLeavePage(): void {
-  Animated.parallel([
-    Animated.spring(left.x, {
-      toValue: Metrics.width * -1,
-      speed: 0.1,
-      useNativeDriver: true,
-    }),
-    Animated.spring(right.x, {
-      toValue: Metrics.width,
-      speed: 0.1,
-      useNativeDriver: true,
-    }),
-    Animated.timing(opacity, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: true,
-    }),
-  ]).start();
+export function onScreenFocus(): void {
+  handleResetAnimations();
+
+  handleEnterPage();
 }
 
 export { opacity, left, right };

@@ -1,9 +1,10 @@
 import React from 'react';
+import { FlatList } from 'react-native';
 
 import { IDividend } from '#types/Dividends';
 import { formatPrice } from '#utils/format';
 
-import { Container, ModalContainer, List, Dividend, Text } from './styles';
+import { Container, ModalContainer, Dividend, Text } from './styles';
 
 interface ListDividendsProps {
   dividends?: IDividend[];
@@ -13,7 +14,7 @@ const ListDividends: React.FC<ListDividendsProps> = ({ dividends }) => {
   return (
     <Container>
       <ModalContainer style={{ elevation: 1 }}>
-        <List
+        <FlatList<IDividend>
           data={dividends}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
