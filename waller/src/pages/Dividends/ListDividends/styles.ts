@@ -14,9 +14,13 @@ export const ModalContainer = styled.View`
   width: ${Metrics.width - Metrics.base * 4}px;
   border-radius: ${Metrics.radius}px;
   padding: ${Metrics.base}px 0;
+  padding-bottom: 0;
 
   background: ${Colors.grayDark};
   position: relative;
+
+  border-width: 1px;
+  border-color: ${Colors.grayDarker};
 `;
 
 export const Title = styled.Text`
@@ -42,7 +46,14 @@ export const Dividend = styled.View`
 `;
 
 export const Header = styled(Dividend)`
-  background: ${Colors.grayDarker};
+  background: ${Colors.primaryDark};
+  padding: 0px;
+`;
+
+export const Footer = styled(Dividend)`
+  background: ${Colors.primaryDark};
+  border-bottom-left-radius: ${Metrics.radius}px;
+  border-bottom-right-radius: ${Metrics.radius}px;
 `;
 
 export const Text = styled.Text`

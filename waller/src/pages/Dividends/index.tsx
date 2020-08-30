@@ -1,27 +1,25 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { LineChart } from 'react-native-chart-kit';
+import { Dataset } from 'react-native-chart-kit/dist/HelperTypes';
 
 import Header, { HeaderText } from '#components/Header';
 import { useFetch } from '#hooks/swr';
 import { Colors, Metrics } from '#styles';
-import { IDividendsResponse, IDividendsMonthly } from '#types/Dividends';
-import { formatPrice } from '#utils/format';
+import {
+  IDividendsResponse,
+  IDividendsMonthly,
+  IDividend,
+} from '#types/Dividends';
 
 import Card from './Card';
 import ListDividends, { IDividendList } from './ListDividends';
 import { Container } from './styles';
 
-interface Dataset {
-  data: number[];
-  color: () => string;
-  labels: string[];
-  strokeWidth: number;
-}
-
 const Dividends: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [month, setMonth] = useState(0);
-  const [year, setYear] = useState(0);
+  const [period, setPeriod] = useState('');
+  const [chartLabels, setChartLabels] = useState<string[]>([]);
+  const [dividendsList, setDividendsList] = useState<IDividendList[]>([]);
 
   const { data } = useFetch<IDividendsResponse>('dividends/receivable');
   const { data: monthly } = useFetch<IDividendsMonthly>('dividends/monthly');
@@ -33,62 +31,90 @@ const Dividends: React.FC = () => {
     const dataset: Dataset = {
       data: [],
       color: () => Colors.primary,
-      labels: [],
       strokeWidth: 3,
     };
 
     monthly?.dividends
-      .filter((_, i, a) => i > a.length - 10)
-      .forEach(m => {
-        labels.push(`${m.month.toString().padStart(2, '0')}/${m.year}`);
-        dataset.data.push(m.total);
+      .filter((_, index, array) => index > array.length - 10)
+      .forEach(months => {
+        labels.push(
+          `${months.month.toString().padStart(2, '0')}/${months.year}`,
+        );
+        dataset.data.push(months.total);
       });
 
-    dataset.labels = labels;
-
     datasets.push(dataset);
+
+    setChartLabels(labels);
 
     return { labels, datasets };
   }, [monthly]);
 
-  const dividendsList = useMemo(() => {
-    if (!openModal) return [];
+  const unifyDividends = useCallback(
+    (dividendsEdited: IDividendList[], dividend: IDividend) => {
+      const findIndex = dividendsEdited.findIndex(
+        ({ code, pay_date }) =>
+          code === dividend.active.code && dividend.pay_date === pay_date,
+      );
 
+      if (findIndex >= 0) {
+        const numberValue =
+          Number(dividendsEdited[findIndex].value) +
+          dividend.value * dividend.quantity;
+
+        dividendsEdited[findIndex] = {
+          ...dividend,
+          code: dividend.active.code,
+          value: numberValue,
+        };
+      } else {
+        dividendsEdited.push({
+          ...dividend,
+          code: dividend.active.code,
+          value: dividend.quantity * dividend.value,
+        });
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
     const dividendsMonthly = monthly?.dividends.find(
-      d => Number(d.year) === Number(year) && Number(d.month) === Number(month),
+      d => `${d.month.toString().padStart(2, '0')}/${d.year}` === period,
     );
 
     const dividendsEdited: IDividendList[] = [];
 
-    dividendsMonthly?.dividends.forEach(d => {
-      const findIndex = dividendsEdited.findIndex(
-        de => de.code === d.active.code,
-      );
-
-      if (findIndex >= 0) {
-        dividendsEdited[findIndex].id = d.id;
-        dividendsEdited[findIndex].code = d.active.code;
-        dividendsEdited[findIndex].type = d.type;
-        dividendsEdited[findIndex].pay_date = d.pay_date;
-        const numberValue =
-          Number(dividendsEdited[findIndex].value) + d.value * d.quantity;
-        dividendsEdited[findIndex].value = numberValue;
-      } else {
-        dividendsEdited.push({
-          id: d.id,
-          code: d.active.code,
-          type: d.type,
-          pay_date: d.pay_date,
-          value: d.quantity * d.value,
-        });
-      }
+    dividendsMonthly?.dividends.forEach(dividend => {
+      unifyDividends(dividendsEdited, dividend);
     });
 
-    return dividendsEdited.map(dividend => ({
-      ...dividend,
-      value: formatPrice(Number(dividend.value)),
-    }));
-  }, [openModal, monthly, month, year]);
+    setDividendsList(dividendsEdited);
+  }, [monthly, period, unifyDividends]);
+
+  const onPressReceivable = useCallback(() => {
+    const dividendsEdited: IDividendList[] = [];
+
+    data?.dividends.forEach(dividend => {
+      unifyDividends(dividendsEdited, dividend);
+    });
+
+    setDividendsList(dividendsEdited);
+    setOpenModal(true);
+  }, [data, unifyDividends]);
+
+  const onPressReceived = useCallback(() => {
+    const dividendsEdited: IDividendList[] = [];
+
+    monthly?.dividends.forEach(months => {
+      months.dividends.forEach(dividend => {
+        unifyDividends(dividendsEdited, dividend);
+      });
+    });
+
+    setDividendsList(dividendsEdited);
+    setOpenModal(true);
+  }, [monthly, unifyDividends]);
 
   return (
     <Container>
@@ -96,11 +122,11 @@ const Dividends: React.FC = () => {
         <HeaderText>Dividends</HeaderText>
       </Header>
 
-      <Card value={data?.total} />
-      <Card value={monthly?.total} />
+      <Card value={data?.total} onPress={onPressReceivable} />
+      <Card value={monthly?.total} onPress={onPressReceived} />
 
       <ListDividends
-        title={`Dividends ${month.toString().padStart(2, '0')}/${year}`}
+        title={`Dividends ${period}`}
         dividends={dividendsList}
         open={openModal}
         setOpen={setOpenModal}
@@ -115,15 +141,21 @@ const Dividends: React.FC = () => {
           transparent
           withInnerLines={false}
           fromZero
-          onDataPointClick={({ dataset, index }) => {
-            const [m, y] = dataset.labels[index].split('/');
-            setMonth(Number(m));
-            setYear(Number(y));
+          onDataPointClick={({ index }) => {
+            setPeriod(chartLabels[index]);
             setOpenModal(true);
           }}
           yAxisLabel="R$ "
           verticalLabelRotation={60}
-          chartConfig={{ color: () => Colors.primary }}
+          chartConfig={{
+            color: () => Colors.primary,
+            propsForDots: {
+              r: '6',
+              fill: Colors.primaryDarker,
+              strokeWidth: '2',
+              stroke: Colors.primaryDarker,
+            },
+          }}
           bezier
         />
       )}

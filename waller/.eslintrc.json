@@ -45,6 +45,7 @@
     "@typescript-eslint/no-empty-function": "off",
     "no-empty": "off",
     "camelcase": "off",
+    "no-param-reassign": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

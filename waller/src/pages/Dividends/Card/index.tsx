@@ -1,32 +1,22 @@
-import React from 'react';
-import { Text } from 'react-native';
+import React, { useMemo } from 'react';
 
-import {
-  Container,
-  TopCircle,
-  TopSubCircle,
-  BottomCircle,
-  BottomSubCircle,
-  Top,
-  Bottom,
-} from './styles';
+import { formatPrice } from '#utils/format';
+
+import { Container, Wrapper, CardText } from './styles';
 
 interface CardProps {
   value: number | undefined;
+  onPress: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ value }) => {
+const Card: React.FC<CardProps> = ({ value, onPress }) => {
+  const valueEditted = useMemo(() => formatPrice(value), [value]);
+
   return (
-    <Container>
-      <Top>
-        <TopCircle />
-        <TopSubCircle />
-      </Top>
-      <Text>{value}</Text>
-      <Bottom>
-        <BottomCircle />
-        <BottomSubCircle />
-      </Bottom>
+    <Container onPress={onPress}>
+      <Wrapper style={{ elevation: 1 }}>
+        <CardText>{valueEditted}</CardText>
+      </Wrapper>
     </Container>
   );
 };

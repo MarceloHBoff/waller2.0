@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useMemo, useState, createContext } from 'react';
 import { FlatList, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
+import {
+  OrderTableHeader,
+  IOrderTableContext,
+} from '#components/OrderTableHeader';
 import { Colors } from '#styles';
+import { formatPrice } from '#utils/format';
+import { SortArray, Sorting } from '#utils/sorting';
 
 import {
   Container,
   ModalContainer,
   Title,
   CloseButton,
-  Header,
   Dividend,
+  Header,
+  Footer,
   Text,
 } from './styles';
 
@@ -19,6 +26,7 @@ export interface IDividendList {
   code: string;
   type: string;
   pay_date: string;
+  pay_date_order?: Date;
   value: string | number;
 }
 
@@ -29,14 +37,58 @@ interface ListDividendsProps {
   setOpen(open: boolean): void;
 }
 
+const Headers = [
+  { id: 'code', align: 'left', width: 20, text: 'Code' },
+  { id: 'type', width: 20, text: 'Type' },
+  { id: 'pay_date_order', width: 30, text: 'Pay Date' },
+  { id: 'value', width: 30, text: 'Value(R$)' },
+];
+
 const ListDividends: React.FC<ListDividendsProps> = ({
   title = 'Dividends',
   dividends,
   open,
   setOpen,
 }) => {
+  const [orderBy, setOrderBy] = useState('name');
+  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+
+  const Context = createContext({} as IOrderTableContext);
+
+  const total = useMemo(() => {
+    const totalDividends = dividends?.reduce(
+      (accumulator, currentValue) => accumulator + Number(currentValue.value),
+      0,
+    );
+
+    return formatPrice(totalDividends);
+  }, [dividends]);
+
+  const dividendsEditted = useMemo(() => {
+    if (!dividends) return [];
+
+    const dividendsUnsorted = dividends?.map(dividend => ({
+      ...dividend,
+      pay_date_order: new Date(
+        Number(dividend.pay_date.substr(7, 4)),
+        Number(dividend.pay_date.substr(3, 2)) + 1,
+        Number(dividend.pay_date.substr(0, 2)),
+      ),
+    }));
+
+    const dividendSorted = SortArray<IDividendList>(
+      dividendsUnsorted,
+      Sorting<IDividendList>(order, orderBy),
+    );
+
+    return dividendSorted.map(dividend => ({
+      ...dividend,
+      value: formatPrice(Number(dividend.value)),
+    }));
+  }, [dividends, order, orderBy]);
+
   return (
-    <Modal transparent animated animationType="fade" visible={open}>
+    <Modal transparent animated animationType="slide" visible={open}>
       <Container>
         <ModalContainer style={{ elevation: 1 }}>
           <Title>{title}</Title>
@@ -46,14 +98,13 @@ const ListDividends: React.FC<ListDividendsProps> = ({
           </CloseButton>
 
           <Header>
-            <Text style={{ width: '20%', textAlign: 'left' }}>Code</Text>
-            <Text style={{ width: '20%' }}>Type</Text>
-            <Text style={{ width: '30%' }}>Pay Date</Text>
-            <Text style={{ width: '30%' }}>Value</Text>
+            <Context.Provider value={{ order, orderBy, setOrder, setOrderBy }}>
+              <OrderTableHeader headers={Headers} context={Context} />
+            </Context.Provider>
           </Header>
 
           <FlatList<IDividendList>
-            data={dividends}
+            data={dividendsEditted}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
               <Dividend>
@@ -66,6 +117,11 @@ const ListDividends: React.FC<ListDividendsProps> = ({
               </Dividend>
             )}
           />
+
+          <Footer style={{ elevation: 1 }}>
+            <Text style={{ width: '70%', textAlign: 'center' }}>Total</Text>
+            <Text style={{ width: '30%' }}>{total}</Text>
+          </Footer>
         </ModalContainer>
       </Container>
     </Modal>
