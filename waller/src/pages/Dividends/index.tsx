@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from 'react';
-import { Modal } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
 import Header, { HeaderText } from '#components/Header';
 import { useFetch } from '#hooks/swr';
 import { Colors, Metrics } from '#styles';
 import { IDividendsResponse, IDividendsMonthly } from '#types/Dividends';
+import { formatPrice } from '#utils/format';
 
 import Card from './Card';
-import ListDividends from './ListDividends';
+import ListDividends, { IDividendList } from './ListDividends';
 import { Container } from './styles';
 
 interface Dataset {
@@ -38,9 +38,9 @@ const Dividends: React.FC = () => {
     };
 
     monthly?.dividends
-      .filter((_, i, a) => i > a.length - 7)
+      .filter((_, i, a) => i > a.length - 10)
       .forEach(m => {
-        labels.push(`${m.month}/${m.year}`);
+        labels.push(`${m.month.toString().padStart(2, '0')}/${m.year}`);
         dataset.data.push(m.total);
       });
 
@@ -55,10 +55,39 @@ const Dividends: React.FC = () => {
     if (!openModal) return [];
 
     const dividendsMonthly = monthly?.dividends.find(
-      d => Number(d.year) === year && Number(d.month) === month,
+      d => Number(d.year) === Number(year) && Number(d.month) === Number(month),
     );
 
-    return dividendsMonthly?.dividends;
+    const dividendsEdited: IDividendList[] = [];
+
+    dividendsMonthly?.dividends.forEach(d => {
+      const findIndex = dividendsEdited.findIndex(
+        de => de.code === d.active.code,
+      );
+
+      if (findIndex >= 0) {
+        dividendsEdited[findIndex].id = d.id;
+        dividendsEdited[findIndex].code = d.active.code;
+        dividendsEdited[findIndex].type = d.type;
+        dividendsEdited[findIndex].pay_date = d.pay_date;
+        const numberValue =
+          Number(dividendsEdited[findIndex].value) + d.value * d.quantity;
+        dividendsEdited[findIndex].value = numberValue;
+      } else {
+        dividendsEdited.push({
+          id: d.id,
+          code: d.active.code,
+          type: d.type,
+          pay_date: d.pay_date,
+          value: d.quantity * d.value,
+        });
+      }
+    });
+
+    return dividendsEdited.map(dividend => ({
+      ...dividend,
+      value: formatPrice(Number(dividend.value)),
+    }));
   }, [openModal, monthly, month, year]);
 
   return (
@@ -70,23 +99,26 @@ const Dividends: React.FC = () => {
       <Card value={data?.total} />
       <Card value={monthly?.total} />
 
-      <Modal transparent animated animationType="fade" visible={openModal}>
-        <ListDividends dividends={dividendsList} />
-      </Modal>
+      <ListDividends
+        title={`Dividends ${month.toString().padStart(2, '0')}/${year}`}
+        dividends={dividendsList}
+        open={openModal}
+        setOpen={setOpenModal}
+      />
 
       {chartData.datasets[0].data.length !== 0 && (
         <LineChart
           data={chartData}
-          width={Metrics.width}
+          width={Metrics.width - 32}
           height={250}
-          style={{ flex: 1, margin: 16, paddingBottom: 10 }}
+          style={{ flex: 1, marginLeft: 16, marginTop: 16, paddingBottom: 16 }}
           transparent
           withInnerLines={false}
           fromZero
           onDataPointClick={({ dataset, index }) => {
             const [m, y] = dataset.labels[index].split('/');
-            setMonth(m);
-            setYear(y);
+            setMonth(Number(m));
+            setYear(Number(y));
             setOpenModal(true);
           }}
           yAxisLabel="R$ "
