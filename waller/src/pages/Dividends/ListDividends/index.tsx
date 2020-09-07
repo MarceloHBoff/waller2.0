@@ -1,4 +1,11 @@
-import React, { useMemo, useState, createContext } from 'react';
+import React, {
+  useMemo,
+  useState,
+  createContext,
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import { FlatList, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -33,8 +40,10 @@ export interface IDividendList {
 interface ListDividendsProps {
   title?: string;
   dividends?: IDividendList[];
-  open: boolean;
-  setOpen(open: boolean): void;
+}
+
+export interface ListDividendsHandles {
+  openModal: () => void;
 }
 
 const Headers = [
@@ -44,12 +53,11 @@ const Headers = [
   { id: 'value', width: 30, text: 'Value(R$)' },
 ];
 
-const ListDividends: React.FC<ListDividendsProps> = ({
-  title = 'Dividends',
-  dividends,
-  open,
-  setOpen,
-}) => {
+const ListDividends: React.RefForwardingComponent<
+  ListDividendsHandles,
+  ListDividendsProps
+> = ({ title = 'Dividends', dividends }, ref) => {
+  const [visible, setVisible] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
 
@@ -87,13 +95,19 @@ const ListDividends: React.FC<ListDividendsProps> = ({
     }));
   }, [dividends, order, orderBy]);
 
+  const openModal = useCallback(() => setVisible(true), []);
+
+  const closeModal = useCallback(() => setVisible(false), []);
+
+  useImperativeHandle(ref, () => ({ openModal }));
+
   return (
-    <Modal transparent animated animationType="slide" visible={open}>
+    <Modal transparent animated animationType="slide" visible={visible}>
       <Container>
         <ModalContainer style={{ elevation: 1 }}>
           <Title>{title}</Title>
 
-          <CloseButton onPress={() => setOpen(false)}>
+          <CloseButton onPress={closeModal}>
             <Icon name="times" size={26} color={Colors.white} />
           </CloseButton>
 
@@ -128,4 +142,4 @@ const ListDividends: React.FC<ListDividendsProps> = ({
   );
 };
 
-export default ListDividends;
+export default forwardRef(ListDividends);

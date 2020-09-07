@@ -53,6 +53,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
             onLongPress={onLongPress}
             active={isActive}
             key={route.name}
+            index={index}
           >
             <Icon color="#fff" size={25} />
           </Tab>

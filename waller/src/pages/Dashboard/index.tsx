@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 
 import Header, { HeaderText } from '#components/Header';
+import Loading from '#components/Loading';
 import Nothing from '#components/Nothing';
 import { useAuth } from '#hooks/auth';
 import { useFetch } from '#hooks/swr';
@@ -21,7 +22,7 @@ const Dashboard: React.FC = () => {
 
   const { navigate } = useNavigation();
 
-  const { data } = useFetch<IUserActivesResponse>('userActives');
+  const { data, isValidating } = useFetch<IUserActivesResponse>('userActives');
 
   const { totals, types } = useMemo(
     () => ({
@@ -80,22 +81,32 @@ const Dashboard: React.FC = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ padding: 16 }}
       >
-        <Card icon="wallet" label="Investment">
+        <Card loading={isValidating} icon="wallet" label="Investment">
           {investment}
         </Card>
-        <Card icon="money-bill-wave" label="Current Value">
+        <Card
+          loading={isValidating}
+          icon="money-bill-wave"
+          label="Current Value"
+        >
           {currentValue}
         </Card>
-        <Card icon="dollar-sign" label="Profit">
+        <Card loading={isValidating} icon="dollar-sign" label="Profit">
           {profit}
         </Card>
-        <Card icon="percentage" label="Profit percent">
+        <Card loading={isValidating} icon="percentage" label="Profit percent">
           {percent} %
         </Card>
       </Cards>
 
       {totals?.investment === 0 ? (
-        <Nothing text="None actives yet" />
+        <>
+          {isValidating ? (
+            <Loading size={200} />
+          ) : (
+            <Nothing text="None actives yet" />
+          )}
+        </>
       ) : (
         <PieChart
           data={pieData}

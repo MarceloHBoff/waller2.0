@@ -1,4 +1,10 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, {
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react';
 import { LineChart } from 'react-native-chart-kit';
 import { Dataset } from 'react-native-chart-kit/dist/HelperTypes';
 
@@ -12,17 +18,25 @@ import {
 } from '#types/Dividends';
 
 import Card from './Card';
-import ListDividends, { IDividendList } from './ListDividends';
+import ListDividends, {
+  IDividendList,
+  ListDividendsHandles,
+} from './ListDividends';
 import { Container } from './styles';
 
 const Dividends: React.FC = () => {
-  const [openModal, setOpenModal] = useState(false);
+  const [title, setTitle] = useState('');
   const [period, setPeriod] = useState('');
   const [chartLabels, setChartLabels] = useState<string[]>([]);
   const [dividendsList, setDividendsList] = useState<IDividendList[]>([]);
+  const listDividendsRef = useRef<ListDividendsHandles>(null);
 
-  const { data } = useFetch<IDividendsResponse>('dividends/receivable');
-  const { data: monthly } = useFetch<IDividendsMonthly>('dividends/monthly');
+  const { data, isValidating } = useFetch<IDividendsResponse>(
+    'dividends/receivable',
+  );
+  const { data: monthly, isValidating: isValidatingMonthly } = useFetch<
+    IDividendsMonthly
+  >('dividends/monthly');
 
   const chartData = useMemo(() => {
     const labels: string[] = [];
@@ -100,7 +114,8 @@ const Dividends: React.FC = () => {
     });
 
     setDividendsList(dividendsEdited);
-    setOpenModal(true);
+    setTitle('Dividends receivable');
+    listDividendsRef.current?.openModal();
   }, [data, unifyDividends]);
 
   const onPressReceived = useCallback(() => {
@@ -113,7 +128,8 @@ const Dividends: React.FC = () => {
     });
 
     setDividendsList(dividendsEdited);
-    setOpenModal(true);
+    setTitle('Dividends received');
+    listDividendsRef.current?.openModal();
   }, [monthly, unifyDividends]);
 
   return (
@@ -122,14 +138,23 @@ const Dividends: React.FC = () => {
         <HeaderText>Dividends</HeaderText>
       </Header>
 
-      <Card value={data?.total} onPress={onPressReceivable} />
-      <Card value={monthly?.total} onPress={onPressReceived} />
+      <Card
+        label="Dividends receivable"
+        value={data?.total}
+        onPress={onPressReceivable}
+        loading={isValidating}
+      />
+      <Card
+        label="Dividends received"
+        value={monthly?.total}
+        onPress={onPressReceived}
+        loading={isValidatingMonthly}
+      />
 
       <ListDividends
-        title={`Dividends ${period}`}
+        ref={listDividendsRef}
+        title={title}
         dividends={dividendsList}
-        open={openModal}
-        setOpen={setOpenModal}
       />
 
       {chartData.datasets[0].data.length !== 0 && (
@@ -143,14 +168,15 @@ const Dividends: React.FC = () => {
           fromZero
           onDataPointClick={({ index }) => {
             setPeriod(chartLabels[index]);
-            setOpenModal(true);
+            setTitle(`Dividends ${chartLabels[index]}`);
+            listDividendsRef.current?.openModal();
           }}
           yAxisLabel="R$ "
           verticalLabelRotation={60}
           chartConfig={{
             color: () => Colors.primary,
             propsForDots: {
-              r: '6',
+              r: '4',
               fill: Colors.primaryDarker,
               strokeWidth: '2',
               stroke: Colors.primaryDarker,

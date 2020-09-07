@@ -19,7 +19,7 @@ export const Container = styled.View`
 `;
 
 export const CardText = styled.Text`
-  color: ${Colors.graySuperDark};
+  color: ${Colors.white};
   font-size: ${Fonts.big}px;
   font-family: ${Fonts.poppinsMedium};
 `;

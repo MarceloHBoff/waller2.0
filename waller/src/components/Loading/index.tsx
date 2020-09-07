@@ -2,10 +2,16 @@ import React, { useEffect } from 'react';
 import { Animated } from 'react-native';
 
 import logo from '#assets/logo.png';
+import logoDark from '#assets/logoDark.png';
 
 import { Container, Image } from './styles';
 
-const Loading: React.FC = () => {
+interface LoadingProps {
+  mode?: 'light' | 'dark';
+  size: number;
+}
+
+const Loading: React.FC<LoadingProps> = ({ mode = 'light', size }) => {
   const opacity = new Animated.Value(0);
   const rotate = new Animated.Value(0);
 
@@ -28,7 +34,7 @@ const Loading: React.FC = () => {
   return (
     <Container testID="loading">
       <Image
-        source={logo}
+        source={mode === 'light' ? logo : logoDark}
         style={{
           opacity,
           transform: [
@@ -39,6 +45,8 @@ const Loading: React.FC = () => {
               }),
             },
           ],
+          width: size,
+          height: size,
         }}
       />
     </Container>

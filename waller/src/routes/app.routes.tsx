@@ -27,6 +27,15 @@ const AppRoutes: React.FC = () => (
       }}
     />
     <App.Screen
+      name="Stonks"
+      component={Dashboard}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="home" color={color} size={size} />
+        ),
+      }}
+    />
+    <App.Screen
       name="Dashboard"
       component={Dashboard}
       options={{

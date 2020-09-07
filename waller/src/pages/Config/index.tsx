@@ -45,7 +45,8 @@ const Config: React.FC = () => {
         useNativeDriver: true,
       }),
     ]).start();
-  }, [offsetBottom, opacity]);
+    // eslint-disable-next-line
+  }, []);
 
   useFocusEffect(onScreenFocus);
 

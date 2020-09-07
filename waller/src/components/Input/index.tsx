@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useImperativeHandle,
   useEffect,
+  forwardRef,
 } from 'react';
 import { TextInputProps } from 'react-native';
 
@@ -18,11 +19,11 @@ interface InputProps extends TextInputProps {
   icon?: string;
 }
 
-interface InputValueRefence {
+export interface InputValueRefence {
   value: string;
 }
 
-interface InputRef {
+export interface InputRef {
   focus(): void;
 }
 
@@ -48,11 +49,11 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
     setIsFilled(!!inputValueRef.current?.value);
   }, []);
 
-  // useImperativeHandle(ref, () => ({
-  //   focus() {
-  //     inputElementRef.current.focus();
-  //   },
-  // }));
+  useImperativeHandle(ref, () => ({
+    focus() {
+      inputElementRef.current.focus();
+    },
+  }));
 
   useEffect(() => {
     registerField<string>({
@@ -96,4 +97,4 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
   );
 };
 
-export default Input;
+export default forwardRef(Input);

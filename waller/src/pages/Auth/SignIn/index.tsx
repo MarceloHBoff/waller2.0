@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { ScrollView, Keyboard, Alert } from 'react-native';
+import { ScrollView, Keyboard, Alert, TextInput } from 'react-native';
 import TouchID from 'react-native-touch-id';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -35,6 +35,7 @@ let timeout: NodeJS.Timeout;
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const passwordInputRef = useRef<TextInput>(null);
   const scrollViewRef = useRef<ScrollView>(null);
 
   const { goBack, addListener, removeListener } = useNavigation();
@@ -127,8 +128,10 @@ const SignIn: React.FC = () => {
               autoCapitalize="none"
               keyboardType="email-address"
               returnKeyType="next"
+              onSubmitEditing={() => passwordInputRef.current?.focus()}
             />
             <Input
+              ref={passwordInputRef}
               name="password"
               secureTextEntry
               placeholder="Password"
