@@ -7,6 +7,7 @@ import Dashboard from '#pages/Dashboard';
 import Dividends from '#pages/Dividends';
 import ListActives from '#pages/ListActives';
 import Performance from '#pages/Performance';
+import Rentability from '#pages/Rentability';
 
 import CustomTabBar from './CustomTabBar';
 
@@ -27,11 +28,11 @@ const AppRoutes: React.FC = () => (
       }}
     />
     <App.Screen
-      name="Stonks"
-      component={Dashboard}
+      name="Rentability"
+      component={Rentability}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <Icon name="home" color={color} size={size} />
+          <Icon name="chart-line" color={color} size={size} />
         ),
       }}
     />

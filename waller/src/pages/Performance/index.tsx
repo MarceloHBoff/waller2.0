@@ -4,7 +4,7 @@ import { Animated } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { opacity, left, onScreenFocus } from '#animations';
+import { left, onScreenFocus } from '#animations';
 import Header, { HeaderText } from '#components/Header';
 import { Colors, Fonts } from '#styles';
 
@@ -23,9 +23,7 @@ const Performance: React.FC = () => {
         <HeaderText>Wallet</HeaderText>
       </Header>
 
-      <Animated.View
-        style={{ flex: 1, opacity, transform: [{ translateX: left.x }] }}
-      >
+      <Animated.View style={{ flex: 1, transform: [{ translateX: left.x }] }}>
         <Tab.Navigator
           sceneContainerStyle={{ backgroundColor: Colors.grayDark }}
           tabBarOptions={{

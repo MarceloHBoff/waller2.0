@@ -1,13 +1,13 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
+import { Animated } from 'react-native';
 
-import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-import { opacity, left, right, onScreenFocus } from '#animations';
 import Header, { HeaderText } from '#components/Header';
+import Loading from '#components/Loading';
 import Nothing from '#components/Nothing';
-import { useFetch } from '#hooks/swr';
-import { Colors, Fonts } from '#styles';
-import { IUserActivesResponse } from '#types/UserActive';
+import { Colors, Fonts, Metrics } from '#styles';
+import { IUserActivesResponse, IUserActives } from '#types/UserActive';
 import { formatPrice, roundTo2 } from '#utils/format';
 
 import api from '../../services/api';
@@ -34,38 +34,79 @@ export interface IListActives {
 }
 
 const ListActives: React.FC = () => {
+  const left = new Animated.ValueXY({ x: Metrics.width * -1, y: 0 });
+  const right = new Animated.ValueXY({ x: Metrics.width, y: 0 });
+
   const [loading, setLoading] = useState(false);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [actives, setActives] = useState<IListActives[]>([]);
 
-  const { data, mutate } = useFetch<IUserActivesResponse>('userActives');
+  const editUserActive = useCallback(
+    (activesList: IUserActives[]) =>
+      activesList.map(userActive => ({
+        id: userActive.active.id,
+        code: userActive.active.code,
+        name: userActive.active.name,
+        quantity: userActive.quantity,
+        variation: roundTo2(
+          (userActive.active.price / userActive.active.last_price - 1) * 100,
+        ),
+        price: formatPrice(userActive.active.price),
+      })),
+    [],
+  );
 
-  useFocusEffect(onScreenFocus);
-
-  const userActives = useMemo(() => {
-    if (!data?.actives) return [];
-
-    return data?.actives.map(userActive => ({
-      id: userActive.active.id,
-      code: userActive.active.code,
-      name: userActive.active.name,
-      quantity: userActive.quantity,
-      variation: roundTo2(
-        (userActive.active.price / userActive.active.last_price - 1) * 100,
-      ),
-      price: formatPrice(userActive.active.price),
-    }));
-  }, [data]);
-
-  const updateActivesPrice = useCallback(async () => {
+  useEffect(() => {
     setLoading(true);
 
-    try {
-      const responde = await api.put<IUserActivesResponse>('userActives');
+    api
+      .get<IUserActivesResponse>('userActives')
+      .then(response => setActives(editUserActive(response.data.actives)))
+      .finally(() => setLoading(false));
+  }, [editUserActive]);
 
-      await mutate(responde.data);
+  const updateActivesPrice = useCallback(async () => {
+    setLoadingUpdate(true);
+
+    left.setValue({ x: 0, y: 0 });
+    right.setValue({ x: 0, y: 0 });
+
+    try {
+      const response = await api.put<IUserActivesResponse>('userActives');
+      const editedActives = editUserActive(response.data.actives);
+      setActives(editedActives);
     } catch {}
 
-    setLoading(false);
-  }, [mutate]);
+    setLoadingUpdate(false);
+  }, [editUserActive, left, right]);
+
+  const onScreenFocus = useCallback(() => {
+    left.setValue({ x: Metrics.width * -1, y: 0 });
+    right.setValue({ x: Metrics.width, y: 0 });
+
+    Animated.parallel([
+      Animated.spring(left.x, {
+        toValue: 0,
+        speed: 0.1,
+        bounciness: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.spring(right.x, {
+        toValue: 0,
+        speed: 0.1,
+        bounciness: 1000,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [left, right]);
+
+  const { addListener, removeListener } = useNavigation();
+
+  useEffect(() => {
+    addListener('focus', () => onScreenFocus());
+
+    return () => removeListener('focus', () => {});
+  }, [addListener, removeListener, onScreenFocus]);
 
   return (
     <Container>
@@ -73,21 +114,22 @@ const ListActives: React.FC = () => {
         <HeaderText>Today price</HeaderText>
       </Header>
 
-      {userActives.length === 0 ? (
+      {loading ? (
+        <Loading size={120} />
+      ) : actives.length === 0 ? (
         <Nothing text="None actives yet" />
       ) : (
         <Cards
           testID="cards"
-          data={userActives}
+          data={actives}
           numColumns={2}
           keyExtractor={item => item.id}
           contentContainerStyle={{ alignItems: 'center' }}
           onRefresh={updateActivesPrice}
-          refreshing={loading}
+          refreshing={loadingUpdate}
           renderItem={({ item, index }) => (
             <Card
               style={{
-                opacity,
                 transform: [{ translateX: index % 2 ? right.x : left.x }],
               }}
             >

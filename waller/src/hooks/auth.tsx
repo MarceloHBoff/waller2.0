@@ -87,6 +87,9 @@ const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   const signInByTouchId = useCallback(async () => {
+    if (process.env.NODE_ENV !== 'production')
+      await AsyncStorage.setItem('@Waller:signed', JSON.stringify(true));
+
     setSigned(true);
   }, []);
 

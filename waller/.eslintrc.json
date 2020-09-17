@@ -46,6 +46,7 @@
     "no-empty": "off",
     "camelcase": "off",
     "no-param-reassign": "off",
+    "no-nested-ternary": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

@@ -5,9 +5,13 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
+import { Animated } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Dataset } from 'react-native-chart-kit/dist/HelperTypes';
 
+import { useFocusEffect } from '@react-navigation/native';
+
+import { onScreenFocus, opacity } from '#animations';
 import Header, { HeaderText } from '#components/Header';
 import { useFetch } from '#hooks/swr';
 import { Colors, Metrics } from '#styles';
@@ -132,6 +136,8 @@ const Dividends: React.FC = () => {
     listDividendsRef.current?.openModal();
   }, [monthly, unifyDividends]);
 
+  useFocusEffect(onScreenFocus);
+
   return (
     <Container>
       <Header>
@@ -157,34 +163,41 @@ const Dividends: React.FC = () => {
         dividends={dividendsList}
       />
 
-      {chartData.datasets[0].data.length !== 0 && (
-        <LineChart
-          data={chartData}
-          width={Metrics.width - 32}
-          height={250}
-          style={{ flex: 1, marginLeft: 16, marginTop: 16, paddingBottom: 16 }}
-          transparent
-          withInnerLines={false}
-          fromZero
-          onDataPointClick={({ index }) => {
-            setPeriod(chartLabels[index]);
-            setTitle(`Dividends ${chartLabels[index]}`);
-            listDividendsRef.current?.openModal();
-          }}
-          yAxisLabel="R$ "
-          verticalLabelRotation={60}
-          chartConfig={{
-            color: () => Colors.primary,
-            propsForDots: {
-              r: '4',
-              fill: Colors.primaryDarker,
-              strokeWidth: '2',
-              stroke: Colors.primaryDarker,
-            },
-          }}
-          bezier
-        />
-      )}
+      <Animated.View style={{ opacity }}>
+        {chartData.datasets[0].data.length !== 0 && (
+          <LineChart
+            data={chartData}
+            width={Metrics.width - 32}
+            height={250}
+            style={{
+              flex: 1,
+              marginLeft: 16,
+              marginTop: 16,
+              paddingBottom: 16,
+            }}
+            transparent
+            withInnerLines={false}
+            fromZero
+            onDataPointClick={({ index }) => {
+              setPeriod(chartLabels[index]);
+              setTitle(`Dividends ${chartLabels[index]}`);
+              listDividendsRef.current?.openModal();
+            }}
+            yAxisLabel="R$ "
+            verticalLabelRotation={60}
+            chartConfig={{
+              color: () => Colors.primary,
+              propsForDots: {
+                r: '4',
+                fill: Colors.primaryDarker,
+                strokeWidth: '2',
+                stroke: Colors.primaryDarker,
+              },
+            }}
+            bezier
+          />
+        )}
+      </Animated.View>
     </Container>
   );
 };
