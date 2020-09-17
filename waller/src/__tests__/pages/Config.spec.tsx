@@ -46,12 +46,12 @@ describe('Config page', () => {
     fireEvent.press(seeValues);
     fireEvent.press(fingerPrint);
 
-    rerender(<Config />);
-
     mockedScreenFocus();
 
     const seeValuesIcon = getByTestId('eye-icon');
     const fingerPrintIcon = getByTestId('finger-print-icon');
+
+    rerender(<Config />);
 
     expect(seeValuesIcon).toBeTruthy();
     expect(fingerPrintIcon).toBeTruthy();
