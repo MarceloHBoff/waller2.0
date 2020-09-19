@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { onScreenFocus, opacity } from '#animations';
 import Header, { HeaderText } from '#components/Header';
+import Nothing from '#components/Nothing';
 import { useFetch } from '#hooks/swr';
 import { Colors, Metrics } from '#styles';
 import {
@@ -136,7 +137,22 @@ const Dividends: React.FC = () => {
     listDividendsRef.current?.openModal();
   }, [monthly, unifyDividends]);
 
+  const onClickChartPoint = useCallback(
+    ({ index }) => {
+      setPeriod(chartLabels[index]);
+      setTitle(`Dividends ${chartLabels[index]}`);
+      listDividendsRef.current?.openModal();
+    },
+    [chartLabels],
+  );
+
   useFocusEffect(onScreenFocus);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'test') {
+      setTimeout(() => onClickChartPoint(0), 100);
+    }
+  }, [onClickChartPoint]);
 
   return (
     <Container>
@@ -164,7 +180,9 @@ const Dividends: React.FC = () => {
       />
 
       <Animated.View style={{ opacity }}>
-        {chartData.datasets[0].data.length !== 0 && (
+        {chartData.datasets[0].data.length === 0 ? (
+          <Nothing text="None dividends yet" />
+        ) : (
           <LineChart
             data={chartData}
             width={Metrics.width - 32}
@@ -178,11 +196,7 @@ const Dividends: React.FC = () => {
             transparent
             withInnerLines={false}
             fromZero
-            onDataPointClick={({ index }) => {
-              setPeriod(chartLabels[index]);
-              setTitle(`Dividends ${chartLabels[index]}`);
-              listDividendsRef.current?.openModal();
-            }}
+            onDataPointClick={onClickChartPoint}
             yAxisLabel="R$ "
             verticalLabelRotation={60}
             chartConfig={{

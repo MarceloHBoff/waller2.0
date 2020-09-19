@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
 
-import { onScreenFocus, opacity, left } from '#animations';
+import { onScreenFocus, left } from '#animations';
 import Loading from '#components/Loading';
 import { formatPrice } from '#utils/format';
 
@@ -21,15 +21,14 @@ const Card: React.FC<CardProps> = ({ label, value, onPress, loading }) => {
   useFocusEffect(onScreenFocus);
 
   return (
-    <Container
-      style={{ elevation: 1, opacity, transform: [{ translateX: left.x }] }}
-    >
-      <Wrapper onPress={onPress}>
+    <Container style={{ elevation: 1, transform: [{ translateX: left.x }] }}>
+      <Wrapper onPress={onPress} testID={label}>
         <CardText>{label}</CardText>
+
         {loading ? (
           <Loading size={30} />
         ) : (
-          <CardValue>{valueEditted}</CardValue>
+          <CardValue>{valueEditted || 'R$ 0,00'}</CardValue>
         )}
       </Wrapper>
     </Container>

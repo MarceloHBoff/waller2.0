@@ -1,10 +1,11 @@
 import React, { useMemo, useCallback } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Animated } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
+import { onScreenFocus, left, opacity } from '#animations';
 import Header, { HeaderText } from '#components/Header';
 import Loading from '#components/Loading';
 import Nothing from '#components/Nothing';
@@ -21,6 +22,8 @@ const Dashboard: React.FC = () => {
   const { user } = useAuth();
 
   const { navigate } = useNavigation();
+
+  useFocusEffect(onScreenFocus);
 
   const { data, isValidating } = useFetch<IUserActivesResponse>('userActives');
 
@@ -43,9 +46,9 @@ const Dashboard: React.FC = () => {
   const { investment, currentValue, profit, percent } = useMemo(
     () => ({
       investment: formatPrice(totals?.investment) || 'R$ 0,00',
-      currentValue: formatPrice(totals?.currentValue || 0) || 'R$ 0,00',
-      profit: formatPrice(totals?.profit || 0) || 'R$ 0,00',
-      percent: round10(totals?.percent || 0) || '0,00',
+      currentValue: formatPrice(totals?.currentValue) || 'R$ 0,00',
+      profit: formatPrice(totals?.profit) || 'R$ 0,00',
+      percent: round10(totals?.percent) || '0,00',
     }),
     [totals],
   );
@@ -76,54 +79,61 @@ const Dashboard: React.FC = () => {
         </TouchableOpacity>
       </Header>
 
-      <Cards
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ padding: 16 }}
+      <Animated.View
+        style={{
+          opacity,
+          transform: [{ translateX: left.x }],
+        }}
       >
-        <Card loading={isValidating} icon="wallet" label="Investment">
-          {investment}
-        </Card>
-        <Card
-          loading={isValidating}
-          icon="money-bill-wave"
-          label="Current Value"
+        <Cards
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ padding: 16 }}
         >
-          {currentValue}
-        </Card>
-        <Card loading={isValidating} icon="dollar-sign" label="Profit">
-          {profit}
-        </Card>
-        <Card loading={isValidating} icon="percentage" label="Profit percent">
-          {percent} %
-        </Card>
-      </Cards>
+          <Card loading={isValidating} icon="wallet" label="Investment">
+            {investment}
+          </Card>
+          <Card
+            loading={isValidating}
+            icon="money-bill-wave"
+            label="Current Value"
+          >
+            {currentValue}
+          </Card>
+          <Card loading={isValidating} icon="dollar-sign" label="Profit">
+            {profit}
+          </Card>
+          <Card loading={isValidating} icon="percentage" label="Profit percent">
+            {percent} %
+          </Card>
+        </Cards>
 
-      {totals?.investment === 0 ? (
-        <>
-          {isValidating ? (
-            <Loading size={200} />
-          ) : (
-            <Nothing text="None actives yet" />
-          )}
-        </>
-      ) : (
-        <PieChart
-          data={pieData}
-          width={Metrics.width}
-          height={220}
-          chartConfig={{
-            color: () => '#fff',
-            barRadius: 10,
-            barPercentage: 10,
-          }}
-          accessor="value"
-          backgroundColor="transparent"
-          paddingLeft="16"
-          fromZero
-          hasLegend
-        />
-      )}
+        {totals?.investment === 0 ? (
+          <>
+            {isValidating ? (
+              <Loading size={200} />
+            ) : (
+              <Nothing text="None actives yet" />
+            )}
+          </>
+        ) : (
+          <PieChart
+            data={pieData}
+            width={Metrics.width}
+            height={220}
+            chartConfig={{
+              color: () => '#fff',
+              barRadius: 10,
+              barPercentage: 10,
+            }}
+            accessor="value"
+            backgroundColor="transparent"
+            paddingLeft="16"
+            fromZero
+            hasLegend
+          />
+        )}
+      </Animated.View>
     </Container>
   );
 };

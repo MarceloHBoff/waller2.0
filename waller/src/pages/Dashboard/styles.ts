@@ -9,4 +9,5 @@ export const Container = styled.View`
 
 export const Cards = styled.ScrollView`
   max-height: ${Metrics.base * 2 + 100}px;
+  margin-bottom: ${Metrics.base * 4}px;
 `;

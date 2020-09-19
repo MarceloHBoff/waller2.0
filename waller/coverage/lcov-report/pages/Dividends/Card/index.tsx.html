@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,8 +94,7 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -112,13 +111,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,7 +136,7 @@
 &nbsp;
 import { useFocusEffect } from '@react-navigation/native';
 &nbsp;
-import { onScreenFocus, opacity, left } from '#animations';
+import { onScreenFocus, left } from '#animations';
 import Loading from '#components/Loading';
 import { formatPrice } from '#utils/format';
 &nbsp;
@@ -151,21 +149,20 @@ interface CardProps {
   loading: boolean;
 }
 &nbsp;
-const Card: React.FC&lt;CardProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> label, value, onPress, loading }) =&gt; {</span>
-  const valueEditted = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >formatPrice(value),</span> [value]);</span>
+const Card: React.FC&lt;CardProps&gt; = ({ label, value, onPress, loading }) =&gt; {
+  const valueEditted = useMemo(() =&gt; formatPrice(value), [value]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useFocusEffect(onScreenFocus);</span>
+  useFocusEffect(onScreenFocus);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Container
-      style={{ elevation: 1, opacity, transform: [{ translateX: left.x }] }}
-    &gt;
-      &lt;Wrapper onPress={onPress}&gt;
+  return (
+    &lt;Container style={{ elevation: 1, transform: [{ translateX: left.x }] }}&gt;
+      &lt;Wrapper onPress={onPress} testID={label}&gt;
         &lt;CardText&gt;{label}&lt;/CardText&gt;
+&nbsp;
         {loading ? (
           &lt;Loading size={30} /&gt;
         ) : (
-          &lt;CardValue&gt;{valueEditted}&lt;/CardValue&gt;
+          &lt;CardValue&gt;{valueEditted || 'R$ 0,00'}&lt;/CardValue&gt;
         )}
       &lt;/Wrapper&gt;
     &lt;/Container&gt;
@@ -180,7 +177,7 @@ export default Card;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Sep 17 2020 20:39:28 GMT-0300 (Brasilia Standard Time)
+                at Sat Sep 19 2020 20:29:28 GMT-0300 (Brasilia Standard Time)
             </div>
         </div>
         <script src="..\..\..\prettify.js"></script>

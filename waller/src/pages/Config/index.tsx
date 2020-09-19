@@ -99,13 +99,13 @@ const Config: React.FC = () => {
           </Configuration>
         </Configurations>
 
-        <SignOut
-          style={{ opacity, transform: [{ translateY: offsetBottom.y }] }}
-        >
-          <TouchableOpacity onPress={signOut}>
+        <TouchableOpacity onPress={signOut} style={{ flex: 1 }}>
+          <SignOut
+            style={{ opacity, transform: [{ translateY: offsetBottom.y }] }}
+          >
             <SignOutText>Sign Out</SignOutText>
-          </TouchableOpacity>
-        </SignOut>
+          </SignOut>
+        </TouchableOpacity>
       </Wrapper>
     </Container>
   );

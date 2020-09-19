@@ -3,14 +3,14 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for pages/Dashboard/Card/index.tsx</title>
+    <title>Code coverage report for pages/Rentability/index.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="..\..\..\prettify.css" />
-    <link rel="stylesheet" href="..\..\..\base.css" />
+    <link rel="stylesheet" href="..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\base.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(..\..\..\sort-arrow-sprite.png);
+            background-image: url(..\..\sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -18,7 +18,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="..\..\..\index.html">All files</a> / <a href="index.html">pages/Dashboard/Card</a> index.tsx</h1>
+        <h1><a href="..\..\index.html">All files</a> / <a href="index.html">pages/Rentability</a> index.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -31,7 +31,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
@@ -73,58 +73,14 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,44 +91,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 &nbsp;
-import Loading from '#components/Loading';
-import ValueField from '#components/ValueField';
-import { Colors } from '#styles';
+import Header, { HeaderText } from '#components/Header';
 &nbsp;
-import { Container, CardWrapper, CardText } from './styles';
+import { Container } from './styles';
 &nbsp;
-interface CardProps {
-  icon: string;
-  label: string;
-  loading: boolean;
-}
-&nbsp;
-const Card: React.FC&lt;CardProps&gt; = ({ icon, label, loading, children }) =&gt; {
+const Rentability: React.FC = () =&gt; {
   return (
     &lt;Container&gt;
-      &lt;Icon name={icon} size={50} color={Colors.primarySuperDark} /&gt;
-&nbsp;
-      {loading ? (
-        &lt;Loading size={50} mode="dark" /&gt;
-      ) : (
-        &lt;CardWrapper&gt;
-          &lt;CardText&gt;{label}&lt;/CardText&gt;
-          &lt;ValueField
-            align="left"
-            colorBase={Colors.white}
-            colorBlinded={Colors.primarySuperDark}
-          &gt;
-            {children}
-          &lt;/ValueField&gt;
-        &lt;/CardWrapper&gt;
-      )}
+      &lt;Header&gt;
+        &lt;HeaderText&gt;Rentability&lt;/HeaderText&gt;
+      &lt;/Header&gt;
     &lt;/Container&gt;
   );
 };
 &nbsp;
-export default Card;
+export default Rentability;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -183,14 +117,14 @@ export default Card;
                 at Sat Sep 19 2020 20:29:28 GMT-0300 (Brasilia Standard Time)
             </div>
         </div>
-        <script src="..\..\..\prettify.js"></script>
+        <script src="..\..\prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="..\..\..\sorter.js"></script>
-        <script src="..\..\..\block-navigation.js"></script>
+        <script src="..\..\sorter.js"></script>
+        <script src="..\..\block-navigation.js"></script>
     </body>
 </html>
     

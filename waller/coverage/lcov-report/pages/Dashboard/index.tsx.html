@@ -24,14 +24,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>24/24</span>
+                <span class='fraction'>25/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.29% </span>
+                <span class="strong">86.36% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>25/28</span>
+                <span class='fraction'>19/22</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>21/21</span>
+                <span class='fraction'>22/22</span>
             </div>
         
             
@@ -187,7 +187,18 @@
 <a name='L129'></a><a href='#L129'>129</a>
 <a name='L130'></a><a href='#L130'>130</a>
 <a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,6 +218,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
@@ -302,6 +315,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -318,13 +337,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo, useCallback } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Animated } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 &nbsp;
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 &nbsp;
+import { onScreenFocus, left, opacity } from '#animations';
 import Header, { HeaderText } from '#components/Header';
 import Loading from '#components/Loading';
 import Nothing from '#components/Nothing';
@@ -341,6 +362,8 @@ const Dashboard: React.FC = () =&gt; {
   const { user } = useAuth();
 &nbsp;
   const { navigate } = useNavigation();
+&nbsp;
+  useFocusEffect(onScreenFocus);
 &nbsp;
   const { data, isValidating } = useFetch&lt;IUserActivesResponse&gt;('userActives');
 &nbsp;
@@ -363,9 +386,9 @@ const Dashboard: React.FC = () =&gt; {
   const { investment, currentValue, profit, percent } = useMemo(
     () =&gt; ({
       investment: formatPrice(totals?.investment) || 'R$ 0,00',
-      currentValue: formatPrice(totals?.currentValue || 0) || 'R$ 0,00',
-      profit: formatPrice(totals?.profit || 0) || 'R$ 0,00',
-      percent: round10(totals?.percent || 0) || '0,00',
+      currentValue: formatPrice(totals?.currentValue) || 'R$ 0,00',
+      profit: formatPrice(totals?.profit) || 'R$ 0,00',
+      percent: round10(totals?.percent) || '0,00',
     }),
     [totals],
   );
@@ -396,54 +419,61 @@ const Dashboard: React.FC = () =&gt; {
         &lt;/TouchableOpacity&gt;
       &lt;/Header&gt;
 &nbsp;
-      &lt;Cards
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ padding: 16 }}
+      &lt;Animated.View
+        style={{
+          opacity,
+          transform: [{ translateX: left.x }],
+        }}
       &gt;
-        &lt;Card loading={isValidating} icon="wallet" label="Investment"&gt;
-          {investment}
-        &lt;/Card&gt;
-        &lt;Card
-          loading={isValidating}
-          icon="money-bill-wave"
-          label="Current Value"
+        &lt;Cards
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ padding: 16 }}
         &gt;
-          {currentValue}
-        &lt;/Card&gt;
-        &lt;Card loading={isValidating} icon="dollar-sign" label="Profit"&gt;
-          {profit}
-        &lt;/Card&gt;
-        &lt;Card loading={isValidating} icon="percentage" label="Profit percent"&gt;
-          {percent} %
-        &lt;/Card&gt;
-      &lt;/Cards&gt;
+          &lt;Card loading={isValidating} icon="wallet" label="Investment"&gt;
+            {investment}
+          &lt;/Card&gt;
+          &lt;Card
+            loading={isValidating}
+            icon="money-bill-wave"
+            label="Current Value"
+          &gt;
+            {currentValue}
+          &lt;/Card&gt;
+          &lt;Card loading={isValidating} icon="dollar-sign" label="Profit"&gt;
+            {profit}
+          &lt;/Card&gt;
+          &lt;Card loading={isValidating} icon="percentage" label="Profit percent"&gt;
+            {percent} %
+          &lt;/Card&gt;
+        &lt;/Cards&gt;
 &nbsp;
-      {totals?.investment === 0 ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >        &lt;&gt;</span>
-          {isValidating ? (
-            &lt;Loading size={200} /&gt;
-          ) : (
-            &lt;Nothing text="None actives yet" /&gt;
-          )}
-        &lt;/&gt;
-      ) : (
-        &lt;PieChart
-          data={pieData}
-          width={Metrics.width}
-          height={220}
-          chartConfig={{
-            color: () =&gt; '#fff',
-            barRadius: 10,
-            barPercentage: 10,
-          }}
-          accessor="value"
-          backgroundColor="transparent"
-          paddingLeft="16"
-          fromZero
-          hasLegend
-        /&gt;
-      )}
+        {totals?.investment === 0 ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >          &lt;&gt;</span>
+            {isValidating ? (
+              &lt;Loading size={200} /&gt;
+            ) : (
+              &lt;Nothing text="None actives yet" /&gt;
+            )}
+          &lt;/&gt;
+        ) : (
+          &lt;PieChart
+            data={pieData}
+            width={Metrics.width}
+            height={220}
+            chartConfig={{
+              color: () =&gt; '#fff',
+              barRadius: 10,
+              barPercentage: 10,
+            }}
+            accessor="value"
+            backgroundColor="transparent"
+            paddingLeft="16"
+            fromZero
+            hasLegend
+          /&gt;
+        )}
+      &lt;/Animated.View&gt;
     &lt;/Container&gt;
   );
 };
@@ -456,7 +486,7 @@ export default Dashboard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Sep 17 2020 20:39:28 GMT-0300 (Brasilia Standard Time)
+                at Sat Sep 19 2020 20:29:28 GMT-0300 (Brasilia Standard Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>

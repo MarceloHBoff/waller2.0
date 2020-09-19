@@ -73,8 +73,6 @@ const ListDividends: React.RefForwardingComponent<
   }, [dividends]);
 
   const dividendsEditted = useMemo(() => {
-    if (!dividends) return [];
-
     const dividendsUnsorted = dividends?.map(dividend => ({
       ...dividend,
       pay_date_order: new Date(
@@ -107,7 +105,7 @@ const ListDividends: React.RefForwardingComponent<
         <ModalContainer style={{ elevation: 1 }}>
           <Title>{title}</Title>
 
-          <CloseButton onPress={closeModal}>
+          <CloseButton testID="close-button" onPress={closeModal}>
             <Icon name="times" size={26} color={Colors.white} />
           </CloseButton>
 

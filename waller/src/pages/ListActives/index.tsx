@@ -1,12 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Animated } from 'react-native';
-
-import { useNavigation } from '@react-navigation/native';
 
 import Header, { HeaderText } from '#components/Header';
 import Loading from '#components/Loading';
 import Nothing from '#components/Nothing';
-import { Colors, Fonts, Metrics } from '#styles';
+import { Colors, Fonts } from '#styles';
 import { IUserActivesResponse, IUserActives } from '#types/UserActive';
 import { formatPrice, roundTo2 } from '#utils/format';
 
@@ -34,9 +31,6 @@ export interface IListActives {
 }
 
 const ListActives: React.FC = () => {
-  const left = new Animated.ValueXY({ x: Metrics.width * -1, y: 0 });
-  const right = new Animated.ValueXY({ x: Metrics.width, y: 0 });
-
   const [loading, setLoading] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [actives, setActives] = useState<IListActives[]>([]);
@@ -68,9 +62,6 @@ const ListActives: React.FC = () => {
   const updateActivesPrice = useCallback(async () => {
     setLoadingUpdate(true);
 
-    left.setValue({ x: 0, y: 0 });
-    right.setValue({ x: 0, y: 0 });
-
     try {
       const response = await api.put<IUserActivesResponse>('userActives');
       const editedActives = editUserActive(response.data.actives);
@@ -78,35 +69,7 @@ const ListActives: React.FC = () => {
     } catch {}
 
     setLoadingUpdate(false);
-  }, [editUserActive, left, right]);
-
-  const onScreenFocus = useCallback(() => {
-    left.setValue({ x: Metrics.width * -1, y: 0 });
-    right.setValue({ x: Metrics.width, y: 0 });
-
-    Animated.parallel([
-      Animated.spring(left.x, {
-        toValue: 0,
-        speed: 0.1,
-        bounciness: 1000,
-        useNativeDriver: true,
-      }),
-      Animated.spring(right.x, {
-        toValue: 0,
-        speed: 0.1,
-        bounciness: 1000,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [left, right]);
-
-  const { addListener, removeListener } = useNavigation();
-
-  useEffect(() => {
-    addListener('focus', () => onScreenFocus());
-
-    return () => removeListener('focus', () => {});
-  }, [addListener, removeListener, onScreenFocus]);
+  }, [editUserActive]);
 
   return (
     <Container>
@@ -127,12 +90,8 @@ const ListActives: React.FC = () => {
           contentContainerStyle={{ alignItems: 'center' }}
           onRefresh={updateActivesPrice}
           refreshing={loadingUpdate}
-          renderItem={({ item, index }) => (
-            <Card
-              style={{
-                transform: [{ translateX: index % 2 ? right.x : left.x }],
-              }}
-            >
+          renderItem={({ item }) => (
+            <Card>
               <Code>{item.code}</Code>
               <Name numberOfLines={1}>{item.name}</Name>
               <Quantity
