@@ -15,7 +15,7 @@ import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
 let fakeUserActiveRepository;
 let updateUserActives: UpdateUserActivesService;
 
-describe('ListUserActives', () => {
+describe('UpdateUserActives', () => {
   beforeEach(() => {
     initCreateUser();
 

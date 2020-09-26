@@ -5,9 +5,11 @@ import FindActivesByCEIService from '@modules/users/services/FindActivesByCEISer
 
 export default class CEIController {
   public async create(request: Request, response: Response): Promise<Response> {
+    const { cpf, password } = request.body;
+
     const findActivesByCEI = container.resolve(FindActivesByCEIService);
 
-    findActivesByCEI.execute(request.user.id);
+    findActivesByCEI.execute(request.user.id, cpf, password);
 
     return response.status(204).send();
   }

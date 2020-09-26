@@ -32,7 +32,11 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
 
   private browser: Browser;
 
-  public async findUserActivesByCEI(user_id: string): Promise<void> {
+  public async findUserActivesByCEI(
+    user_id: string,
+    cpf: string,
+    password: string,
+  ): Promise<void> {
     let actives: ICEIActiveDTO[] = [];
     let bonds: ICEIBond[] = [];
 
@@ -48,9 +52,9 @@ export default class PuppeteerProvider implements ICEICrawlerProvider {
 
     await this.page.goto(URLs.Login);
     await this.page.click(Fields.UsernameSelector);
-    await this.page.keyboard.type(String(process.env.CEI_CPF));
+    await this.page.keyboard.type(cpf);
     await this.page.click(Fields.PasswordSelector);
-    await this.page.keyboard.type(String(process.env.CEI_PASSWORD));
+    await this.page.keyboard.type(password);
     await this.page.click(Fields.SubmitSelector);
 
     try {
