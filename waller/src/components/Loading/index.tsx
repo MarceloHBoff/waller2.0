@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import { Animated } from 'react-native';
+import { Animated, ViewProps } from 'react-native';
 
 import logo from '#assets/logo.png';
 import logoDark from '#assets/logoDark.png';
 
 import { Container, Image } from './styles';
 
-interface LoadingProps {
+interface LoadingProps extends ViewProps {
   mode?: 'light' | 'dark';
   size: number;
 }
 
-const Loading: React.FC<LoadingProps> = ({ mode = 'light', size }) => {
+const Loading: React.FC<LoadingProps> = ({ mode = 'light', size, ...rest }) => {
   const opacity = new Animated.Value(0);
   const rotate = new Animated.Value(0);
 
@@ -32,7 +32,7 @@ const Loading: React.FC<LoadingProps> = ({ mode = 'light', size }) => {
   }, [opacity, rotate]);
 
   return (
-    <Container testID="loading">
+    <Container testID="loading" {...rest}>
       <Image
         source={mode === 'light' ? logo : logoDark}
         style={{

@@ -41,7 +41,7 @@ export const Tab = styled.TouchableOpacity<TabProps>`
   ${props =>
     props.active &&
     css`
-      border-color: ${Colors.primaryDark};
-      background: ${Colors.primaryDark};
+      border-color: ${Colors.primary};
+      background: ${Colors.primary};
     `}
 `;

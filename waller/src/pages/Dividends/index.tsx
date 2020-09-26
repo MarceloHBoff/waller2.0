@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { onScreenFocus, opacity } from '#animations';
 import Header, { HeaderText } from '#components/Header';
+import Loading from '#components/Loading';
 import Nothing from '#components/Nothing';
 import { useFetch } from '#hooks/swr';
 import { Colors, Metrics } from '#styles';
@@ -180,7 +181,9 @@ const Dividends: React.FC = () => {
       />
 
       <Animated.View style={{ opacity }}>
-        {chartData.datasets[0].data.length === 0 ? (
+        {isValidating ? (
+          <Loading size={80} style={{ marginTop: 60 }} />
+        ) : chartData.datasets[0].data.length === 0 ? (
           <Nothing text="None dividends yet" />
         ) : (
           <LineChart
@@ -188,7 +191,6 @@ const Dividends: React.FC = () => {
             width={Metrics.width - 32}
             height={250}
             style={{
-              flex: 1,
               marginLeft: 16,
               marginTop: 16,
               paddingBottom: 16,

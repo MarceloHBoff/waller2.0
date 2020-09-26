@@ -47,6 +47,7 @@
     "camelcase": "off",
     "no-param-reassign": "off",
     "no-nested-ternary": "off",
+    "react/jsx-wrap-multilines": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

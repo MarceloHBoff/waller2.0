@@ -10,7 +10,7 @@ export { HeaderText };
 const Header: React.FC = ({ children }) => {
   return (
     <>
-      <StatusBar backgroundColor={Colors.primaryDark} />
+      <StatusBar backgroundColor={Colors.primary} />
 
       <Container style={{ elevation: 1 }}>{children}</Container>
     </>

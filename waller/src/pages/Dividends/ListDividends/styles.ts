@@ -46,12 +46,12 @@ export const Dividend = styled.View`
 `;
 
 export const Header = styled(Dividend)`
-  background: ${Colors.primaryDark};
+  background: ${Colors.primary};
   padding: 0px;
 `;
 
 export const Footer = styled(Dividend)`
-  background: ${Colors.primaryDark};
+  background: ${Colors.primary};
   border-bottom-left-radius: ${Metrics.radius}px;
   border-bottom-right-radius: ${Metrics.radius}px;
 `;

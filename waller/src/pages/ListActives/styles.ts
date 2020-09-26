@@ -21,7 +21,7 @@ export const Card = styled(Animated.View)`
   border-radius: ${Metrics.radius}px;
   margin: ${Metrics.base / 2}px;
   padding: ${Metrics.base / 2}px;
-  background: ${Colors.primaryDark};
+  background: ${Colors.primary};
 `;
 
 const DefaultText = styled.Text`

@@ -83,7 +83,7 @@ const ListDividends: React.RefForwardingComponent<
     }));
 
     const dividendSorted = SortArray<IDividendList>(
-      dividendsUnsorted,
+      dividendsUnsorted || [],
       Sorting<IDividendList>(order, orderBy),
     );
 

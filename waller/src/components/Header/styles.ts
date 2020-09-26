@@ -8,7 +8,7 @@ export const Container = styled(Animated.View)`
   height: 60px;
   border-bottom-left-radius: ${Metrics.radius * 2}px;
   border-bottom-right-radius: ${Metrics.radius * 2}px;
-  background: ${Colors.primaryDark};
+  background: ${Colors.primary};
 
   flex-direction: row;
   justify-content: space-between;

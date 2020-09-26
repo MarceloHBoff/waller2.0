@@ -63,8 +63,8 @@ const ListActives: React.FC = () => {
     setLoadingUpdate(true);
 
     try {
-      const response = await api.put<IUserActivesResponse>('userActives');
-      const editedActives = editUserActive(response.data.actives);
+      const response = await api.put<IUserActives[]>('userActives');
+      const editedActives = editUserActive(response.data);
       setActives(editedActives);
     } catch {}
 

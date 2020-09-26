@@ -11,7 +11,7 @@ export const Container = styled(Animated.View)`
   margin: 16px 24px;
   padding: 10px;
 
-  background: ${Colors.primaryDark};
+  background: ${Colors.primary};
   border-radius: ${Metrics.radius}px;
 `;
 
