@@ -26,9 +26,9 @@ export default class ListDividendsService {
   public async start(): Promise<void> {
     await this.getDividendsProvider.createPage();
 
-    await this.cacheProvider.invalidate(`list-dividends:*`);
-    await this.cacheProvider.invalidate(`list-dividendsReceivable:*`);
-    await this.cacheProvider.invalidate(`list-dividendsMonthly:*`);
+    await this.cacheProvider.invalidatePrefix(`list-dividends`);
+    await this.cacheProvider.invalidatePrefix(`list-dividendsReceivable`);
+    await this.cacheProvider.invalidatePrefix(`list-dividendsMonthly`);
   }
 
   public async execute(code: string, id?: string): Promise<void> {
@@ -51,6 +51,7 @@ export default class ListDividendsService {
   }
 
   public async finish(): Promise<void> {
+    console.log('Finish');
     await this.getDividendsProvider.destroyPage();
   }
 }
