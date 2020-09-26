@@ -40,17 +40,17 @@ describe('ListUserDividendsReceivables', () => {
   });
 
   it('should be able to list user dividends receivable', async () => {
-    const { id } = await createUser();
-
-    const { active1, active2 } = await createActives();
-
-    await createUserActives(id);
-
     const dateMock = jest
       .spyOn(Date, 'now')
       .mockImplementation(() => new Date(2020, 8, 1).getTime());
 
     dateMock.mockClear();
+
+    const { id } = await createUser();
+
+    const { active1, active2 } = await createActives();
+
+    await createUserActives(id);
 
     await fakeDividendsRepository.createMany([
       {

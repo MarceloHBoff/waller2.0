@@ -33,8 +33,9 @@ export default class ListDividendsService {
     const dividends = await this.getDividendsProvider.getActiveDividends(code);
 
     const dividendSerialized = dividends.map(dividend => ({
-      active_id,
       ...dividend,
+      active_id,
+      value: dividend.type === 'jscp' ? dividend.value * 0.85 : dividend.value,
     }));
 
     await this.dividendsRepository.createMany(dividendSerialized);

@@ -15,7 +15,6 @@ import Active from '@modules/actives/infra/typeorm/entities/Active';
 @Entity('dividends')
 export default class Dividend {
   @PrimaryGeneratedColumn('uuid')
-  @Exclude()
   id: string;
 
   @Column()

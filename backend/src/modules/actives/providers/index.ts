@@ -4,7 +4,7 @@ import YahooPriceProvider from './PriceProvider/implementations/YahooPriceProvid
 import IPriceProvider from './PriceProvider/models/IPriceProvider';
 import YahooRefreshProvider from './RefreshProvider/implementations/YahooRefreshProvider';
 import IRefreshProvider from './RefreshProvider/models/IRefreshProvider';
-import FreeForexApiProvider from './USDProvider/implementations/FreeForexApiProvider';
+import AwesomeApiProvider from './USDProvider/implementations/AwesomeApiProvider';
 import IUSDProvider from './USDProvider/models/IUSDProvider';
 
 container.registerSingleton<IPriceProvider>(
@@ -17,4 +17,4 @@ container.registerSingleton<IRefreshProvider>(
   YahooRefreshProvider,
 );
 
-container.registerSingleton<IUSDProvider>('USDProvider', FreeForexApiProvider);
+container.registerSingleton<IUSDProvider>('USDProvider', AwesomeApiProvider);
