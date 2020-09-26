@@ -6,9 +6,16 @@ import IDividendRepository from '../repositories/IDividendsRepository';
 
 import IUserActivesRepository from '@modules/actives/repositories/IUserActivesRepository';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+
 interface IDividendResponse extends Dividend {
   active_id: string;
   quantity: number;
+}
+
+interface IResponse {
+  dividends: IDividendResponse[];
+  total: number;
 }
 
 @injectable()
@@ -19,11 +26,20 @@ export default class ListUserDividendsReceivablesService {
 
     @inject('UserActivesRepository')
     private userActivesRepository: IUserActivesRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
-  public async execute(
-    user_id: string,
-  ): Promise<{ dividends: IDividendResponse[]; total: number }> {
+  public async execute(user_id: string): Promise<IResponse> {
+    const cacheKey = `list-dividendsReceivable:${user_id}`;
+
+    const userDividendsCached = await this.cacheProvider.recover<IResponse>(
+      cacheKey,
+    );
+
+    if (userDividendsCached) return userDividendsCached;
+
     const actives = await this.userActivesRepository.findDataByDividendsList(
       user_id,
     );
@@ -52,6 +68,10 @@ export default class ListUserDividendsReceivablesService {
       0,
     );
 
-    return { dividends, total };
+    const response = { dividends, total };
+
+    await this.cacheProvider.save(cacheKey, response);
+
+    return response;
   }
 }

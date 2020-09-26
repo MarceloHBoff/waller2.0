@@ -1,52 +1,41 @@
-import 'reflect-metadata';
-
-import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
-import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import { container } from 'tsyringe';
 
 import AuthenticateUserService from './AuthenticateUserService';
 
 import AppError from '@shared/errors/AppError';
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
+import { createUser } from '@shared/infra/typeorm/tests/users';
 
-let fakeUsersRepository: FakeUsersRepository;
-let fakeHashProvider: FakeHashProvider;
 let authenticateUser: AuthenticateUserService;
+let userId: string;
 
 describe('AuthenticateUser', () => {
-  beforeEach(() => {
-    fakeUsersRepository = initCreateUser();
-    fakeHashProvider = new FakeHashProvider();
+  beforeAll(async () => {
+    const { id } = await createUser();
+    userId = id;
 
-    authenticateUser = new AuthenticateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
+    authenticateUser = container.resolve(AuthenticateUserService);
   });
 
   it('should be able to authenticate', async () => {
-    const user = await createUser();
-
     const response = await authenticateUser.execute({
       email: 'johndoe@example.com',
       password: '123456',
     });
 
     expect(response).toHaveProperty('token');
-    expect(response.user).toEqual(user);
+    expect(response.user.id).toEqual(userId);
   });
 
   it('should not be able to authenticate with non existing user', async () => {
     await expect(
       authenticateUser.execute({
-        email: 'johndoe@example.com',
+        email: 'johndoe2@example.com',
         password: '123456',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
 
   it('should not be able to authenticate without wrong password', async () => {
-    await createUser();
-
     await expect(
       authenticateUser.execute({
         email: 'johndoe@example.com',

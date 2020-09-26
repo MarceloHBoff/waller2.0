@@ -6,6 +6,8 @@ import IDividendRepository from '../repositories/IDividendsRepository';
 
 import IUserActivesRepository from '@modules/actives/repositories/IUserActivesRepository';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+
 interface IDividendResponse extends Dividend {
   active_id: string;
   quantity: number;
@@ -18,6 +20,11 @@ interface IMonthlyDividends {
   dividends: Omit<IDividendResponse[], 'active_id'>;
 }
 
+interface IResponse {
+  dividends: IMonthlyDividends[];
+  total: number;
+}
+
 @injectable()
 export default class ListUserDividendsMonthlyService {
   constructor(
@@ -26,11 +33,20 @@ export default class ListUserDividendsMonthlyService {
 
     @inject('UserActivesRepository')
     private userActivesRepository: IUserActivesRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
-  public async execute(
-    user_id: string,
-  ): Promise<{ dividends: IMonthlyDividends[]; total: number }> {
+  public async execute(user_id: string): Promise<IResponse> {
+    const cacheKey = `list-dividendsMonthly:${user_id}`;
+
+    const userDividendsCached = await this.cacheProvider.recover<IResponse>(
+      cacheKey,
+    );
+
+    if (userDividendsCached) return userDividendsCached;
+
     const actives = await this.userActivesRepository.findDataByDividendsList(
       user_id,
     );
@@ -105,7 +121,11 @@ export default class ListUserDividendsMonthlyService {
       0,
     );
 
-    return { dividends: dividendsByMonth, total };
+    const response = { dividends: dividendsByMonth, total };
+
+    await this.cacheProvider.save(cacheKey, response);
+
+    return response;
   }
 
   private getDate(date: string): Date {

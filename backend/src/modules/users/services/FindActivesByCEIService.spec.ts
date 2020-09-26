@@ -1,28 +1,22 @@
-import 'reflect-metadata';
-
-import FakeCEICrawlerProvider from '../providers/CEICrawlerProvider/fakes/FakeCEICrawlerProvider';
+import { container } from 'tsyringe';
 
 import FindActivesByCEIService from './FindActivesByCEIService';
 
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
-
-let fakeCEICrawler: FakeCEICrawlerProvider;
+import { createUser } from '@shared/infra/typeorm/tests/users';
 
 let findActivesByCEI: FindActivesByCEIService;
+let userId: string;
 
 describe('FindActivesByCEI', () => {
-  beforeEach(() => {
-    initCreateUser();
+  beforeAll(async () => {
+    const user = await createUser();
+    userId = user.id;
 
-    fakeCEICrawler = new FakeCEICrawlerProvider();
-
-    findActivesByCEI = new FindActivesByCEIService(fakeCEICrawler);
+    findActivesByCEI = container.resolve(FindActivesByCEIService);
   });
 
   it('should be able to find user actives by CEI', async () => {
-    const { id } = await createUser();
-
-    expect(findActivesByCEI.execute(id, '', ''));
+    expect(findActivesByCEI.execute(userId, '', ''));
   });
 
   it('should be able to catch error if to occur', async () => {

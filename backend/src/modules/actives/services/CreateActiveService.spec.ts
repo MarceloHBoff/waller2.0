@@ -1,30 +1,19 @@
-import CreateActiveService from './CreateActiveService';
-
-import {
-  createActiveRepository,
-  initCreateActiveService,
-} from '@shared/infra/typeorm/tests/actives';
-
-let createActive: CreateActiveService;
+import { createActives } from '@shared/infra/typeorm/tests/actives';
 
 describe('CreateActive', () => {
-  beforeEach(() => {
-    createActiveRepository();
-
-    createActive = initCreateActiveService();
-  });
-
   it('should be able to create a active in database', async () => {
-    const active = await createActive.execute('PETR3', 'Acao');
+    const { active1, active2 } = await createActives();
 
-    expect(active).toHaveProperty('id');
+    expect(active1).toHaveProperty('id');
+    expect(active2).toHaveProperty('id');
   });
 
   it('should be return active if exists without create new', async () => {
-    await createActive.execute('PETR3', 'Acao');
+    await createActives();
 
-    const active = await createActive.execute('PETR3', 'Acao');
+    const { active1, active2 } = await createActives();
 
-    expect(active).toHaveProperty('id');
+    expect(active1).toHaveProperty('id');
+    expect(active2).toHaveProperty('id');
   });
 });

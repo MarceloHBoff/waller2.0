@@ -1,26 +1,23 @@
-import 'reflect-metadata';
-
-import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import { container } from 'tsyringe';
 
 import ShowProfileService from '@modules/users/services/ShowProfileService';
 
 import AppError from '@shared/errors/AppError';
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
+import { createUser } from '@shared/infra/typeorm/tests/users';
 
-let fakeUsersRepository: FakeUsersRepository;
 let showProfile: ShowProfileService;
+let userId: string;
 
 describe('UpdateProfile', () => {
-  beforeEach(() => {
-    fakeUsersRepository = initCreateUser();
+  beforeAll(async () => {
+    const { id } = await createUser();
+    userId = id;
 
-    showProfile = new ShowProfileService(fakeUsersRepository);
+    showProfile = container.resolve(ShowProfileService);
   });
 
   it('should be able to show the profile', async () => {
-    const { id } = await createUser();
-
-    const profile = await showProfile.execute(id);
+    const profile = await showProfile.execute(userId);
 
     expect(profile.name).toBe('John Doe');
     expect(profile.email).toBe('johndoe@example.com');

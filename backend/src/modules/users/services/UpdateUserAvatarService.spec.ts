@@ -1,21 +1,26 @@
-import 'reflect-metadata';
-
+import User from '../infra/typeorm/entities/User';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 
 import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
 import AppError from '@shared/errors/AppError';
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeStorageProvider: FakeStorageProvider;
 let updateUserAvatar: UpdateUserAvatarService;
+let user: User;
 
 describe('UpdateUserAvatar', () => {
-  beforeEach(() => {
-    fakeUsersRepository = initCreateUser();
+  beforeAll(async () => {
+    fakeUsersRepository = new FakeUsersRepository();
     fakeStorageProvider = new FakeStorageProvider();
+
+    user = await fakeUsersRepository.create({
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: '123456',
+    });
 
     updateUserAvatar = new UpdateUserAvatarService(
       fakeUsersRepository,
@@ -24,8 +29,6 @@ describe('UpdateUserAvatar', () => {
   });
 
   it('should be able to update user avatar', async () => {
-    const user = await createUser();
-
     await updateUserAvatar.execute({
       user_id: user.id,
       avatarFilename: 'avatar.jpg',
@@ -46,15 +49,13 @@ describe('UpdateUserAvatar', () => {
   it('should be delete old avatar when updating new one', async () => {
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
 
-    const { id } = await createUser();
-
     await updateUserAvatar.execute({
-      user_id: id,
+      user_id: user.id,
       avatarFilename: 'avatar.jpg',
     });
 
     await updateUserAvatar.execute({
-      user_id: id,
+      user_id: user.id,
       avatarFilename: 'avatar2.jpg',
     });
 

@@ -5,7 +5,6 @@ import FakeUserTokensRepository from '../repositories/fakes/FakeUserTokensReposi
 import ResetPasswordService from './ResetPasswordService';
 
 import AppError from '@shared/errors/AppError';
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeUserTokenRepository: FakeUserTokensRepository;
@@ -14,7 +13,7 @@ let resetPasswordService: ResetPasswordService;
 
 describe('ResetPassword', () => {
   beforeEach(() => {
-    fakeUsersRepository = initCreateUser();
+    fakeUsersRepository = new FakeUsersRepository();
     fakeUserTokenRepository = new FakeUserTokensRepository();
     fakeHashProvider = new FakeHashProvider();
 
@@ -26,7 +25,11 @@ describe('ResetPassword', () => {
   });
 
   it('should be able to reset password', async () => {
-    const { id } = await createUser();
+    const { id } = await fakeUsersRepository.create({
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: '123456',
+    });
 
     const { token } = await fakeUserTokenRepository.generate(id);
 
@@ -63,7 +66,11 @@ describe('ResetPassword', () => {
   });
 
   it('should not be able to reset password if passed more than 2 hours', async () => {
-    const { id } = await createUser();
+    const { id } = await fakeUsersRepository.create({
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: '123456',
+    });
 
     const { token } = await fakeUserTokenRepository.generate(id);
 

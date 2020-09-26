@@ -1,62 +1,62 @@
-import 'reflect-metadata';
-
 import ListUserDividendsService from './ListUserDividendsService';
 
-import CreateUserActiveService from '@modules/actives/services/CreateUserActiveService';
+import FakeRefreshProvider from '@modules/actives/providers/RefreshProvider/fakes/FakeRefreshProvider';
+import FakeActivesRepository from '@modules/actives/repositories/fakes/FakeActivesRepository';
+import FakeUserActiveRepository from '@modules/actives/repositories/fakes/FakeUserActiveRepository';
 import FakeDividendsRepository from '@modules/dividends/repositories/fakes/FakeDividendsRepository';
 
-import {
-  initCreateActiveService,
-  initCreateUserActiveService,
-  createActiveRepository,
-  createUserActiveRepository,
-  createActives,
-  createUserActives,
-} from '@shared/infra/typeorm/tests/actives';
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
-
-let fakeUserActiveRepository;
-let fakeDividendsRepository: FakeDividendsRepository;
-let createUserActive: CreateUserActiveService;
-
-let listUserDividends: ListUserDividendsService;
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
+import { createUser } from '@shared/infra/typeorm/tests/users';
 
 describe('ListUserDividends', () => {
-  beforeEach(() => {
-    initCreateUser();
-
-    createActiveRepository();
-
-    fakeUserActiveRepository = createUserActiveRepository();
-
-    initCreateActiveService();
-
-    createUserActive = initCreateUserActiveService();
-
-    fakeDividendsRepository = new FakeDividendsRepository();
-
-    listUserDividends = new ListUserDividendsService(
-      fakeDividendsRepository,
-      fakeUserActiveRepository,
-    );
-  });
-
   it('should be able to list user dividends receivable', async () => {
     const { id } = await createUser();
 
-    const { active1, active2 } = await createActives();
+    const fakeDividendsRepository = new FakeDividendsRepository();
+    const fakeActivesRepository = new FakeActivesRepository();
+    const fakeRefreshProvider = new FakeRefreshProvider();
+    const fakeUserActiveRepository = new FakeUserActiveRepository(
+      fakeActivesRepository,
+      fakeRefreshProvider,
+    );
+    const fakeCacheProvider = new FakeCacheProvider();
+
+    const listUserDividends = new ListUserDividendsService(
+      fakeDividendsRepository,
+      fakeUserActiveRepository,
+      fakeCacheProvider,
+    );
+
+    const active1 = await fakeActivesRepository.create('PETR3', 'Acao');
+    const active2 = await fakeActivesRepository.create('ITUB3', 'Acao');
 
     const dateMock = jest
       .spyOn(Date, 'now')
       .mockImplementation(() => new Date(2020, 7, 1).getTime());
 
-    await createUserActives(id);
-
-    await createUserActive.execute({
+    await fakeUserActiveRepository.create({
       user_id: id,
+      type: 'Acao',
+      buy_price: 100,
+      code: 'PETR3',
+      quantity: 10,
+      buy_date: new Date(2019, 4, 1),
+    });
+    await fakeUserActiveRepository.create({
+      user_id: id,
+      type: 'Acao',
+      buy_price: 10,
+      code: 'ITUB3',
+      quantity: 20,
+      buy_date: new Date(2019, 4, 1),
+    });
+    await fakeUserActiveRepository.create({
+      user_id: id,
+      type: 'Acao',
       buy_price: 8,
       code: 'ITUB3',
       quantity: 10,
+      buy_date: new Date(2019, 4, 1),
     });
 
     dateMock.mockClear();
@@ -109,5 +109,12 @@ describe('ListUserDividends', () => {
     expect(dividends.dividends[0].active_id).toBe(active1.id);
     expect(dividends.dividends[1].active_id).toBe(active2.id);
     expect(dividends.total).toBe(0.4);
+
+    const dividendsCached = await listUserDividends.execute(id);
+
+    expect(dividendsCached.dividends.length).toBe(2);
+    expect(dividendsCached.dividends[0].active_id).toBe(active1.id);
+    expect(dividendsCached.dividends[1].active_id).toBe(active2.id);
+    expect(dividendsCached.total).toBe(0.4);
   });
 });

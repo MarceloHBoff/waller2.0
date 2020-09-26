@@ -1,56 +1,28 @@
-import 'reflect-metadata';
+import FakeGetDividendsProvider from '../providers/GetDividendsProvider/fakes/FakeGetDividendsProvider';
 
 import SearchDividendsService from './SearchDividendsService';
 
 import FakeActivesRepository from '@modules/actives/repositories/fakes/FakeActivesRepository';
-import FakeGetDividendsProvider from '@modules/dividends/providers/GetDividendsProvider/fakes/FakeGetDividendsProvider';
 import FakeDividendsRepository from '@modules/dividends/repositories/fakes/FakeDividendsRepository';
 
-import {
-  initCreateActiveService,
-  initCreateUserActiveService,
-  createActiveRepository,
-  createUserActiveRepository,
-  createActives,
-  createUserActives,
-} from '@shared/infra/typeorm/tests/actives';
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
-
-let fakeActivesRepository: FakeActivesRepository;
-let fakeGetDividendsProvider: FakeGetDividendsProvider;
-let fakeDividendsRepository: FakeDividendsRepository;
-
-let searchDividends: SearchDividendsService;
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 
 describe('SearchDividends', () => {
-  beforeEach(() => {
-    initCreateUser();
+  it('should be able to search active dividends', async () => {
+    const fakeGetDividendsProvider = new FakeGetDividendsProvider();
+    const fakeActivesRepository = new FakeActivesRepository();
+    const fakeDividendsRepository = new FakeDividendsRepository();
+    const fakeCacheProvider = new FakeCacheProvider();
 
-    fakeActivesRepository = createActiveRepository();
-
-    createUserActiveRepository();
-
-    initCreateActiveService();
-
-    initCreateUserActiveService();
-
-    fakeGetDividendsProvider = new FakeGetDividendsProvider();
-
-    fakeDividendsRepository = new FakeDividendsRepository();
-
-    searchDividends = new SearchDividendsService(
+    const searchDividends = new SearchDividendsService(
       fakeGetDividendsProvider,
       fakeActivesRepository,
       fakeDividendsRepository,
+      fakeCacheProvider,
     );
-  });
 
-  it('should be able to search active dividends', async () => {
-    const { id } = await createUser();
-
-    const { active1, active2 } = await createActives();
-
-    await createUserActives(id);
+    const active1 = await fakeActivesRepository.create('PETR3', 'Acao');
+    const active2 = await fakeActivesRepository.create('ITUB3', 'Acao');
 
     await searchDividends.start();
 

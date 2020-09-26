@@ -6,6 +6,8 @@ import IUserActiveRepository from '../repositories/IUserActivesRepository';
 
 import IUserBondsRepository from '@modules/bonds/repositories/IUserBondsRepository';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+
 interface IResponse {
   actives: UserActive[];
   types: {
@@ -35,9 +37,20 @@ export default class CreateUserActiveService {
 
     @inject('USDProvider')
     private USDProvider: IUSDProvider,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute(user_id: string): Promise<IResponse> {
+    const cacheKey = `list-userActives:${user_id}`;
+
+    const userActivesCached = await this.cacheProvider.recover<IResponse>(
+      cacheKey,
+    );
+
+    if (userActivesCached) return userActivesCached;
+
     const userActives = await this.userActiveRepository.findActivesByUserId(
       user_id,
     );
@@ -96,7 +109,7 @@ export default class CreateUserActiveService {
       currentValue += Number(userBond.now_price);
     });
 
-    return {
+    const response = {
       actives: userActives,
       types: {
         Acao,
@@ -113,5 +126,9 @@ export default class CreateUserActiveService {
         percent: (currentValue / investment - 1) * 100,
       },
     };
+
+    await this.cacheProvider.save(cacheKey, response);
+
+    return response;
   }
 }

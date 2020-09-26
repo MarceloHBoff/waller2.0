@@ -1,19 +1,7 @@
-import {
-  initCreateUserBonds,
-  createBondRepository,
-  createUserBonds,
-} from '@shared/infra/typeorm/tests/bonds';
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
+import { createUserBonds } from '@shared/infra/typeorm/tests/bonds';
+import { createUser } from '@shared/infra/typeorm/tests/users';
 
 describe('CreateUserBond', () => {
-  beforeEach(() => {
-    initCreateUser();
-
-    createBondRepository();
-
-    initCreateUserBonds();
-  });
-
   it('should be able to create user bonds', async () => {
     const { id } = await createUser();
 

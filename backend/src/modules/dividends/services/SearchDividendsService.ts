@@ -5,6 +5,8 @@ import IDividendRepository from '../repositories/IDividendsRepository';
 
 import IActivesRepository from '@modules/actives/repositories/IActivesRepository';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+
 @injectable()
 export default class ListDividendsService {
   constructor(
@@ -16,10 +18,17 @@ export default class ListDividendsService {
 
     @inject('DividendsRepository')
     private dividendsRepository: IDividendRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async start(): Promise<void> {
     await this.getDividendsProvider.createPage();
+
+    await this.cacheProvider.invalidate(`list-dividends:*`);
+    await this.cacheProvider.invalidate(`list-dividendsReceivable:*`);
+    await this.cacheProvider.invalidate(`list-dividendsMonthly:*`);
   }
 
   public async execute(code: string, id?: string): Promise<void> {

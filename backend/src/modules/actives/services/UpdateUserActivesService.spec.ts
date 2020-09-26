@@ -1,37 +1,18 @@
-import 'reflect-metadata';
+import { container } from 'tsyringe';
 
 import UpdateUserActivesService from './UpdateUserActivesService';
 
 import {
-  initCreateActiveService,
-  initCreateUserActiveService,
-  createActiveRepository,
-  createUserActiveRepository,
   createActives,
   createUserActives,
 } from '@shared/infra/typeorm/tests/actives';
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
-
-let fakeUserActiveRepository;
-let updateUserActives: UpdateUserActivesService;
+import { createUser } from '@shared/infra/typeorm/tests/users';
 
 describe('UpdateUserActives', () => {
-  beforeEach(() => {
-    initCreateUser();
-
-    createActiveRepository();
-
-    initCreateActiveService();
-
-    fakeUserActiveRepository = createUserActiveRepository();
-
-    initCreateUserActiveService();
-
-    updateUserActives = new UpdateUserActivesService(fakeUserActiveRepository);
-  });
-
   it('should be able to update user actives', async () => {
     const { id } = await createUser();
+
+    const updateUserActives = container.resolve(UpdateUserActivesService);
 
     await createActives();
 

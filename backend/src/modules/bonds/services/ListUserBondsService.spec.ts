@@ -1,27 +1,15 @@
-import 'reflect-metadata';
+import { container } from 'tsyringe';
 
 import ListUserBondsService from './ListUserBondsService';
 
-import {
-  createBondRepository,
-  initCreateUserBonds,
-  createUserBonds,
-} from '@shared/infra/typeorm/tests/bonds';
-import { initCreateUser, createUser } from '@shared/infra/typeorm/tests/users';
-
-let fakeBondsRepository;
+import { createUserBonds } from '@shared/infra/typeorm/tests/bonds';
+import { createUser } from '@shared/infra/typeorm/tests/users';
 
 let listUserBonds: ListUserBondsService;
 
 describe('ListUserBonds', () => {
   beforeEach(() => {
-    initCreateUser();
-
-    fakeBondsRepository = createBondRepository();
-
-    initCreateUserBonds();
-
-    listUserBonds = new ListUserBondsService(fakeBondsRepository);
+    listUserBonds = container.resolve(ListUserBondsService);
   });
 
   it('should be able to list user bonds', async () => {

@@ -3,6 +3,8 @@ import { injectable, inject } from 'tsyringe';
 import UserActive from '../infra/typeorm/entities/UserActive';
 import IUserActiveRepository from '../repositories/IUserActivesRepository';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+
 interface IRequest {
   user_id: string;
   code: string;
@@ -17,6 +19,9 @@ export default class CreateUserActiveService {
   constructor(
     @inject('UserActivesRepository')
     private userActiveRepository: IUserActiveRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -35,6 +40,8 @@ export default class CreateUserActiveService {
       buy_price,
       buy_date: buy_date || new Date(),
     });
+
+    await this.cacheProvider.invalidate(`list-userActives:${user_id}`);
 
     return userActive;
   }

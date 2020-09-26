@@ -13,8 +13,8 @@ export default {
 
   defautls: {
     from: {
-      name: 'Equipe GoBarber',
-      email: 'equipe@gobarber.com.br',
+      name: 'Equipe Waller',
+      email: 'equipe@waller.com.br',
     },
   },
 } as IMailConfig;
